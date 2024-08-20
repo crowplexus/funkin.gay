@@ -22,3 +22,8 @@ SOURCE GUIDE:
       
       - Q: what's with the name?
       - A: it's one of my oc's names lol. @crowplexus
+  - libraries:
+      custom libraries made by other people
+      
+      - inifile by bartbes
+        https://luarocks.org/modules/bartbes/inifile

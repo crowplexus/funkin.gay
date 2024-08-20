@@ -9,11 +9,13 @@ local ScreenManager = {
 function ScreenManager:switch_screen(file)
   local next_screen = require(file)
   if type(next_screen) == "table" then
-    if not next_screen then return end
+    -- clear the previous screen.
     if ScreenManager.active_screen ~= nil then
       ScreenManager.active_screen.clear() end
+    -- enable the requested screen.
     ScreenManager.active_screen = next_screen
   end
+  -- now that the new screen is set, enter it.
   if ScreenManager:screen_active() then
     ScreenManager.active_screen:enter()
   end
