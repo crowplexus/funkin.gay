@@ -16,6 +16,7 @@ return {
     end,
     --- fake match/switch for lua
     match = function(prop, pat)
-      return pat[prop] ~= nil and pat[prop]() or pat.default ~= nil and pat.default()
+      if pat[prop] ~= nil then pat[prop]()
+      elseif pat.default ~= nil then pat.default() end
   end,
 }
