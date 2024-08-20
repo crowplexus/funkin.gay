@@ -1,33 +1,38 @@
--- CONFIGURE METATABLE --
-
-local screen = {
-  objects = {},
+local Screen = {
   __name = "Screen",
+  objects = {},
 }
-require("jigw.class"):clone(screen,require("jigw.class"))
-screen.__index = screen
+Screen.__index = Screen
 
--- METAMETHODS --
-
-function screen:enter() end
-function screen:update(dt) end
-function screen:draw() end
-function screen:clear() end
-
-function screen:add(obj)
-  if not table[obj] then
-    table.insert(screen.objects, obj)
+function Screen:enter() end
+function Screen:update(dt) end
+function Screen:keypressed(key) end
+function Screen:keyreleased(key) end
+function Screen:draw()
+  for _,v in pairs(self.objects) do
+    if v and v.draw then v:draw() end
   end
 end
 
-function screen:remove(obj)
-  for _,v in ipairs(screen.objects) do
-    if v == obj then table.remove(obj, _) end
+function Screen:clear()
+  while #self.objects ~= 0 do
+    if self.objects[0] and self.objects[0].dispose then
+      self.objects[0]:dispose()
+    end
+    table.remove(self.objects, i)
   end
 end
 
-function screen:__index(table, key)
-  return screen[key]
+function Screen:add(obj)
+  if not self.objects[obj] then
+    table.insert(self.objects, obj)
+  end
 end
 
-return screen
+function Screen:remove(obj)
+  for _,v in ipairs(self.objects) do
+    if v == obj then table.remove(self.objects,_) end
+  end
+end
+
+return setmetatable(Screen, {__index = Screen})

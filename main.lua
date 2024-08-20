@@ -22,8 +22,10 @@ Utils = require("jigw.util.jigw_utils")
 --- @type string
 local game_ver = tostring(os.date("%Y.%m.%d"))
 
-local fps_font = love.graphics.newFont("assets/fonts/vcr.ttf", 14, "none")
+local system_font = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none")
 local do_fps_draw = true
+
+local game_canvas --- @type love.graphics.Canvas
 
 function love.load()
   local x = "sm"
@@ -32,19 +34,58 @@ function love.load()
     ["fnf"] = function() print "Friday Night Funkin'" end,
     ["default"] = function() print "Unknown" end,
   })
+  love.graphics.setFont(system_font)
+  game_canvas = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
   ScreenManager:switch_screen("funkin.screens.main_menu")
 end
 
+function love.keypressed(key)
+  if ScreenManager:screen_active() then
+    ScreenManager.active_screen:keypressed(key)
+  end
+end
+
+function love.keyreleased(key)
+  if ScreenManager:screen_active() then
+    ScreenManager.active_screen:keyreleased(key)
+  end
+end
+
 function love.draw()
-  love.graphics.clear(0.30,0.30,0.30,1.0)
+  local screen_w = love.graphics.getWidth()
+  local screen_h = love.graphics.getHeight()
+
+  love.graphics.setCanvas(game_canvas)
+  love.graphics.setColor(0,0,0,1)
+  love.graphics.rectangle("fill",0,0,game_canvas:getWidth(),game_canvas:getHeight())
+
+  --- in game canvas ---
+  love.graphics.setColor(1,1,1,1)
   if ScreenManager:screen_active() then
     ScreenManager.active_screen:draw()
   end
+  --- in main canvas ---
+  love.graphics.setCanvas()
+  love.graphics.setColor(1,1,1,1)
+  love.graphics.clear(0.30,0.30,0.30,1.0)
+  love.graphics.draw(game_canvas,
+    (screen_w - game_canvas:getWidth()) * 0.5,
+    (screen_h - game_canvas:getHeight()) * 0.5
+  )
   if do_fps_draw then -- the fps counter should render over everything else.
-    love.graphics.print("FPS: "..love.timer.getFPS()
-      .."\nRAM: "..Utils.format_bytes(love.graphics.getStats().images)
+    Utils.draw_text_with_stroke("FPS: "..love.timer.getFPS()
+      .."\nRAM: "..Utils.format_bytes(get_memory())
       .."\nScreen: "..ScreenManager.active_screen.__name
-      .."\nVersion "..game_ver
-      ,fps_font,5,5)
+      .."\nVersion: "..game_ver
+      .."\nDraw Calls: "..love.graphics.getStats().drawcalls
+      ,5,5)
   end
+  --- -- ---- ------- ---
+end
+
+function get_memory()
+  local img_mem = love.graphics.getStats().images
+  local font_mem = love.graphics.getStats().fonts
+  local canvas_mem = love.graphics.getStats().canvases
+  return img_mem + font_mem + canvas_mem
 end

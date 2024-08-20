@@ -1,13 +1,17 @@
-Conductor = {
-  bpm = 100.0, --- @type number
-  crotchet = (60 / Conductor.bpm), --- @type number
-  semiquaver = (60 / Conductor.bpm) * 4.0, --- @type number
-  steps_per_beat = 4, --- @type number
-  -- we really just need these two, bars aren't gonna be used often
-  -- i'll add them later if its really needed.
-  step = 0.0, --- @type number
-  beat = 0.0, --- @type number
-}
+local function reset_vars(con)
+  con = {
+    bpm = 100.0, --- @type number
+    crotchet = (60 / Conductor.bpm), --- @type number
+    semiquaver = (60 / Conductor.bpm) * 4.0, --- @type number
+    steps_per_beat = 4, --- @type number
+    -- we really just need these two, bars aren't gonna be used often
+    -- i'll add them later if its really needed.
+    step = 0.0, --- @type number
+    beat = 0.0, --- @type number
+  }
+  return con
+end
+Conductor = reset_vars({})
 Conductor.__index = Conductor
 
 function Conductor:init(starting_bpm)
