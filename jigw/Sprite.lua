@@ -1,5 +1,5 @@
 local function resetVars(Spr)
-	Spr = {
+	return {
 		position = {x = 0, y = 0},
 		scale = {x = 1, y = 1},
 		color = {1,1,1,1},
@@ -8,10 +8,9 @@ local function resetVars(Spr)
 		--alpha = 1.0,
 		texture = nil,
 	}
-	return Spr
 end
 
-local Sprite = resetVars({})
+local Sprite = resetVars()
 Sprite.__index = Sprite
 
 function Sprite:new(x,y,tex)
@@ -24,7 +23,7 @@ end
 
 function Sprite:dispose()
 	self.texture:release()
-	resetVars(self)
+	resetVars()
 end
 
 function Sprite:draw()
@@ -36,22 +35,18 @@ function Sprite:draw()
 end
 
 --#region Getters and Setters
---function Sprite:get_alpha() return rawget(self,self.color[4]) end
---function Sprite:set_alpha(vl) return rawset(self,self.color[4],vl) end
+function Sprite:get_alpha() return rawget(self,self.color[4]) end
+function Sprite:set_alpha(vl) return rawset(self,self.color[4],vl) end
 --#endregion
 
 function Sprite:__index(idx)
-  -- custom getter functionality
-  if rawget(self,"get_"..idx) then return rawget(self,"get_"..idx)()
-  else return rawget(self,idx) end
+  -- custom get variable functionality
+  return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self,idx)
 end
 
 function Sprite:__newindex(idx,vl)
-  -- custom setter functionality
-  print(idx)
-
-  if rawget(self,"set_"..idx) then return rawget(self,"set_"..idx)(self,vl)
-  else return rawset(self,idx,vl) end
+  -- custom set variable functionality
+  return rawget(self,"set_"..idx) and rawget(self,"set_"..idx)(self,vl) or rawset(self,idx,vl)
 end
 
 return Sprite

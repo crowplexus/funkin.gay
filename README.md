@@ -24,6 +24,7 @@ SOURCE GUIDE:
       - A: it's one of my oc's names lol. @crowplexus
   - libraries:
       custom libraries made by other people
-      
+      - classic by txi
+        https://github.com/rxi/classic
       - inifile by bartbes
         https://luarocks.org/modules/bartbes/inifile

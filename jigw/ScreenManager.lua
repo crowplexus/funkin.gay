@@ -34,4 +34,9 @@ function ScreenManager:isScreenOperating()
   return ScreenManager.activeScreen ~= nil
 end
 
+function ScreenManager:getName()
+  local named = ScreenManager.activeScreen ~= nil and ScreenManager.activeScreen.__name
+  return named and ScreenManager.activeScreen.__name or tostring(ScreenManager.activeScreen)
+end
+
 return ScreenManager

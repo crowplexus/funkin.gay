@@ -4,6 +4,13 @@ end
 
 --#region Global
 
+Object = require("libraries.classic")
+
+Point2 = require("jigw.util.Point2")
+Point3 = require("jigw.util.Point3")
+Rect2 = require("jigw.util.Rect2")
+Rect3 = require("jigw.util.Rect3")
+
 --- @class Colour
 --- Utility containing functions and variables to work with colors
 Colour = require("jigw.util.Colour")
@@ -19,7 +26,7 @@ Utils = require("jigw.util.JigwUtils")
 --- this doesn't follow SemVer, and instead is the date
 --- of when a version of the game was compiled
 --- @type string
-local gameVersion = tostring(os.date("%Y.%m.%d"))
+gameVersion = tostring(os.date("%Y.%m.%d"))
 
 local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none")
 local drawFPSCounter = true --- @type boolean
@@ -74,9 +81,8 @@ function love.draw()
   if drawFPSCounter then -- the fps counter should render over everything else.
     Utils.drawTextWithStroke("FPS: "..love.timer.getFPS()
       .." - RAM: "..Utils.formatBytes(getMemoryUsage())
-      .."\nScreen: "..ScreenManager.activeScreen.__name
+      .."\nScreen: "..ScreenManager.getName()
       .." - Draw Calls: "..love.graphics.getStats().drawcalls
-      .."\nVersion: "..gameVersion
       ,5,5)
   end
   --- -- ---- ------- ---

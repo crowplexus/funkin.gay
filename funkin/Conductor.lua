@@ -1,5 +1,5 @@
-local function resetVars(con)
-  con = {
+local function resetVars()
+  return {
     bpm = 100.0, --- @type number
     crotchet = (60 / Conductor.bpm), --- @type number
     semiquaver = (60 / Conductor.bpm) * 4.0, --- @type number
@@ -9,7 +9,6 @@ local function resetVars(con)
     step = 0.0, --- @type number
     beat = 0.0, --- @type number
   }
-  return con
 end
 Conductor = resetVars({})
 Conductor.__index = Conductor
@@ -36,15 +35,13 @@ end
 
 --#region Override Index
 function Conductor:__index(idx)
-  -- custom getter functionality
-  if rawget(self,"get_"..idx) then return rawget(self,"get_"..idx)()
-  else return rawget(self,idx) end
+  -- custom get variable functionality
+  return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self,idx)
 end
 
 function Conductor:__newindex(idx,vl)
-  -- custom setter functionality
-  if rawget(self,"set_"..idx) then return rawget(self,"set_"..idx)(self,vl)
-  else return rawset(self,idx,vl) end
+  -- custom set variable functionality
+  return rawget(self,"set_"..idx) and rawget(self,"set_"..idx)(self,vl) or rawset(self,idx,vl)
 end
 --#endregion
 

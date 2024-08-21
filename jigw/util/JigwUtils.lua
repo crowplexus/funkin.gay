@@ -19,16 +19,6 @@ return {
     if pat[prop] ~= nil then pat[prop]()
     elseif pat.default ~= nil then pat.default() end
   end,
-  --- helper function for inheriting classes.
-  --- @param target table   Class that will extend the specified ones,
-  --- @param parent table      Classes to clone methods and properties from.
-  extend = function(target, parent)
-    local child_class = target or {}
-    for i,v in pairs(parent or {}) do
-      child_class[i] = v
-    end
-    return child_class
-  end,
   --- to draw text with a stroke behind it.
   --- @param text string
   --- @param x number

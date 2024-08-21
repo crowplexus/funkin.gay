@@ -1,8 +1,12 @@
-local Screen = {
-  __name = "Screen",
-  objects = {},
-}
-Screen.__index = Screen
+local Screen = Object:extend()
+Screen.objects = {}
+Screen.__name = "Screen"
+--Screen.__index = Screen
+
+function Screen:new()
+  self.objects = {}
+  return self
+end
 
 function Screen:enter() end
 function Screen:update(dt) end
