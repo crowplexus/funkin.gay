@@ -9,7 +9,7 @@ MainMenu.__name = "Main Menu"
 local freaky = love.audio.newSource("assets/music/freakyMenu.ogg","stream")
 
 function MainMenu:enter()
-  freaky:setVolume(0)
+  freaky:setVolume(0.1)
   freaky:play()
 
   local vps = {w=love.graphics.getWidth(),h=love.graphics.getHeight()}
