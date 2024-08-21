@@ -19,6 +19,7 @@ function MainMenu:enter()
   self:add(bg)
 
   local blah = Label:new(5,vps.h*0.96,"v"..gameVersion, 20)
+  blah.strokeSize = 1
   self:add(blah)
 end
 

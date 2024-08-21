@@ -5,9 +5,10 @@ local function buildLabel(sel)
 	sel.position = Point2(0,0)
 	sel.size = Point2(0,0)
 	sel.scale = Point2(1,1)
-	sel.strokeSize = 1
-	sel.strokecolour = Colour.rgba(0,0,0,1)
+	sel.strokeSize = 0
+	sel.strokeColour = Colour.rgba(0,0,0,1)
 	sel.colour = Colour.rgba(1,1,1,1)
+	sel.visible = true
 	sel.textWidth = 0
 	sel.textHeight = 0
 	sel.rotation = 0
@@ -38,6 +39,31 @@ local function _isFontPath(p)
 	return p and type(p) == "string" and (p:sub(#".ttf") or p:sub(#".otf"))
 end
 
+--- Function to draw a label's text field with a stroke below it.
+--- @param t love.graphics.Text Text object.
+--- @param c table<number> Text colour.
+--- @param sc table<number> Text stroke colour.
+--- @param x number Text X position.
+--- @param y number Text Y position.
+--- @param r number Text rotation.
+--- @param sz number Text stroke size.
+--- @param sx number X value for text scale.
+--- @param sy number Y value for text scale.
+local function _drawWithStroke(t,c,sc,x,y,r,sz,sx,sy)
+	local offset = -sz
+  love.graphics.setColor(sc)
+  for i = 1,2 do
+    love.graphics.draw(t,x + sz,y + sz + offset,r,sx,sy)
+    love.graphics.draw(t,x + sz + offset,y + sz,r,sx,sy)
+    love.graphics.draw(t,x + sz - offset,y + sz + offset,r,sx,sy)
+    love.graphics.draw(t,x + sz + offset,y + sz - offset,r,sx,sy)
+    offset = -offset
+  end
+  love.graphics.setColor(c)
+  love.graphics.draw(t,x + sz,y + sz,r,sx,sy)
+  love.graphics.setColor(1,1,1,1)
+end
+
 function Label:new(x,y,text,size)
 	self.position = Point2(x,y)
 	self.text = text or nil
@@ -56,9 +82,16 @@ end
 function Label:draw()
 	if self and self:has_any_text() and self.visible and self.colour[4] > 0.0 then
 		-- TODO: use printf for alignments
-		love.graphics.setColor(self.colour)
-		love.graphics.draw(self._renderText,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
-		love.graphics.setColor({1,1,1,1})
+		if self.strokeSize > 0 then
+			_drawWithStroke(
+				self._renderText,self.colour,self.strokeColour,
+				self.position.x,self.position.y,self.rotation,self.strokeSize,
+				self.scale.x or 1.0, self.scale.y or 1.0)
+		else
+			love.graphics.setColor(self.colour)
+			love.graphics.draw(self._renderText,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
+			love.graphics.setColor(1,1,1,1)
+		end
 	end
 end
 
