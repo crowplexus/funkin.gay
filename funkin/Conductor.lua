@@ -1,9 +1,9 @@
-local function reset_vars(con)
+local function resetVars(con)
   con = {
     bpm = 100.0, --- @type number
     crotchet = (60 / Conductor.bpm), --- @type number
     semiquaver = (60 / Conductor.bpm) * 4.0, --- @type number
-    steps_per_beat = 4, --- @type number
+    stepsPerBeat = 4, --- @type number
     -- we really just need these two, bars aren't gonna be used often
     -- i'll add them later if its really needed.
     step = 0.0, --- @type number
@@ -11,7 +11,7 @@ local function reset_vars(con)
   }
   return con
 end
-Conductor = reset_vars({})
+Conductor = resetVars({})
 Conductor.__index = Conductor
 
 function Conductor:init(starting_bpm)
@@ -24,13 +24,13 @@ end
 --#region Setters
 function Conductor:set_bpm(vl)
   self.crotchet = (60/vl)
-  self.semiquaver = (60/vl)*self.steps_per_beat
+  self.semiquaver = (60/vl)*self.stepsPerBeat
   return rawset(self,self.bpm,vl)
 end
 
 function Conductor:set_steps_ber_beat(vl)
   self.semiquaver = (60/self.bpm)*vl
-  return rawset(self,self.steps_per_beat,vl)
+  return rawset(self,self.stepsPerBeat,vl)
 end
 --#endregion
 

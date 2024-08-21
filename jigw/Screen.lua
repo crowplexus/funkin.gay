@@ -18,6 +18,9 @@ function Screen:clear()
   while #self.objects ~= 0 do
     if self.objects[0] and self.objects[0].dispose then
       self.objects[0]:dispose()
+      if self.objects[0] ~= nil then
+        self.objects[0] = nil
+      end
     end
     table.remove(self.objects, i)
   end
@@ -35,4 +38,5 @@ function Screen:remove(obj)
   end
 end
 
-return setmetatable(Screen, {__index = Screen})
+--return setmetatable(Screen, {__index = Screen})
+return Screen

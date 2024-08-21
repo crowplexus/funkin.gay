@@ -1,4 +1,4 @@
-local template_note = {
+local templateNote = {
   --- ...
   --- @type number
   row = 0,
@@ -18,4 +18,4 @@ local template_note = {
   judgement = nil,
 }
 
-return template_note
+return templateNote

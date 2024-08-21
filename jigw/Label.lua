@@ -1,4 +1,4 @@
-local function reset_vars(x)
+local function resetVars(x)
 	x = {
 		text = nil,
 		position = {x = 0, y = 0},
@@ -6,24 +6,24 @@ local function reset_vars(x)
 		color = {1,1,1,1},
 		rotation = 0,
 		--alpha = 1.0,
-		stroke_size = 1,
-		stroke_color = {0,0,0,1},
-		font_path = "assets/fonts/vcr.ttf",
-		font_size = 14,
+		strokeSize = 1,
+		strokeColour = {0,0,0,1},
+		fontPath = "assets/fonts/vcr.ttf",
+		fontSize = 14,
 		_font = nil,
 	}
 	return x
 end
 
-local Label = reset_vars({})
+local Label = resetVars({})
 Label.__index = Label
 
-local function _recreate_font(self) -- gonna be doing this a lot
+local function _recreateFont(self) -- gonna be doing this a lot
 	if self._font then self._font:release() end
-	self._font = love.graphics.newFont(self.font_path,self.font_size,"none")
+	self._font = love.graphics.newFont(self.fontPath,self.fontSize,"none")
 end
 
-local function _is_font_path(p)
+local function _isFontPath(p)
 	return p and type(p) == "string" and (p:sub(#".ttf") or p:sub(#".otf"))
 end
 
@@ -33,14 +33,14 @@ function Label:new(x,y,text,size)
 	self.position.x = x or 0
 	self.position.y = y or 0
 	self.text = text or ""
-	self.font_size = size or 14
-	self:change_font_size(size, true)
+	self.fontSize = size or 14
+	self:changeFontSize(size, true)
 	return self
 end
 
 function Label:dispose()
 	self._font:release()
-	reset_vars(self)
+	resetVars(self)
 end
 
 function Label:draw()
@@ -56,23 +56,22 @@ function Label:has_any_text()
 	return type(self.text) == "string" and string.len(self.text) ~= 0
 end
 
-function Label:change_font(path)
+function Label:changeFont(path)
 	local fi = love.filesystem.getInfo(path)
-	if _is_font_path(path) and fi and fi.size and self.font_path ~= path then
-		self.font_path = path
-		_recreate_font(self)
+	if _isFontPath(path) and fi and fi.size and self.fontPath ~= path then
+		self.fontPath = path
+		_recreateFont(self)
 	end
 end
 
-function Label:change_font_size(new_size, force)
+function Label:changeFontSize(newSize, force)
 	if force == false then
-		if type(new_size) ~= "number" or new_size == self.font_size then
-			new_size = _font_size
+		if type(newSize) ~= "number" or newSize == self.fontSize then
 			return
 		end
 	end
-	self.font_size = new_size
-	_recreate_font(self)
+	self.fontSize = newSize
+	_recreateFont(self)
 end
 
 --#region Getters and Setters

@@ -1,4 +1,3 @@
-local inifile = require "libraries.inifile"
 if arg[2] == "debug" then
   require("lldebugger").start()
 end
@@ -7,12 +6,12 @@ end
 
 --- @class Colour
 --- Utility containing functions and variables to work with colors
-Colour = require("jigw.util.colour")
+Colour = require("jigw.util.Colour")
 --- @alias Colour Color
-Color = require("jigw.util.colour")
+Color = require("jigw.util.Colour")
 --- @class SceneManager
-ScreenManager = require("jigw.screen_manager")
-Utils = require("jigw.util.jigw_utils")
+ScreenManager = require("jigw.ScreenManager")
+Utils = require("jigw.util.JigwUtils")
 
 --#endregion
 
@@ -20,72 +19,75 @@ Utils = require("jigw.util.jigw_utils")
 --- this doesn't follow SemVer, and instead is the date
 --- of when a version of the game was compiled
 --- @type string
-local game_ver = tostring(os.date("%Y.%m.%d"))
+local gameVersion = tostring(os.date("%Y.%m.%d"))
 
-local system_font = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none")
-local do_fps_draw = true
+local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none")
+local drawFPSCounter = true --- @type boolean
 
-local game_canvas --- @type love.graphics.Canvas
+local gameCanvas --- @type love.graphics.Canvas
 
 function love.load()
-  local x = "sm"
-  Utils.match(x, {
-    ["sm"] = function() print "Stepmania" end,
-    ["fnf"] = function() print "Friday Night Funkin'" end,
-    ["default"] = function() print "Unknown" end,
-  })
-  love.graphics.setFont(system_font)
-  game_canvas = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
-  ScreenManager:switch_screen("funkin.screens.main_menu")
+  love.graphics.setFont(systemFont) -- set default font
+  gameCanvas = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
+  ScreenManager:switchScreen("funkin.screens.MainMenu")
+end
+
+function love.update()
+  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.update then
+    ScreenManager.activeScreen:update(love.timer.getDelta())
+  end
 end
 
 function love.keypressed(key)
-  if ScreenManager:screen_active() then
-    ScreenManager.active_screen:keypressed(key)
+  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keypressed then
+    ScreenManager.activeScreen:keypressed(key)
   end
 end
 
 function love.keyreleased(key)
-  if ScreenManager:screen_active() then
-    ScreenManager.active_screen:keyreleased(key)
+  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keyreleased then
+    ScreenManager.activeScreen:keyreleased(key)
   end
 end
 
 function love.draw()
-  local screen_w = love.graphics.getWidth()
-  local screen_h = love.graphics.getHeight()
+  local screenWidth = love.graphics.getWidth()
+  local screenHeight = love.graphics.getHeight()
 
-  love.graphics.setCanvas(game_canvas)
+  love.graphics.setCanvas(gameCanvas)
   love.graphics.setColor(0,0,0,1)
-  love.graphics.rectangle("fill",0,0,game_canvas:getWidth(),game_canvas:getHeight())
+  love.graphics.rectangle("fill",0,0,gameCanvas:getWidth(),gameCanvas:getHeight())
 
   --- in game canvas ---
   love.graphics.setColor(1,1,1,1)
-  if ScreenManager:screen_active() then
-    ScreenManager.active_screen:draw()
+  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.draw then
+    ScreenManager.activeScreen:draw()
   end
   --- in main canvas ---
   love.graphics.setCanvas()
   love.graphics.setColor(1,1,1,1)
   love.graphics.clear(0.30,0.30,0.30,1.0)
-  love.graphics.draw(game_canvas,
-    (screen_w - game_canvas:getWidth()) * 0.5,
-    (screen_h - game_canvas:getHeight()) * 0.5
+  love.graphics.draw(gameCanvas,
+    (screenWidth - gameCanvas:getWidth()) * 0.5,
+    (screenHeight - gameCanvas:getHeight()) * 0.5
   )
-  if do_fps_draw then -- the fps counter should render over everything else.
-    Utils.draw_text_with_stroke("FPS: "..love.timer.getFPS()
-      .."\nRAM: "..Utils.format_bytes(get_memory())
-      .."\nScreen: "..ScreenManager.active_screen.__name
-      .."\nVersion: "..game_ver
-      .."\nDraw Calls: "..love.graphics.getStats().drawcalls
+  if drawFPSCounter then -- the fps counter should render over everything else.
+    Utils.drawTextWithStroke("FPS: "..love.timer.getFPS()
+      .." - RAM: "..Utils.formatBytes(getMemoryUsage())
+      .."\nScreen: "..ScreenManager.activeScreen.__name
+      .." - Draw Calls: "..love.graphics.getStats().drawcalls
+      .."\nVersion: "..gameVersion
       ,5,5)
   end
   --- -- ---- ------- ---
 end
 
-function get_memory()
-  local img_mem = love.graphics.getStats().images
-  local font_mem = love.graphics.getStats().fonts
-  local canvas_mem = love.graphics.getStats().canvases
-  return img_mem + font_mem + canvas_mem
+function love.quit()
+end
+
+function getMemoryUsage()
+  local imgBytes = love.graphics.getStats().images --- @type number
+  local fontBytes = love.graphics.getStats().fonts --- @type number
+  local canvasBytes = love.graphics.getStats().canvases --- @type number
+  return imgBytes + fontBytes + canvasBytes
 end

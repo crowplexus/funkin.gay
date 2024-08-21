@@ -1,4 +1,4 @@
-local template_event = {
+local templateEvent = {
   --- Internal Name for the event
   --- @type string
   __name = "my_event",
@@ -13,8 +13,8 @@ local template_event = {
 }
 --- Event preload callback
 --- @type function
-function template_event:preload() end
+function templateEvent:preload() end
 --- Event trigger callback.
 --- @type function
-function template_event:fire() end
-return template_event
+function templateEvent:fire() end
+return templateEvent

@@ -15,7 +15,7 @@ return {
   GREEN_YELLOW    = 0xFFADFF2F,
   PALE_GREEN      = 0xFF98FB98,
 
-  rgba_table = function(r,g,b,a)
+  rgbaTable = function(r,g,b,a)
     if a == nil or type(a) ~= "number" then
       a = 255
     end

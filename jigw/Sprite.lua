@@ -1,4 +1,4 @@
-local function reset_vars(Spr)
+local function resetVars(Spr)
 	Spr = {
 		position = {x = 0, y = 0},
 		scale = {x = 1, y = 1},
@@ -11,7 +11,7 @@ local function reset_vars(Spr)
 	return Spr
 end
 
-local Sprite = reset_vars({})
+local Sprite = resetVars({})
 Sprite.__index = Sprite
 
 function Sprite:new(x,y,tex)
@@ -24,7 +24,7 @@ end
 
 function Sprite:dispose()
 	self.texture:release()
-	reset_vars(self)
+	resetVars(self)
 end
 
 function Sprite:draw()
