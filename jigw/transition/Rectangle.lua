@@ -12,7 +12,7 @@ function Transition:reset()
 	started = false
 	finished = false
 	transIn = true
-	local w = 1280; local h = 720
+	local w, h = love.graphics.getDimensions()
 	canvasSize = Point2(w,h)
 end
 

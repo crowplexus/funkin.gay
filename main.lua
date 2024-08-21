@@ -5,14 +5,15 @@ end
 --#region Global
 
 Object = require("libraries.classic")
-ScreenTransitions = {
-  Circle = require("jigw.transition.Circle"),
-  Rectangle = require("jigw.transition.Rectangle"),
-}
 Point2 = require("jigw.util.Point2")
 Point3 = require("jigw.util.Point3")
 Rect2 = require("jigw.util.Rect2")
 Rect3 = require("jigw.util.Rect3")
+ScreenTransitions = {
+  Circle = require("jigw.transition.Circle"),
+  Rectangle = require("jigw.transition.Rectangle"),
+}
+DefaultScreenTransition = ScreenTransitions.Circle
 
 --- @class Colour
 --- Utility containing functions and variables to work with colors
@@ -42,7 +43,7 @@ function love.load()
   -- make a canvas for the actual game.
   local sz = Point2(love.graphics.getWidth(),love.graphics.getHeight())
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
-  ScreenManager.skipNextTransIn = true
+  ScreenManager.skipNextTransIn = false
   ScreenManager:switchScreen("funkin.screens.MainMenu")
 end
 

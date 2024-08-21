@@ -35,19 +35,24 @@ return {
     if not x then x = 0 end
     if not y then y = 0 end
 
-    local text = love.graphics.newText(font,text)
+    local nf = type(font) == "string" and love.graphics.newFont(font, 32) or font
+    local text = love.graphics.newText(nf,text)
     local offset = -strokeSize
     love.graphics.setColor(strokeColour)
     for i = 1,2 do
-      love.graphics.draw(text,strokeSize,strokeSize+offset)
-      love.graphics.draw(text,strokeSize + offset,strokeSize)
-      love.graphics.draw(text,strokeSize - offset,strokeSize + offset)
-      love.graphics.draw(text,strokeSize + offset,strokeSize - offset)
+      love.graphics.draw(text,x+strokeSize,y+strokeSize+offset)
+      love.graphics.draw(text,x+strokeSize + offset,y+strokeSize)
+      love.graphics.draw(text,x+strokeSize - offset,y+strokeSize + offset)
+      love.graphics.draw(text,x+strokeSize + offset,y+strokeSize - offset)
       offset = -offset
     end
     love.graphics.setColor(textColour)
-    love.graphics.draw(text,strokeSize,strokeSize)
+    love.graphics.draw(text,x+strokeSize,y+strokeSize)
     love.graphics.setColor(1,1,1,1)
-    text:release() -- free memory
+    -- free memory
+    text:release()
+    nf:release()
+    text = nil
+    nf = nil
   end,
 }

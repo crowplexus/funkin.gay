@@ -12,7 +12,7 @@ function ScreenManager:switchScreen(modname)
   local nextScreen = require(modname)
   -- in case the transition isn't set
   if not ScreenManager:willSkipTransition() and ScreenManager.transition == nil then
-    ScreenManager.transition = ScreenTransitions.Circle
+    ScreenManager.transition = DefaultScreenTransition
   end
   if ScreenManager:isTransitionActive() then -- is set, has draw
     if ScreenManager.skipNextTransOut == false then
