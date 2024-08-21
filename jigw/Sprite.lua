@@ -1,22 +1,19 @@
-local function resetVars(Spr)
-	return {
-		position = {x = 0, y = 0},
-		scale = {x = 1, y = 1},
-		color = {1,1,1,1},
-		visible = true,
-		rotation = 0,
-		--alpha = 1.0,
-		texture = nil,
-	}
+local function buildSprite(sel)
+	sel.position = Point2(0,0)
+	sel.scale = Point2(1,1)
+	sel.colour = Colour.rgba(1,1,1,1)
+	sel.visible = true
+	sel.rotation = 0
+	sel.alpha = 1.0
+	sel.texture = nil
+	return sel
 end
 
-local Sprite = resetVars()
-Sprite.__index = Sprite
+local Sprite = Object:extend()
+buildSprite(Sprite)
 
 function Sprite:new(x,y,tex)
-	local self = setmetatable(Sprite, {})
-	self.position.x = x or 0
-	self.position.y = y or 0
+	self.position = Point2(x,y)
 	if tex then self.texture = tex end
 	return self
 end
@@ -27,16 +24,16 @@ function Sprite:dispose()
 end
 
 function Sprite:draw()
-	if self and self.texture and self.visible and self.color[4] > 0.0 then
-		love.graphics.setColor(self.color)
+	if self and self.texture and self.visible and self.colour[4] > 0.0 then
+		love.graphics.setColor(self.colour)
 		love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
-		love.graphics.setColor({1,1,1,1})
+		love.graphics.setColor(Colour.rgba(1,1,1,1))
 	end
 end
 
 --#region Getters and Setters
-function Sprite:get_alpha() return rawget(self,self.color[4]) end
-function Sprite:set_alpha(vl) return rawset(self,self.color[4],vl) end
+function Sprite:get_alpha() return rawget(self,self.colour[4]) end
+function Sprite:set_alpha(vl) return rawset(self,self.colour[4],vl) end
 --#endregion
 
 function Sprite:__index(idx)

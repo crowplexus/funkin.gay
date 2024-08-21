@@ -1,13 +1,25 @@
 local ScreenManager = {
   __name = "Screen Manager",
-  --- @class Screen
-  activeScreen = require("jigw.Screen"),
+  activeScreen = nil, --- @class Screen
+  transition = nil,
+  skipNextTransIn = false,
+  skipNextTransOut = false,
 }
 
 --- Unloads the current screen and loads a new one
 --- @param file string      Next screen module name
 function ScreenManager:switchScreen(modname)
   local nextScreen = require(modname)
+  -- in case the transition isn't set
+  if not ScreenManager:willSkipTransition() and ScreenManager.transition == nil then
+    ScreenManager.transition = ScreenTransitions.Circle
+  end
+  if ScreenManager:isTransitionActive() then -- is set, has draw
+    if ScreenManager.skipNextTransOut == false then
+      ScreenManager.transition:outwards(true)
+    end
+  end
+
   if type(nextScreen) == "table" then
     -- clear the previous screen.
     if ScreenManager:isScreenOperating() then
@@ -16,10 +28,6 @@ function ScreenManager:switchScreen(modname)
         ScreenManager.activeScreen = nil
       end
     end
-    -- transform the requested screen into a metatable
-    local nextInstance = {}
-    nextInstance.__index = nextInstance
-    setmetatable({}, nextScreen)
     -- enable the requested screen.
     if nextScreen.new then ScreenManager.activeScreen = nextScreen:new()
     else ScreenManager.activeScreen = nextScreen end
@@ -28,6 +36,21 @@ function ScreenManager:switchScreen(modname)
   if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.enter then
     ScreenManager.activeScreen:enter()
   end
+
+  if ScreenManager:isTransitionActive() and ScreenManager.skipNextTransIn == false then
+    ScreenManager.transition:inwards(true)
+  end
+
+  ScreenManager.skipNextTransIn = false
+  ScreenManager.skipNextTransOut = false
+end
+
+function ScreenManager:isTransitionActive()
+  return ScreenManager.transition ~= nil and ScreenManager.transition.draw
+end
+
+function ScreenManager:willSkipTransition()
+  return ScreenManager.skipNextTransOut and ScreenManager.skipNextTransIn
 end
 
 function ScreenManager:isScreenOperating()

@@ -1,18 +1,30 @@
-local noteDisplay = {
+local NoteDisplay = {
 	noteObjects = {},
 	receptorNotes = {}
 }
 
-function noteDisplay:drawReceptors()
-	for _,v in pairs(noteDisplay.receptorNotes) do
+--- @enum NoteParts
+local NoteParts = {
+	TapBody = 0,
+	HoldBody = 1,
+	HoldTail = 2,
+	--[[TODO:
+		maybe include RollBody and RollTail just so you can draw them differently
+		maybe include TapStroke for custom outlines for noteskins
+		maybe include MineBody for custom note kinds (i.e: Mines/Hurt Notes)
+	]]
+}
+
+function NoteDisplay:drawReceptors()
+	for _,v in pairs(NoteDisplay.receptorNotes) do
 		if v then v:draw() end
 	end
 end
 
-function noteDisplay:drawNotes()
-	for _,v in pairs(noteDisplay.noteObjects) do
+function NoteDisplay:drawNotes()
+	for _,v in pairs(NoteDisplay.noteObjects) do
 		if v then v:draw() end
 	end
 end
 
-return noteDisplay
+return NoteDisplay

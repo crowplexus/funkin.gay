@@ -1,4 +1,22 @@
+local function buildLabel(sel)
+	sel.text = nil
+	sel.fontSize = 14
+	sel.fontPath = "assets/fonts/vcr.ttf"
+	sel.position = Point2(0,0)
+	sel.size = Point2(0,0)
+	sel.scale = Point2(1,1)
+	sel.strokeSize = 1
+	sel.strokecolour = Colour.rgba(0,0,0,1)
+	sel.colour = Colour.rgba(1,1,1,1)
+	sel.textWidth = 0
+	sel.textHeight = 0
+	sel.rotation = 0
+	sel.alpha = 1.0
+	return sel
+end
+
 local Label = Object:extend()
+buildLabel(Label)
 
 function Label:__tostring()
 	return "Label"
@@ -21,19 +39,9 @@ local function _isFontPath(p)
 end
 
 function Label:new(x,y,text,size)
-	self.text = text or nil
-	self.fontPath = "assets/fonts/vcr.ttf"
-	self.fontSize = size or 14
 	self.position = Point2(x,y)
-	self.size = Point2(0,0)
-	self.scale = Point2(1,1)
-	self.strokeSize = 1
-	self.strokeColour = {0,0,0,1}
-	self.colour = {1,1,1,1}
-	self.textWidth = 0
-	self.textHeight = 0
-	self.rotation = 0
-	self.alpha = 1.0
+	self.text = text or nil
+	self.fontSize = size or 14
 	self._renderFont = nil
 	self._renderText = nil
 	self:changeFontSize(size, true)
@@ -46,7 +54,7 @@ function Label:dispose()
 end
 
 function Label:draw()
-	if self and self:has_any_text() then
+	if self and self:has_any_text() and self.visible and self.colour[4] > 0.0 then
 		-- TODO: use printf for alignments
 		love.graphics.setColor(self.colour)
 		love.graphics.draw(self._renderText,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
@@ -80,8 +88,8 @@ function Label:changeFontSize(newSize, force)
 end
 
 --#region Getters and Setters
-function Label:get_alpha() return rawget(self,self.color[4]) end
-function Label:set_alpha(vl) return rawset(self,self.color[4],vl) end
+function Label:get_alpha() return rawget(self,self.colour[4]) end
+function Label:set_alpha(vl) return rawset(self,self.colour[4],vl) end
 --#endregion
 
 function Label:__index(idx)
