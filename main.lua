@@ -83,12 +83,9 @@ function love.draw()
   --- in main canvas ---
   love.graphics.setCanvas()
   love.graphics.clear(0.30,0.30,0.30,1.0)
-
   -- stretches the game's canvas.
   local sr = Point2(screenWidth / gameCanvas:getWidth(), screenHeight / gameCanvas:getHeight())
-  local cs = Point2(math.max(sr.x, 1), math.max(sr.y, 1))
-  love.graphics.draw(gameCanvas, 0, 0, 0, cs.x, cs.y)
-
+  love.graphics.draw(gameCanvas, 0, 0, 0, sr.x, sr.y)
   -- the fps counter should render over everything else.
   if drawFPSCounter then drawFPS() end
   --- -- ---- ------- ---
