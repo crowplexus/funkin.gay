@@ -2,12 +2,13 @@ local function buildLabel(sel)
 	sel.text = nil
 	sel.fontSize = 14
 	sel.fontPath = "assets/fonts/vcr.ttf"
-	sel.position = Point2(0,0)
-	sel.size = Point2(0,0)
-	sel.scale = Point2(1,1)
+	sel.position = Vector3(0,0,0)
+	sel.zAsLayer = true
+	sel.size = Vector2(0,0)
+	sel.scale = Vector2(1,1)
 	sel.strokeSize = 0
-	sel.strokeColour = Colour.rgba(0,0,0,1)
-	sel.colour = Colour.rgba(1,1,1,1)
+	sel.strokeColour = Colour.rgb(0,0,0)
+	sel.colour = Colour.rgb(255,255,255)
 	sel.visible = true
 	sel.textWidth = 0
 	sel.textHeight = 0
@@ -52,20 +53,20 @@ end
 local function _drawWithStroke(t,c,sc,x,y,r,sz,sx,sy)
 	local offset = -sz
   love.graphics.setColor(sc)
-  for i = 1,2 do
-    love.graphics.draw(t,x + sz,y + sz + offset,r,sx,sy)
-    love.graphics.draw(t,x + sz + offset,y + sz,r,sx,sy)
-    love.graphics.draw(t,x + sz - offset,y + sz + offset,r,sx,sy)
-    love.graphics.draw(t,x + sz + offset,y + sz - offset,r,sx,sy)
+  for i = 1,1 do
+    love.graphics.draw(t, x + sz, y + sz + offset, r, sx, sy)
+    love.graphics.draw(t, x + sz + offset, y + sz, r, sx, sy)
+    love.graphics.draw(t, x + sz - offset, y + sz + offset, r, sx, sy)
+    love.graphics.draw(t, x + sz + offset, y + sz - offset, r, sx, sy)
     offset = -offset
   end
   love.graphics.setColor(c)
-  love.graphics.draw(t,x + sz,y + sz,r,sx,sy)
+  love.graphics.draw(t, x + sz, y + sz, r, sx, sy)
   love.graphics.setColor(1,1,1,1)
 end
 
 function Label:new(x,y,text,size)
-	self.position = Point2(x,y)
+	self.position = Vector3(x,y,0)
 	self.text = text or nil
 	self.fontSize = size or 14
 	self._renderFont = nil

@@ -9,11 +9,17 @@ function Screen:new()
 end
 
 function Screen:enter() end
-function Screen:update(dt) end
+function Screen:update(dt)
+  for i=1, #self.objects do
+    local v = self.objects[i]
+    if v and v.update then v:update(dt) end
+  end
+end
 function Screen:keypressed(key) end
 function Screen:keyreleased(key) end
 function Screen:draw()
-  for _,v in pairs(self.objects) do
+  for i=1, #self.objects do
+    local v = self.objects[i]
     if v and v.draw then v:draw() end
   end
 end
@@ -38,8 +44,15 @@ end
 
 function Screen:remove(obj)
   for _,v in ipairs(self.objects) do
-    if v == obj then table.remove(self.objects,_) end
+    if v == obj then
+      table.remove(self.objects,_)
+    end
   end
+end
+
+function Screen:sortDrawZ()
+  -- doesn't work i'll check this later
+  --table.sort(self.objects, function(a,b) return Vector3.sortByZ(-1,a,b) end)
 end
 
 --return setmetatable(Screen, {__index = Screen})

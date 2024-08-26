@@ -1,7 +1,8 @@
 local function buildSprite(sel)
-	sel.position = Point2(0,0)
-	sel.scale = Point2(1,1)
-	sel.colour = Colour.rgba(1,1,1,1)
+	sel.position = Vector3(0,0,0) -- X, Y, Z
+	sel.zAsLayer = true -- treats Z position value as a layer index, is a toggle so you can use Z for something else
+	sel.scale = Vector2(1,1)
+	sel.colour = Colour.rgb(255,255,255)
 	sel.visible = true
 	sel.rotation = 0
 	sel.alpha = 1.0
@@ -13,7 +14,7 @@ local Sprite = Object:extend()
 buildSprite(Sprite)
 
 function Sprite:new(x,y,tex)
-	self.position = Point2(x,y)
+	self.position = Vector3(x,y,0)
 	if tex then self.texture = tex end
 	return self
 end
@@ -27,7 +28,7 @@ function Sprite:draw()
 	if self and self.texture and self.visible and self.colour[4] > 0.0 then
 		love.graphics.setColor(self.colour)
 		love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
-		love.graphics.setColor(Colour.rgba(1,1,1,1))
+		love.graphics.setColor(Colour.rgb(1,1,1,1))
 	end
 end
 

@@ -6,23 +6,23 @@ local started = false --- @type boolean
 
 local speed = 50 --- @type number
 local circS = 0 --- @type number
-local canvasSize --- @class Point2
+local canvasSize --- @class Vector2
 
 function Transition:reset()
 	started = false
 	finished = false
 	transIn = true
 	local w, h = love.graphics.getDimensions()
-	canvasSize = Point2(w,h)
+	canvasSize = Vector2(w,h)
 end
 
 function Transition:draw()
 	if finished then return end
 	local circX = (canvasSize.x) * 0.5
   local circY = (canvasSize.y) * 0.5
-	love.graphics.setColor(Colour.rgba(0,0,0,1))
+	love.graphics.setColor(Colour.rgb(0,0,0))
   love.graphics.circle("fill",circX,circY,circS,circS)
-  love.graphics.setColor(Colour.rgba(1,1,1,1))
+  love.graphics.setColor(Colour.rgb(255,255,255))
   if transIn then self:inwards() else self:outwards() end
   if circS < 0 then finished = true end
 end

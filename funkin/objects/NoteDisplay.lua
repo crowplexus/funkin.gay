@@ -16,13 +16,15 @@ local NoteParts = {
 }
 
 function NoteDisplay:drawReceptors()
-	for _,v in pairs(NoteDisplay.receptorNotes) do
+	for i=1, #self.receptorNotes do
+		local v = self.receptorNotes[i]
 		if v then v:draw() end
 	end
 end
 
 function NoteDisplay:drawNotes()
-	for _,v in pairs(NoteDisplay.noteObjects) do
+	for i=1, #self.noteObjects do
+		local v = self.noteObjects[i]
 		if v then v:draw() end
 	end
 end

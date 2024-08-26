@@ -1,24 +1,36 @@
 return {
-  BLACK           = 0xFF000000,
-  WHITE           = 0xFFFFFFFF,
-  RED             = 0xFFFF0000,
-  GREEN           = 0xFF00FF00,
-  BLUE            = 0xFF0000FF,
-  YELLOW          = 0xFFFFFF00,
-  ORANGE          = 0xFFFF8000,
-  CYAN            = 0xFF00FFFF,
-  PINK            = 0xFFFFC0CB,
-  BROWN           = 0xFFA52A2A,
-  MAGENTA         = 0xFFFF00FF,
-  LAVENDER        = 0xFFE6E6FA,
-  INDIGO          = 0xFF4B0082,
-  GREEN_YELLOW    = 0xFFADFF2F,
-  PALE_GREEN      = 0xFF98FB98,
+  BLACK           = {0,0,0,1},
+  WHITE           = {1,1,1,1},
+  RED             = {1,0,0,1},
+  GREEN           = {0,1,0,1},
+  BLUE            = {0,0,1,1},
+  YELLOW          = {1,1,0,1},
+  ORANGE          = {1,128/255,0,1},
+  CYAN            = {0,1,1,1},
+  PINK            = {1,192/255,203/255,1},
+  BROWN           = {165/255,42/255,42/255,1},
+  MAGENTA         = {1,0,1,1},
+  LAVENDER        = {230/255,230/255,250/255,1},
+  INDIGO          = {75/255,0,130/255,1},
+  GREEN_YELLOW    = {173/255,1,47/255,1},
+  PALE_GREEN      = {152/255,251/255,152/255,1},
 
-  rgba = function(r,g,b,a)
-    if a == nil or type(a) ~= "number" then
-      a = 1
-    end
+  --- Returns a colour table in RGBA, from 0 to 255
+  --- @param r Red Channel Value.
+  --- @param g Green Channel Value.
+  --- @param b Blue Channel Value.
+  --- @param r Alpha Channel Value.
+  rgb = function(r,g,b,a)
+    if not a or type(a) ~= "number" then a = 255 end
+    return {r/255,g/255,b/255,a/255}
+  end,
+  --- Returns a colour table in RGBA, from 0 to 1
+  --- @param r Red Channel Value.
+  --- @param g Green Channel Value.
+  --- @param b Blue Channel Value.
+  --- @param r Alpha Channel Value.
+  rgbLinear = function(r,g,b,a)
+    if not a or type(a) ~= "number" then a = 1 end
     return {r,g,b,a}
   end,
 }

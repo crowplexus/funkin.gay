@@ -4,11 +4,11 @@ end
 
 --#region Global
 
-Object = require("libraries.classic")
-Point2 = require("jigw.util.Point2")
-Point3 = require("jigw.util.Point3")
-Rect2 = require("jigw.util.Rect2")
-Rect3 = require("jigw.util.Rect3")
+Object = require("libraries.classic") --- @class Object
+Vector2 = require("jigw.util.Vector2") --- @class Vector2
+Vector3 = require("jigw.util.Vector3") --- @class Vector3
+Rect2 = require("jigw.util.Rect2") --- @class Rect2
+Rect3 = require("jigw.util.Rect3") --- @class Rect3
 ScreenTransitions = {
   Circle = require("jigw.transition.Circle"),
   Rectangle = require("jigw.transition.Rectangle"),
@@ -18,11 +18,9 @@ DefaultScreenTransition = ScreenTransitions.Circle
 --- @class Colour
 --- Utility containing functions and variables to work with colors
 Colour = require("jigw.util.Colour")
---- @alias Colour Color
-Color = require("jigw.util.Colour")
---- @class SceneManager
-ScreenManager = require("jigw.ScreenManager")
-Utils = require("jigw.util.JigwUtils")
+Color = require("jigw.util.Colour") --- @alias Colour Color
+ScreenManager = require("jigw.ScreenManager") --- @class SceneManager
+Utils = require("jigw.util.JigwUtils") --- @class Utils
 
 --#endregion
 
@@ -32,17 +30,17 @@ Utils = require("jigw.util.JigwUtils")
 --- @type string
 gameVersion = tostring(os.date("%Y.%m.%d"))
 
-local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none")
+local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none") --- @type love.graphics.Font
 local drawFPSCounter = true --- @type boolean
-
 local gameCanvas --- @type love.graphics.Canvas
 
 function love.load()
   -- set default font
   love.graphics.setFont(systemFont)
   -- make a canvas for the actual game.
-  local sz = Point2(love.graphics.getWidth(),love.graphics.getHeight())
+  local sz = Vector2(love.graphics.getWidth(),love.graphics.getHeight())
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
+
   ScreenManager.skipNextTransIn = false
   ScreenManager:switchScreen("funkin.screens.MainMenu")
 end
@@ -67,7 +65,7 @@ end
 
 function love.draw()
   local screenWidth, screenHeight = love.graphics.getDimensions()
-  local defaultColour = Colour.rgba(1,1,1,1)
+  local defaultColour = Colour.rgb(255,255,255)
 
   love.graphics.setColor(defaultColour)
   love.graphics.setCanvas(gameCanvas)
@@ -85,7 +83,7 @@ function love.draw()
   love.graphics.setCanvas()
   love.graphics.clear(0.30,0.30,0.30,1.0)
   -- stretches the game's canvas.
-  local sr = Point2(screenWidth / gameCanvas:getWidth(), screenHeight / gameCanvas:getHeight())
+  local sr = Vector2(screenWidth / gameCanvas:getWidth(), screenHeight / gameCanvas:getHeight())
   love.graphics.draw(gameCanvas, 0, 0, 0, sr.x, sr.y)
   -- the fps counter should render over everything else.
   if drawFPSCounter then drawFPS() end

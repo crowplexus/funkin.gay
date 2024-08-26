@@ -16,4 +16,18 @@ function Rect3:round()
 	)
 end
 
+function Rect3:combine(with)
+	self.x = self.x+with.x
+	self.y = self.y+with.y
+	self.z = self.z+with.z
+	self.width = self.width+with.width
+	self.height = self.height+with.height
+	self.depth = self.depth+with.depth
+	return self
+end
+
+function Rect3:__tostring()
+	return "X: "..self.x.." Y: "..self.y.." Z: "..self.z.." Width: "..self.width.." Height: "..self.height.. " Depth: "..self.depth
+end
+
 return Rect3

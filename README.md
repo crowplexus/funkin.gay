@@ -28,3 +28,5 @@ SOURCE GUIDE:
         https://github.com/rxi/classic
       - inifile by bartbes
         https://luarocks.org/modules/bartbes/inifile
+      - xml2lua by manoelcampos
+        https://github.com/manoelcampos/xml2lua
