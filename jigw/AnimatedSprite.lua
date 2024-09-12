@@ -40,12 +40,12 @@ local function buildAnimation()
 end
 
 local AnimatedSprite = Object:extend()
-buildAnimatedSprite(AnimatedSprite)
+
 
 function AnimatedSprite:new(x,y,tex)
+	buildAnimatedSprite(self)
 	self.position = Vector3(x,y,0)
 	if tex then self.texture = tex end
-	return self
 end
 
 function AnimatedSprite:update(dt)
@@ -53,7 +53,7 @@ function AnimatedSprite:update(dt)
 		local curAnim = self.animations[self.currentAnimation]
 		local animationEnd = curAnim.length
 		if self.animationProgress < animationEnd then
-			self.animationProgress = self.animationProgress + dt / (curAnim.frameRate * 0.001)
+			self.animationProgress = self.animationProgress + dt / (curAnim.frameRate * 0.0018)
 		else
 			--- repeats the animation if we even can lol
 			if curAnim.repeatMode == AnimationRepeat.NEVER then
@@ -79,9 +79,9 @@ function AnimatedSprite:addAnimation(name,x,y,width,height,fps,duration,tex)
 	anim.tex = tex
 	anim.name = name or "default"
 	anim.frameRate = fps or 30
-	for y = 0, tex:getHeight() - height, height do
-		for x = 0, tex:getWidth() - width, width do
-			table.insert(anim.quads, love.graphics.newQuad(x,y,width,height,tex:getDimensions()))
+	for _y = 0, tex:getHeight() - height, height do
+		for _x = 0, tex:getWidth() - width, width do
+			table.insert(anim.quads, love.graphics.newQuad(_x,_y,width,height,tex:getDimensions()))
 		end
 	end
 	anim.length = duration or 1
@@ -109,7 +109,11 @@ function AnimatedSprite:addAnimationTransform(name,transform,fps,duration,tex)
 			if frameMargin.height < math.abs(frameMargin.y) then frameMargin.height = math.abs(frameMargin.y) end
 			Rect2.combine(frameRect,frameMargin)
 		end
-		table.insert(anim.quads, love.graphics.newQuad(frameRect.x,frameRect.y,frameRect.width,frameRect.height,anim.tex:getDimensions()))
+		table.insert(anim.quads, {
+			quad = love.graphics.newQuad(frameRect.x,frameRect.y,frameRect.width,frameRect.height,anim.tex:getDimensions()),
+			offset = not trimmed and Vector2(0, 0) or Vector2(cfg.frameX, cfg.frameY)
+		})
+		--print(Utils.tablePrint(anim.quads))
 	end
 
 	anim.length = duration or #anim.quads or 1
@@ -128,41 +132,50 @@ function AnimatedSprite:addOffsetToAnimation(name,x,y)
 	return anim
 end
 
+function AnimatedSprite:playAnimation(name, forced)
+	if type(forced) ~= "boolean" then forced = false end
+	if self.animations and self.animations[name] then
+		self.currentAnimation = self.animations[name].name
+		if forced then self.animationProgress = 0 end
+	end
+end
+
 function AnimatedSprite:dispose()
 	self.texture:release()
-	resetVars()
+	buildAnimatedSprite(self)
 end
 
 function AnimatedSprite:draw()
-	if self and self.texture and self.visible and self.colour[4] > 0.0 then
+	if self and self.texture and self.visible and self.colour[4] ~= 0.0 then
 		love.graphics.setColor(self.colour)
 		if self.currentAnimation == nil then
 			love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
 		else
 			local cur = self.animations[self.currentAnimation]
 			local progress = math.floor(self.animationProgress / cur.length * #cur.quads) + 1
-			local animPos = {x = self.position.x + cur.offset.x, y = self.position.y + cur.offset.y}
 			if progress > cur.length or progress < 1 then progress = 1 end
+			local animPos = {
+				x = self.position.x + cur.offset.x + cur.quads[progress].offset.x,
+				y = self.position.y + cur.offset.y + cur.quads[progress].offset.y
+			}
 			--print(progress)
-			love.graphics.draw(cur.texture or self.texture,cur.quads[progress],animPos.x,animPos.y,self.rotation,self.scale.x,self.scale.y)
+			love.graphics.draw(cur.texture or self.texture,cur.quads[progress].quad,animPos.x + cur.quads[progress].offset.x,animPos.y + cur.quads[progress].offset.y,self.rotation,self.scale.x,self.scale.y)
 		end
 		love.graphics.setColor(Colour.rgb(1,1,1,1))
 	end
 end
 
---#region Getters and Setters
-function AnimatedSprite:get_alpha() return rawget(self,self.colour[4]) end
-function AnimatedSprite:set_alpha(vl) return rawset(self,self.colour[4],vl) end
---#endregion
-
-function AnimatedSprite:__index(idx)
-  -- custom get variable functionality
-  return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self,idx)
-end
-
-function AnimatedSprite:__newindex(idx,vl)
-  -- custom set variable functionality
-  return rawget(self,"set_"..idx) and rawget(self,"set_"..idx)(self,vl) or rawset(self,idx,vl)
+function AnimatedSprite:screenCentre(_x_)
+	_x_ = string.lower(_x_)
+	local vpw, vph = love.graphics.getDimensions()
+	local width, height = self.texture:getDimensions()
+	if _x_ == "x" or _x_ == "xy" then
+		self.position.x = (vpw - width) * 0.5
+	end
+	if _x_ == "y" or _x_ == "xy" then
+		local height = self.texture:getHeight() or 0
+		sezlf.position.y = (vph - height) * 0.5
+	end
 end
 
 return AnimatedSprite

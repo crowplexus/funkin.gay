@@ -16,19 +16,19 @@ return {
   PALE_GREEN      = {152/255,251/255,152/255,1},
 
   --- Returns a colour table in RGBA, from 0 to 255
-  --- @param r Red Channel Value.
-  --- @param g Green Channel Value.
-  --- @param b Blue Channel Value.
-  --- @param r Alpha Channel Value.
+  --- @param r number Red Channel Value.
+  --- @param g number Green Channel Value.
+  --- @param b number Blue Channel Value.
+  --- @param a number Alpha Channel Value.
   rgb = function(r,g,b,a)
     if not a or type(a) ~= "number" then a = 255 end
     return {r/255,g/255,b/255,a/255}
   end,
   --- Returns a colour table in RGBA, from 0 to 1
-  --- @param r Red Channel Value.
-  --- @param g Green Channel Value.
-  --- @param b Blue Channel Value.
-  --- @param r Alpha Channel Value.
+  --- @param r number Red Channel Value.
+  --- @param g number Green Channel Value.
+  --- @param b number Blue Channel Value.
+  --- @param a number Alpha Channel Value.
   rgbLinear = function(r,g,b,a)
     if not a or type(a) ~= "number" then a = 1 end
     return {r,g,b,a}

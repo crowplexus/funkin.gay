@@ -11,17 +11,16 @@ local function buildSprite(sel)
 end
 
 local Sprite = Object:extend()
-buildSprite(Sprite)
 
 function Sprite:new(x,y,tex)
+	buildSprite(self)
 	self.position = Vector3(x,y,0)
 	if tex then self.texture = tex end
-	return self
 end
 
 function Sprite:dispose()
 	self.texture:release()
-	resetVars()
+	buildSprite(self)
 end
 
 function Sprite:draw()
@@ -37,14 +36,17 @@ function Sprite:get_alpha() return rawget(self,self.colour[4]) end
 function Sprite:set_alpha(vl) return rawset(self,self.colour[4],vl) end
 --#endregion
 
-function Sprite:__index(idx)
-  -- custom get variable functionality
-  return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self,idx)
-end
-
-function Sprite:__newindex(idx,vl)
-  -- custom set variable functionality
-  return rawget(self,"set_"..idx) and rawget(self,"set_"..idx)(self,vl) or rawset(self,idx,vl)
+function Sprite:screenCentre(_x_)
+	_x_ = string.lower(_x_)
+	local vpw, vph = love.graphics.getDimensions()
+	if _x_ == "x" or _x_ == "xy" then
+		local width = self.texture:getWidth() or 0
+		self.position.x = (vpw-width) * 0.5
+	end
+	if _x_ == "y" or _x_ == "xy" then
+		local height = self.texture:getHeight() or 0
+		self.position.y = (vph-height) * 0.5
+	end
 end
 
 return Sprite

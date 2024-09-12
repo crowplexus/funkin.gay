@@ -1,9 +1,9 @@
 local Vector3 = Object:extend()
 
 function Vector3:new(x,y,z)
-	self.x = x or 0
-	self.y = y or 0
-	self.z = z or 0
+	self.x = (x and type(x) == "number") and x or 0
+	self.y = (y and type(y) == "number") and y or 0
+	self.z = (z and type(z) == "number") and z or 0
 end
 
 function Vector3:round()

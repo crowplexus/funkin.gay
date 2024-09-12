@@ -18,8 +18,8 @@ end
 function Screen:keypressed(key) end
 function Screen:keyreleased(key) end
 function Screen:draw()
-  for i=1, #self.objects do
-    local v = self.objects[i]
+  for i,v in pairs(self.objects) do
+    --local v = self.objects[i]
     if v and v.draw then v:draw() end
   end
 end

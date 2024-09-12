@@ -1,23 +1,22 @@
-local function resetVars()
-  return {
-    bpm = 100.0, --- @type number
-    crotchet = (60 / Conductor.bpm), --- @type number
-    semiquaver = (60 / Conductor.bpm) * 4.0, --- @type number
-    stepsPerBeat = 4, --- @type number
-    -- we really just need these two, bars aren't gonna be used often
-    -- i'll add them later if its really needed.
-    step = 0.0, --- @type number
-    beat = 0.0, --- @type number
-  }
+local function buildConductor(self)
+  sel.bpm = 100.0 --- @type number
+  sel.crotchet = (60 / Conductor.bpm) --- @type number
+  sel.semiquaver = (60 / Conductor.bpm) * 4.0 --- @type number
+  sel.stepsPerBeat = 4 --- @type number
+  -- we really just need these two, bars aren't gonna be used often
+  -- i'll add them later if its really needed.
+  sel.step = 0.0 --- @type number
+  sel.beat = 0.0 --- @type number
+  return sel
 end
-Conductor = resetVars({})
-Conductor.__index = Conductor
+Conductor = Object:extend()
+buildConductor(Conductor)
 
-function Conductor:init(starting_bpm)
-  if type(starting_bpm) ~= "number" or starting_bpm < 0 then
-    starting_bpm = 100.0
+function Conductor:init(startingBPM)
+  if type(startingBPM) ~= "number" or startingBPM < 0 then
+    startingBPM = 100.0
   end
-  self.bpm = starting_bpm
+  self.bpm = startingBPM
 end
 
 --#region Setters
@@ -27,21 +26,9 @@ function Conductor:set_bpm(vl)
   return rawset(self,self.bpm,vl)
 end
 
-function Conductor:set_steps_ber_beat(vl)
+function Conductor:set_stepsPerBeat(vl)
   self.semiquaver = (60/self.bpm)*vl
   return rawset(self,self.stepsPerBeat,vl)
-end
---#endregion
-
---#region Override Index
-function Conductor:__index(idx)
-  -- custom get variable functionality
-  return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self,idx)
-end
-
-function Conductor:__newindex(idx,vl)
-  -- custom set variable functionality
-  return rawget(self,"set_"..idx) and rawget(self,"set_"..idx)(self,vl) or rawset(self,idx,vl)
 end
 --#endregion
 

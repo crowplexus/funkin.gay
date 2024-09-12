@@ -93,7 +93,7 @@ end
 function drawFPS()
   Utils.drawTextWithStroke("FPS: "..love.timer.getFPS()
     .." - RAM: "..Utils.formatBytes(getMemoryUsage())
-    .."\nScreen: "..ScreenManager.getName()
+    .."\nScreen: "..ScreenManager:getName()
     .." - Draw Calls: "..love.graphics.getStats().drawcalls
     ,5,5)
 end

@@ -1,8 +1,8 @@
 local Vector2 = Object:extend()
 
 function Vector2:new(x,y)
-	self.x = x or 0
-	self.y = y or 0
+	self.x = (x and type(x) == "number") and x or 0
+	self.y = (y and type(y) == "number") and y or 0
 end
 
 function Vector2:round()

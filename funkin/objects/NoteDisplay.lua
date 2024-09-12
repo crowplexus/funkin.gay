@@ -1,6 +1,7 @@
 local NoteDisplay = {
 	noteObjects = {},
-	receptorNotes = {}
+	receptorNotes = {},
+	maxColumns = 4,
 }
 
 --- @enum NoteParts
@@ -18,14 +19,14 @@ local NoteParts = {
 function NoteDisplay:drawReceptors()
 	for i=1, #self.receptorNotes do
 		local v = self.receptorNotes[i]
-		if v then v:draw() end
+		if v and v.draw then v:draw() end
 	end
 end
 
 function NoteDisplay:drawNotes()
 	for i=1, #self.noteObjects do
 		local v = self.noteObjects[i]
-		if v then v:draw() end
+		if v and v.draw then v:draw() end
 	end
 end
 

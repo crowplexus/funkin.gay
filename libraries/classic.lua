@@ -9,7 +9,6 @@
 
 
 local Object = {}
-Object.__index = Object
 
 
 function Object:new()
@@ -57,6 +56,17 @@ function Object:__tostring()
   return "Object"
 end
 
+function Object:__index(idx)
+  -- custom get variable functionality
+  return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self, idx) or Object[idx];
+end
+function Object:__newindex(idx,vl)
+  -- custom set variable functionality
+  if(rawget(self, "set_"..idx))then
+    return rawget(self,"set_"..idx)(self,vl);
+  end
+  rawset(self, idx, vl);
+end
 
 function Object:__call(...)
   local obj = setmetatable({}, self)
