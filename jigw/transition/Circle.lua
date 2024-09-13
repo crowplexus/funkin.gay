@@ -30,7 +30,6 @@ end
 function Transition:inwards(force)
   if circS >= 900 then transIn = false end
 	if force == true and not started then
-		self:reset()
 		transIn = true
 		started = true
 		circS = 0
@@ -40,7 +39,6 @@ end
 
 function Transition:outwards(force)
 	if force == true and not started then
-		self:reset()
 		transIn = false
 		started = true
 		circS = 900

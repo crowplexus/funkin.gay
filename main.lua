@@ -41,7 +41,7 @@ function love.load()
   local sz = Vector2(love.graphics.getWidth(),love.graphics.getHeight())
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
 
-  ScreenManager.skipNextTransIn = false
+  ScreenManager.skipNextTransIn = true
   ScreenManager:switchScreen("funkin.screens.MainMenu")
 end
 
@@ -83,8 +83,8 @@ function love.draw()
   love.graphics.setCanvas()
   love.graphics.clear(0.30,0.30,0.30,1.0)
   -- stretches the game's canvas.
-  local sr = Vector2(screenWidth / gameCanvas:getWidth(), screenHeight / gameCanvas:getHeight())
-  love.graphics.draw(gameCanvas, 0, 0, 0, sr.x, sr.y)
+  local sr = Vector2(screenWidth / gameCanvas:getWidth(),screenHeight / gameCanvas:getHeight())
+  love.graphics.draw(gameCanvas,0,0,0,sr.x,sr.y)
   -- the fps counter should render over everything else.
   if drawFPSCounter then drawFPS() end
   --- -- ---- ------- ---

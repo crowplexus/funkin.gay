@@ -8,7 +8,7 @@ function AtlasSpriteHelper:getAnimationListSparrow(file)
 	end
 
 	local animations = {}
-	print("animations: "..#animations)
+	--print("animations: "..#animations)
 	local curPos = 1
 	while curPos < #xmldoc.children[1].children do
 		local atlasFrameInfo = xmldoc.children[1].children[curPos].attrs
@@ -21,7 +21,7 @@ function AtlasSpriteHelper:getAnimationListSparrow(file)
 		end
 		curPos = curPos + 1
 	end
-	print("resulting animations "..#animations)
+	--print("resulting animations "..#animations)
 	return animations
 end
 

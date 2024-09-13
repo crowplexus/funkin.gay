@@ -7,10 +7,23 @@ local Screen = require("jigw.Screen")
 local MainMenu = Screen:extend()
 MainMenu.__name = "Main Menu"
 
+local menuSounds = {
+  confirm = love.audio.newSource("assets/audio/sfx/confirmMenu.ogg","static"),
+  scroll = love.audio.newSource("assets/audio/sfx/scrollMenu.ogg","static"),
+  cancel = love.audio.newSource("assets/audio/sfx/cancelMenu.ogg","static"),
+}
+local bgMusic = love.audio.newSource("assets/audio/bgm/freakyMenu.ogg","stream")
+local buttons = {}
+
 local selected = 1
 local options = {"storymode","freeplay","credits","options"}
-local freakybob = love.audio.newSource("assets/music/freakyMenu.ogg","stream")
-local buttons = {}
+
+function MainMenu:new()
+  MainMenu.super.new()
+  MainMenu.buttons = {}
+  MainMenu.selected = 1
+  return self
+end
 
 function MainMenu:enter()
   local vpw, vph = love.graphics.getDimensions()
@@ -33,13 +46,13 @@ function MainMenu:enter()
     if i == selected then spriteButton:playAnimation("selected") end
   end
 
-  local blah = Label:new(5,vph*0.96,"v"..gameVersion, 20)
+  local blah = Label:new(5,vph*0.97,"Funkin' Kiskadee v"..gameVersion, 20)
   blah.position.z = -1
-  blah.strokeSize = 1.5
+  blah.strokeSize = 1.25
   self:add(blah)
 
-  freakybob:setVolume(0.1)
-  freakybob:play()
+  bgMusic:setVolume(0.5)
+  bgMusic:play()
 
   self:sortDrawZ()
 end
@@ -49,20 +62,27 @@ function MainMenu:keypressed(x)
   if x == "up" then selected = Utils.wrap(selected - 1, 1, #buttons) end
   if x == "down" then selected = Utils.wrap(selected + 1, 1, #buttons) end
   if selected ~= oldS then
-    print(oldS)
-    print(selected)
     buttons[oldS]:playAnimation("idle")
     buttons[selected]:playAnimation("selected")
     buttons[selected]:screenCentre("X")
+    love.audio.stop(menuSounds.scroll)
+    love.audio.play(menuSounds.scroll)
+  end
+  if x == "d" then
+    Utils.match(selected,{
+      [0] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
+      [1] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
+      [2] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
+      [3] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
+    })
   end
 end
 
 function MainMenu:clear()
-  if freakybob then
-    freakybob:stop()
-    --freakybob:release()
+  MainMenu.super.clear()
+  if bgMusic then
+    bgMusic:stop()
   end
-  Screen:clear()
 end
 
 return MainMenu

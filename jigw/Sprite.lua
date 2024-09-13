@@ -39,13 +39,13 @@ function Sprite:set_alpha(vl) return rawset(self,self.colour[4],vl) end
 function Sprite:screenCentre(_x_)
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
-	if _x_ == "x" or _x_ == "xy" then
+	if string.find(_x_,"x") then
 		local width = self.texture:getWidth() or 0
-		self.position.x = (vpw-width) * 0.5
+		self.position.x = (vpw-width)*0.5
 	end
-	if _x_ == "y" or _x_ == "xy" then
+	if string.find(_x_,"y") then
 		local height = self.texture:getHeight() or 0
-		self.position.y = (vph-height) * 0.5
+		self.position.y = (vph-height)*0.5
 	end
 end
 

@@ -4,7 +4,7 @@ Screen.__name = "Screen"
 --Screen.__index = Screen
 
 function Screen:new()
-  self.objects = {}
+  Screen.objects = {}
   return self
 end
 
@@ -25,34 +25,38 @@ function Screen:draw()
 end
 
 function Screen:clear()
-  while #self.objects ~= 0 do
-    if self.objects[0] and self.objects[0].dispose then
-      self.objects[0]:dispose()
-      if self.objects[0] ~= nil then
-        self.objects[0] = nil
+  while #Screen.objects ~= 0 do
+    if Screen.objects[0] then
+      if Screen.objects[0].dispose then
+        Screen.objects[0]:dispose()
+      elseif Screen.objects[0].release then
+        Screen.objects[0]:release()
+      end
+      if Screen.objects[0] ~= nil then
+        Screen.objects[0] = nil
       end
     end
-    table.remove(self.objects, i)
+    table.remove(Screen.objects, i)
   end
 end
 
 function Screen:add(obj)
-  if not self.objects[obj] then
-    table.insert(self.objects, obj)
+  if not Screen.objects[obj] then
+    table.insert(Screen.objects, obj)
   end
 end
 
 function Screen:remove(obj)
-  for _,v in ipairs(self.objects) do
+  for _,v in ipairs(Screen.objects) do
     if v == obj then
-      table.remove(self.objects,_)
+      table.remove(Screen.objects,_)
     end
   end
 end
 
 function Screen:sortDrawZ()
   -- doesn't work i'll check this later
-  --table.sort(self.objects, function(a,b) return Vector3.sortByZ(-1,a,b) end)
+  --table.sort(Screen.objects, function(a,b) return Vector3.sortByZ(-1,a,b) end)
 end
 
 --return setmetatable(Screen, {__index = Screen})

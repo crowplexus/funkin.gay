@@ -15,6 +15,7 @@ function ScreenManager:switchScreen(modname)
     ScreenManager.transition = DefaultScreenTransition
   end
   if ScreenManager:isTransitionActive() then -- is set, has draw
+    ScreenManager.transition:reset()
     if ScreenManager.skipNextTransOut == false then
       ScreenManager.transition:outwards(true)
     end
@@ -37,8 +38,11 @@ function ScreenManager:switchScreen(modname)
     ScreenManager.activeScreen:enter()
   end
 
-  if ScreenManager:isTransitionActive() and ScreenManager.skipNextTransIn == false then
-    ScreenManager.transition:inwards(true)
+  if ScreenManager:isTransitionActive() then
+    ScreenManager.transition:reset()
+    if ScreenManager.skipNextTransIn == false then
+      ScreenManager.transition:inwards(true)
+    end
   end
 
   ScreenManager.skipNextTransIn = false

@@ -94,7 +94,7 @@ function AnimatedSprite:addAnimationTransform(name,transform,fps,duration,tex)
 	anim.tex = tex or self.texture
 	if anim.tex == nil then
 		print("Cannot add animation to a texture-less AnimatedSprite.")
-		return
+		return nil
 	end
 	anim.name = name or "default"
 	anim.frameRate = fps or 30
@@ -133,7 +133,7 @@ function AnimatedSprite:addOffsetToAnimation(name,x,y)
 end
 
 function AnimatedSprite:playAnimation(name, forced)
-	if type(forced) ~= "boolean" then forced = false end
+	if not forced or type(forced) ~= "boolean" then forced = false end
 	if self.animations and self.animations[name] then
 		self.currentAnimation = self.animations[name].name
 		if forced then self.animationProgress = 0 end
@@ -141,6 +141,13 @@ function AnimatedSprite:playAnimation(name, forced)
 end
 
 function AnimatedSprite:dispose()
+	for idx,anim in ipairs(self.animations) do
+		for qd,prms in self.animations.quads do
+			if prms.quad.release then prms.quad:release() end
+			prms = nil
+		end
+		anim = nil
+	end
 	self.texture:release()
 	buildAnimatedSprite(self)
 end
@@ -153,13 +160,14 @@ function AnimatedSprite:draw()
 		else
 			local cur = self.animations[self.currentAnimation]
 			local progress = math.floor(self.animationProgress / cur.length * #cur.quads) + 1
-			if progress > cur.length or progress < 1 then progress = 1 end
+			if progress < 1 or progress > cur.length then progress = 1 end
 			local animPos = {
 				x = self.position.x + cur.offset.x + cur.quads[progress].offset.x,
 				y = self.position.y + cur.offset.y + cur.quads[progress].offset.y
 			}
 			--print(progress)
-			love.graphics.draw(cur.texture or self.texture,cur.quads[progress].quad,animPos.x + cur.quads[progress].offset.x,animPos.y + cur.quads[progress].offset.y,self.rotation,self.scale.x,self.scale.y)
+			love.graphics.draw(cur.texture or self.texture,cur.quads[progress].quad,animPos.x,animPos.y,
+					self.rotation,self.scale.x,self.scale.y)
 		end
 		love.graphics.setColor(Colour.rgb(1,1,1,1))
 	end
@@ -169,12 +177,13 @@ function AnimatedSprite:screenCentre(_x_)
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
 	local width, height = self.texture:getDimensions()
-	if _x_ == "x" or _x_ == "xy" then
-		self.position.x = (vpw - width) * 0.5
+	local tex = self.animations[self.currentAnimation].texture or self.texture
+	if string.find(_x_,"x") then
+		self.position.x = (vpw-width)/2
 	end
-	if _x_ == "y" or _x_ == "xy" then
-		local height = self.texture:getHeight() or 0
-		sezlf.position.y = (vph - height) * 0.5
+	if string.find(_x_,"y") then
+		local height = tex:getHeight() or 0
+		self.position.y = (vph-height)/2
 	end
 end
 
