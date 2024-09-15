@@ -31,10 +31,10 @@ function Screen:clear()
       if Screen.objects[i].dispose then
         Screen.objects[i]:dispose()
       elseif Screen.objects[i].release then
-        Screen.objects[I]:release()
+        Screen.objects[i]:release()
       end
       if Screen.objects[i] ~= nil then
-        Screen.objects[I] = nil
+        Screen.objects[i] = nil
       end
     end
     table.remove(Screen.objects, i)
