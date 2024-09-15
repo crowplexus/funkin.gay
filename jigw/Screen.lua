@@ -26,14 +26,15 @@ end
 
 function Screen:clear()
   while #Screen.objects ~= 0 do
-    if Screen.objects[0] then
-      if Screen.objects[0].dispose then
-        Screen.objects[0]:dispose()
-      elseif Screen.objects[0].release then
-        Screen.objects[0]:release()
+    local i = 1
+    if Screen.objects[i] then
+      if Screen.objects[i].dispose then
+        Screen.objects[i]:dispose()
+      elseif Screen.objects[i].release then
+        Screen.objects[I]:release()
       end
-      if Screen.objects[0] ~= nil then
-        Screen.objects[0] = nil
+      if Screen.objects[i] ~= nil then
+        Screen.objects[I] = nil
       end
     end
     table.remove(Screen.objects, i)
