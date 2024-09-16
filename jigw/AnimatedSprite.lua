@@ -177,12 +177,13 @@ function AnimatedSprite:draw()
             local _, _, frW, frH = currentFrame.quad:getViewport()
 
             self.transform:reset();
+
+            self.transform:translate(self.position:unpack())
+            self.transform:translate(self.offset.x, self.offset.y);
+            self.transform:rotate(self.rotation);
             if(self.centered)then
                 self.transform:translate(-frW * 0.5, -frH * 0.5)
             end
-            self.transform:translate(self.position:unpack())
-            self.transform:rotate(self.rotation);
-
 			love.graphics.draw(
                 self.currentAnimation.tex,
                 currentFrame.quad,
