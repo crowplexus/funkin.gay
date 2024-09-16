@@ -20,9 +20,9 @@ function Transition:draw()
 	if finished then return end
 	local circX = (canvasSize.x) * 0.5
   local circY = (canvasSize.y) * 0.5
-	love.graphics.setColor(Colour.rgb(0,0,0))
+	love.graphics.setColor(Color.rgb(0,0,0))
   love.graphics.circle("fill",circX,circY,circS,circS)
-  love.graphics.setColor(Colour.rgb(255,255,255))
+  love.graphics.setColor(Color.rgb(255,255,255))
   if transIn then self:inwards() else self:outwards() end
   if circS < 0 then finished = true end
 end

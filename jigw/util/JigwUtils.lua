@@ -23,14 +23,14 @@ return {
   --- @param text string
   --- @param x number
   --- @param y number
-  --- @param textColour table<number>
-  --- @param strokeColour table<number>
+  --- @param textColor table<number>
+  --- @param strokeColor table<number>
   --- @param font love.graphics.Font
   --- @param strokeSize number
-  drawTextWithStroke = function(text,x,y,textColour,strokeColour,font,strokeSize)
+  drawTextWithStroke = function(text,x,y,textColor,strokeColor,font,strokeSize)
     if not strokeSize then strokeSize = 1 end
-    if not textColour then textColour = {1,1,1,1} end
-    if not strokeColour then strokeColour = {0,0,0,1} end
+    if not textColor then textColor = {1,1,1,1} end
+    if not strokeColor then strokeColor = {0,0,0,1} end
     if not font then font = love.graphics.getFont() end
     if not x then x = 0 end
     if not y then y = 0 end
@@ -38,7 +38,7 @@ return {
     local nf = type(font) == "string" and love.graphics.newFont(font, 32) or font
     local text = love.graphics.newText(nf,text)
     local offset = -strokeSize
-    love.graphics.setColor(strokeColour)
+    love.graphics.setColor(strokeColor)
     for i=1,2 do
       love.graphics.draw(text, x + strokeSize,          y + strokeSize + offset)
       love.graphics.draw(text, x + strokeSize + offset, y + strokeSize)
@@ -46,7 +46,7 @@ return {
       love.graphics.draw(text, x + strokeSize + offset, y + strokeSize - offset)
       offset = -offset
     end
-    love.graphics.setColor(textColour)
+    love.graphics.setColor(textColor)
     love.graphics.draw(text,x + strokeSize,y + strokeSize)
     love.graphics.setColor(1,1,1,1)
     -- free memory

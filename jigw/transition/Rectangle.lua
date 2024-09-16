@@ -20,9 +20,9 @@ function Transition:draw()
 	if finished then return end
 	local rectX = (canvasSize.x-rectS) * 0.5
   local rectY = (canvasSize.y-rectS) * 0.5
-	love.graphics.setColor(Colour.rgb(0,0,0))
+	love.graphics.setColor(Color.rgb(0,0,0))
   love.graphics.rectangle("fill",rectX,rectY,rectS,rectS)
-  love.graphics.setColor(Colour.rgb(255,255,255))
+  love.graphics.setColor(Color.rgb(255,255,255))
   if transIn then self:inwards() else self:outwards() end
   if rectS < 0 then finished = true end
 end

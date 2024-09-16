@@ -15,7 +15,7 @@ return { -- and now here's the level data, have fun with that.
 	id="weekend1",
 	levelTitle="ui/story/labels/weekend1.png",
 	songs=not showInFreeplay and darnellSongList or {},
-	colour=Colour.rgb(65,60,174),
+	color=Color.rgb(65,60,174),
 	otherProperties=nil, -- allows everything.
 	visible=true, -- will be ignored in freeplay unless you've beaten it and stuff !
 	isLocked=false,

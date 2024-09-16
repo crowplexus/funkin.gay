@@ -9,7 +9,7 @@ local function buildAnimatedSprite(sel)
 	sel.position = Vector3(0,0,0) -- X, Y, Z
 	sel.zAsLayer = true -- treats Z position value as a layer index, is a toggle so you can use Z for something else
 	sel.scale = Vector2(1,1)
-	sel.colour = Colour.rgb(255,255,255)
+	sel.color = Color.rgb(255,255,255)
 	sel.visible = true
 	sel.rotation = 0
 	sel.alpha = 1.0
@@ -153,8 +153,8 @@ function AnimatedSprite:dispose()
 end
 
 function AnimatedSprite:draw()
-	if self and self.texture and self.visible and self.colour[4] ~= 0.0 then
-		love.graphics.setColor(self.colour)
+	if self and self.texture and self.visible and self.color[4] ~= 0.0 then
+		love.graphics.setColor(self.color)
 		if self.currentAnimation == nil then
 			love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
 		else
@@ -169,7 +169,7 @@ function AnimatedSprite:draw()
 			love.graphics.draw(cur.texture or self.texture,cur.quads[progress].quad,animPos.x,animPos.y,
 					self.rotation,self.scale.x,self.scale.y)
 		end
-		love.graphics.setColor(Colour.rgb(1,1,1,1))
+		love.graphics.setColor(Color.rgb(1,1,1,1))
 	end
 end
 

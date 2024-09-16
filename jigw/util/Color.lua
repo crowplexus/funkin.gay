@@ -15,7 +15,7 @@ return {
   GREEN_YELLOW    = {173/255,1,47/255,1},
   PALE_GREEN      = {152/255,251/255,152/255,1},
 
-  --- Returns a colour table in RGBA, from 0 to 255
+  --- Returns a color table in RGBA, from 0 to 255
   --- @param r number Red Channel Value.
   --- @param g number Green Channel Value.
   --- @param b number Blue Channel Value.
@@ -24,7 +24,7 @@ return {
     if not a or type(a) ~= "number" then a = 255 end
     return {r/255,g/255,b/255,a/255}
   end,
-  --- Returns a colour table in RGBA, from 0 to 1
+  --- Returns a color table in RGBA, from 0 to 1
   --- @param r number Red Channel Value.
   --- @param g number Green Channel Value.
   --- @param b number Blue Channel Value.

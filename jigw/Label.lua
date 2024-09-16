@@ -7,8 +7,8 @@ local function buildLabel(sel)
 	sel.size = Vector2(0,0)
 	sel.scale = Vector2(1,1)
 	sel.strokeSize = 0
-	sel.strokeColour = Colour.rgb(0,0,0)
-	sel.colour = Colour.rgb(255,255,255)
+	sel.strokeColor = Color.rgb(0,0,0)
+	sel.color = Color.rgb(255,255,255)
 	sel.visible = true
 	sel.textWidth = 0
 	sel.textHeight = 0
@@ -42,8 +42,8 @@ end
 
 --- Function to draw a label's text field with a stroke below it.
 --- @param t love.graphics.Text Text object.
---- @param c table<number> Text colour.
---- @param sc table<number> Text stroke colour.
+--- @param c table<number> Text color.
+--- @param sc table<number> Text stroke color.
 --- @param x number Text X position.
 --- @param y number Text Y position.
 --- @param r number Text rotation.
@@ -81,15 +81,15 @@ function Label:dispose()
 end
 
 function Label:draw()
-	if self and self:has_any_text() and self.visible and self.colour[4] > 0.0 then
+	if self and self:has_any_text() and self.visible and self.color[4] > 0.0 then
 		-- TODO: use printf for alignments
 		if self.strokeSize > 0 then
 			_drawWithStroke(
-				self._renderText,self.colour,self.strokeColour,
+				self._renderText,self.color,self.strokeColor,
 				self.position.x,self.position.y,self.rotation,self.strokeSize,
 				self.scale.x or 1.0, self.scale.y or 1.0)
 		else
-			love.graphics.setColor(self.colour)
+			love.graphics.setColor(self.color)
 			love.graphics.draw(self._renderText,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
 			love.graphics.setColor(1,1,1,1)
 		end
@@ -122,8 +122,8 @@ function Label:changeFontSize(newSize, force)
 end
 
 --#region Getters and Setters
-function Label:get_alpha() return rawget(self,self.colour[4]) end
-function Label:set_alpha(vl) return rawset(self,self.colour[4],vl) end
+function Label:get_alpha() return rawget(self,self.color[4]) end
+function Label:set_alpha(vl) return rawset(self,self.color[4],vl) end
 --#endregion
 
 function Label:__index(idx)

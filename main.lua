@@ -2,6 +2,10 @@ if arg[2] == "debug" then
   require("lldebugger").start()
 end
 
+function string:endsWith(pattern)
+  return (self:sub(#self - #pattern + 1, #self) == pattern);
+end
+
 --#region Global
 
 Object = require("libraries.classic") --- @class Object
@@ -15,10 +19,10 @@ ScreenTransitions = {
 }
 DefaultScreenTransition = ScreenTransitions.Circle
 
---- @class Colour
+--- @class Color
 --- Utility containing functions and variables to work with colors
-Colour = require("jigw.util.Colour")
-Color = require("jigw.util.Colour") --- @alias Colour Color
+Color = require("jigw.util.Color")
+Color = require("jigw.util.Color") --- @alias Color Color
 ScreenManager = require("jigw.ScreenManager") --- @class SceneManager
 Utils = require("jigw.util.JigwUtils") --- @class Utils
 
@@ -65,9 +69,9 @@ end
 
 function love.draw()
   local screenWidth, screenHeight = love.graphics.getDimensions()
-  local defaultColour = Colour.rgb(255,255,255)
+  local defaultColor = Color.rgb(255,255,255)
 
-  love.graphics.setColor(defaultColour)
+  love.graphics.setColor(defaultColor)
   love.graphics.setCanvas(gameCanvas)
   --- in game canvas ---
   if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.draw then

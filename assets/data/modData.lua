@@ -4,9 +4,9 @@ function getLevels()
 		["Main Story"] = {"tutorial","week1","week2","week3"},
 		["Side-Story"] = {"weekend1"}
 	}
-	local LevelDatabase = require("funkin.core.modding.LevelDB")
+	local LevelDatabase = require("funkin.data.LevelDatabase")
 	LevelDatabase:clear() -- should do this automatically BUT its here to be sure everything's good.
-	LevelDatabase:setWorkingDirectory("data/levels/") -- this is default but, if you need to switch folders...
+	LevelDatabase:setWorkingDirectory("assets/data/levels/") -- this is default but, if you need to switch folders...
 	-- if you wanna do something with the level data, put this on a local and do it
 	-- then return it, we just return here cus it's all we need :>
 	return LevelDatabase:deepPackSearch(packsToFind)
