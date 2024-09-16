@@ -6,13 +6,17 @@ function Vector2:new(x,y)
 end
 
 function Vector2:round()
-	return Vector2:new(math.floor(x+0.5),math.floor(y+0.5))
+	return Vector2:new(math.floor(self.x+0.5),math.floor(self.y+0.5))
 end
 
 function Vector2:sortByY(o,a,b)
 	if not a or not b then return 0 end
 	if not Vector2.is(a) or not Vector2.is(b) then return 0 end
 	return a.y < b.y and o or a.y > b.y and -o or 0
+end
+
+function Vector2:unpack()
+    return self.x, self.y
 end
 
 function Vector2:__tostring()

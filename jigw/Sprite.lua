@@ -49,4 +49,8 @@ function Sprite:screenCentre(_x_)
 	end
 end
 
+function Sprite:screenCenter(_x_)
+    return self:screenCentre(_x);
+end
+
 return Sprite
