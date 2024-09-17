@@ -17,9 +17,10 @@ function Vector3:sortByY(o,a,b)
 end
 
 function Vector3:sortByZ(o,a,b)
-	if not a or not b then return 0 end
-	if not Vector3.is(a) or not Vector3.is(b) then return 0 end
-	return a.z < b.z and o or a.z > b.z and -o or 0
+	local chk = Vector3.is(a) and Vector3.is(b)
+	--print(Vector3.is(a),Vector3.is(b))
+	if chk then return o<0 and a.z>b.z or a.z<b.z end
+	return false
 end
 
 function Vector3:unpack()

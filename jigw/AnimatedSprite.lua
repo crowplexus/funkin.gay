@@ -194,7 +194,7 @@ function AnimatedSprite:draw()
 	end
 end
 
-function AnimatedSprite:screenCentre(_x_)
+function AnimatedSprite:centerPosition(_x_)
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
 
@@ -206,10 +206,5 @@ function AnimatedSprite:screenCentre(_x_)
 		self.position.y = vph * 0.5;
 	end
 end
-
-function AnimatedSprite:screenCenter(_x_)
-    return self:screenCentre(_x);
-end
-
 
 return AnimatedSprite

@@ -36,7 +36,7 @@ function Sprite:get_alpha() return rawget(self,self.color[4]) end
 function Sprite:set_alpha(vl) return rawset(self,self.color[4],vl) end
 --#endregion
 
-function Sprite:screenCentre(_x_)
+function Sprite:centerPosition(_x_)
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
 	if string.find(_x_,"x") then
@@ -50,7 +50,7 @@ function Sprite:screenCentre(_x_)
 end
 
 function Sprite:screenCenter(_x_)
-    return self:screenCentre(_x);
+    return self:centerPosition(_x);
 end
 
 return Sprite

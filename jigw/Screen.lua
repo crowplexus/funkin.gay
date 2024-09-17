@@ -56,8 +56,11 @@ function Screen:remove(obj)
 end
 
 function Screen:sortDrawZ()
-  -- doesn't work i'll check this later
-  --table.sort(Screen.objects, function(a,b) return Vector3.sortByZ(-1,a,b) end)
+  table.sort(Screen.objects, function(a,b)
+    if a and b and a.position.z and b.position.z then
+      return Vector3.sortByZ(-1,a,b)
+    end
+  end)
 end
 
 --return setmetatable(Screen, {__index = Screen})

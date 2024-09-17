@@ -40,15 +40,15 @@ function MainMenu:enter()
     spriteButton:addAnimationTransform("selected", bttnAnim[name.." selected"].frames, 24)
     spriteButton:addAnimationTransform("idle", bttnAnim[name.." idle"].frames, 24)
     spriteButton:playAnimation("idle", true)
-    spriteButton:screenCentre("X")
+    spriteButton:centerPosition("X")
     self:add(spriteButton)
     table.insert(buttons,spriteButton)
     if i == selected then spriteButton:playAnimation("selected") end
   end
 
   local blah = Label:new(5,vph*0.97,"Funkin' Kiskadee v"..gameVersion, 20)
-  blah.position.z = -1
   blah.strokeSize = 1.25
+  blah.position.z = -1
   self:add(blah)
 
   bgMusic:setVolume(0.5)
@@ -64,7 +64,7 @@ function MainMenu:keypressed(x)
   if selected ~= oldS then
     buttons[oldS]:playAnimation("idle")
     buttons[selected]:playAnimation("selected")
-    buttons[selected]:screenCentre("X")
+    buttons[selected]:centerPosition("X")
     love.audio.stop(menuSounds.scroll)
     love.audio.play(menuSounds.scroll)
   end
