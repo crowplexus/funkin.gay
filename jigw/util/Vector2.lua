@@ -6,13 +6,13 @@ function Vector2:new(x,y)
 end
 
 function Vector2:round()
-	return Vector2:new(math.floor(self.x+0.5),math.floor(self.y+0.5))
+	return Vector2:new(math.round(self.x),math.round(self.y))
 end
 
 function Vector2:sortByY(o,a,b)
-	if not a or not b then return 0 end
-	if not Vector2.is(a) or not Vector2.is(b) then return 0 end
-	return a.y < b.y and o or a.y > b.y and -o or 0
+	if not a or not b then return false end
+	if not Vector2.is(a) or not Vector2.is(b) then return false end
+	return o > 0 and a.y < b.y or a.y > b.y
 end
 
 function Vector2:unpack()
@@ -20,7 +20,7 @@ function Vector2:unpack()
 end
 
 function Vector2:__tostring()
-	return "X: "..self.x.." Y: "..self.y
+	return "(Vector2, X "..self.x.." Y "..self.y..")"
 end
 
 return Vector2

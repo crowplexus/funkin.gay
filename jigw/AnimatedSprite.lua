@@ -197,7 +197,6 @@ end
 function AnimatedSprite:centerPosition(_x_)
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
-
     self.centered = true;
 	if string.find(_x_,"x") then
 		self.position.x = vpw * 0.5;

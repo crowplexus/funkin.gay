@@ -18,6 +18,13 @@ local buttons = {}
 local selected = 1
 local options = {"storymode","freeplay","credits","options"}
 
+-- hud test --
+
+local judgmentCounter
+local scoreText
+
+-- -- -- -- --
+
 function MainMenu:new()
   MainMenu.super.new()
   MainMenu.buttons = {}
@@ -29,8 +36,10 @@ function MainMenu:enter()
   local vpw, vph = love.graphics.getDimensions()
 
   local bg = Sprite(0,0,love.graphics.newImage("assets/images/backgrounds/menu/menuBG.png"))
-  bg.position.z = 0
   self:add(bg)
+
+  bgMusic:setVolume(0.05)
+  bgMusic:play()
 
   local nightmarevision = require("jigw.util.AtlasSpriteHelper")
   for i,name in ipairs(options) do
@@ -46,15 +55,36 @@ function MainMenu:enter()
     if i == selected then spriteButton:playAnimation("selected") end
   end
 
-  local blah = Label:new(5,vph*0.97,"Funkin' Kiskadee v"..gameVersion, 20)
-  blah.strokeSize = 1.25
-  blah.position.z = -1
-  self:add(blah)
+  local versionText = Label(5,0,"Funkin' Kiskadee v"..gameVersion, 20)
+  versionText.position.y = (vph - versionText.size.y) - 5 -- i think that's the original pos idk
+  versionText.strokeSize = 1.5
+  self:add(versionText)
 
-  bgMusic:setVolume(0.5)
-  bgMusic:play()
+  -- i swear to god i just did this for testing
+  -- please neb or anyone else just move this to a class or something LOL
 
-  self:sortDrawZ()
+  local scoreText = Label(0,0,"Score: "..Utils.thousandSep(100000).." | Accuracy: 0% | (ClearFlag) Grade",20)
+  scoreText:centerPosition("sex") -- funny how that works huh.
+  scoreText.position.y = (vph - scoreText.size.y) - 15
+  scoreText.strokeSize = 1.25
+  self:add(scoreText)
+
+  -- make this better prob? idk !!!!
+
+  judgmentCounter = Label(5,0,"",20)
+  judgmentCounter.position.y = (vph-judgmentCounter.size.y)*0.5
+  judgmentCounter.strokeSize = 2
+  self:add(judgmentCounter)
+
+  judgmentCounter:setText(getJudges())
+end
+
+function getJudges()
+  local str = ""
+  local judges = {"Epics","Sicks","Goods","Bads","Shits"}
+  local counts = {0,      0,      0,      0,      0}
+  for i=1,#judges do str = str..judges[i]..": "..counts[i].."\n" end
+  return str
 end
 
 function MainMenu:keypressed(x)
@@ -69,6 +99,7 @@ function MainMenu:keypressed(x)
     love.audio.play(menuSounds.scroll)
   end
   if x == "d" then
+
     Utils.match(selected,{
       [0] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
       [1] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
@@ -78,21 +109,16 @@ function MainMenu:keypressed(x)
   end
 end
 
---[[ function MainMenu:update(dt)
+--[[function MainMenu:update(dt)
     MainMenu.super.update(MainMenu, dt)
-    
     for i = 1, #buttons do
         buttons[i].rotation = buttons[i].rotation + dt;
     end
-
-end ]]
-
+end]]
 
 function MainMenu:clear()
   MainMenu.super.clear()
-  if bgMusic then
-    bgMusic:stop()
-  end
+  if bgMusic then bgMusic:stop() end
 end
 
 return MainMenu

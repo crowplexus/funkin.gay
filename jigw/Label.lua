@@ -18,22 +18,17 @@ local function buildLabel(sel)
 end
 
 local Label = Object:extend()
-buildLabel(Label)
 
-function Label:__tostring()
-	return "Label"
+local function _recreateFont(sel)
+	if sel._renderFont then sel._renderFont:release() end
+	sel._renderFont = love.graphics.newFont(sel.fontPath,sel.fontSize,"none")
 end
 
-local function _recreateFont(self)
-	if self._renderFont then self._renderFont:release() end
-	self._renderFont = love.graphics.newFont(self.fontPath, self.fontSize, "none")
-end
-
-local function _recreateText(self)
-	if self._renderText then self._renderText:release() end
-	self._renderText = love.graphics.newText(self._renderFont or love.graphics.getFont(),self.text)
-	self.size.x = self._renderText:getWidth()
-	self.size.y = self._renderText:getHeight()
+local function _recreateText(sel)
+	if sel._renderText then sel._renderText:release() end
+	sel._renderText = love.graphics.newText(sel._renderFont or love.graphics.getFont(),sel.text)
+	sel.size.x = sel._renderText:getWidth()
+	sel.size.y = sel._renderText:getHeight()
 end
 
 local function _isFontPath(p)
@@ -53,7 +48,7 @@ end
 local function _drawWithStroke(t,c,sc,x,y,r,sz,sx,sy)
 	local offset = -sz
   love.graphics.setColor(sc)
-  for i = 1,1 do
+  for i = 1,2 do
     love.graphics.draw(t, x + sz, y + sz + offset, r, sx, sy)
     love.graphics.draw(t, x + sz + offset, y + sz, r, sx, sy)
     love.graphics.draw(t, x + sz - offset, y + sz + offset, r, sx, sy)
@@ -61,43 +56,48 @@ local function _drawWithStroke(t,c,sc,x,y,r,sz,sx,sy)
     offset = -offset
   end
   love.graphics.setColor(c)
-  love.graphics.draw(t, x + sz, y + sz, r, sx, sy)
+  love.graphics.draw(t,x+sz,y+sz,r,sx,sy)
   love.graphics.setColor(1,1,1,1)
 end
 
 function Label:new(x,y,text,size)
+	buildLabel(self)
 	self.position = Vector3(x,y,0)
 	self.text = text or nil
 	self.fontSize = size or 14
 	self._renderFont = nil
 	self._renderText = nil
-	self:changeFontSize(size, true)
-	return self
+	self:changeFontSize(size,true)
+	--return self
 end
 
 function Label:dispose()
 	self._renderFont:release()
-	resetVars()
+	buildLabel(self)
 end
 
 function Label:draw()
-	if self and self:has_any_text() and self.visible and self.color[4] > 0.0 then
-		-- TODO: use printf for alignments
+	if self:hasAnyText() and self.visible and self.color[4] > 0.0 then
 		if self.strokeSize > 0 then
 			_drawWithStroke(
 				self._renderText,self.color,self.strokeColor,
 				self.position.x,self.position.y,self.rotation,self.strokeSize,
-				self.scale.x or 1.0, self.scale.y or 1.0)
+				self.scale.x, self.scale.y)
 		else
 			love.graphics.setColor(self.color)
 			love.graphics.draw(self._renderText,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
-			love.graphics.setColor(1,1,1,1)
 		end
+		love.graphics.setColor(1,1,1,1)
 	end
 end
 
-function Label:has_any_text()
+function Label:hasAnyText()
 	return type(self.text) == "string" and string.len(self.text) ~= 0
+end
+
+function Label:setText(newtext) -- setter wasn't working fuckkkkk
+	if not self._renderText then _recreateText(self) end
+	self._renderText:set(newtext)
 end
 
 function Label:changeFont(path)
@@ -105,35 +105,33 @@ function Label:changeFont(path)
 	if _isFontPath(path) and fi and fi.size and self.fontPath ~= path then
 		self.fontPath = path
 		_recreateFont(self)
-		if self._renderText == nil then _recreateText(self)
-		else self._renderText.setFont(self._renderFont) end
+		if self._renderText == nil then _recreateText(self) end
+		self._renderText.setFont(self._renderFont)
 	end
 end
 
 function Label:changeFontSize(newSize, force)
-	if force == false then
-		if type(newSize) ~= "number" or newSize == self.fontSize then
-			return
-		end
-	end
 	self.fontSize = newSize
 	_recreateFont(self)
 	_recreateText(self)
+end
+
+function Label:centerPosition(_x_)
+	_x_ = string.lower(_x_)
+	local vpw, vph = love.graphics.getDimensions()
+	if string.find(_x_,"x") then
+		local width = self._renderText:getWidth() or 0
+		self.position.x = (vpw-width)*0.5
+	end
+	if string.find(_x_,"y") then
+		local height = self._renderText:getHeight() or 0
+		self.position.y = (vph-height)*0.5
+	end
 end
 
 --#region Getters and Setters
 function Label:get_alpha() return rawget(self,self.color[4]) end
 function Label:set_alpha(vl) return rawset(self,self.color[4],vl) end
 --#endregion
-
-function Label:__index(idx)
-  -- custom get variable functionality
-  return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self,idx)
-end
-
-function Label:__newindex(idx,vl)
-  -- custom set variable functionality
-  return rawget(self,"set_"..idx) and rawget(self,"set_"..idx)(self,vl) or rawset(self,idx,vl)
-end
 
 return Label

@@ -55,7 +55,26 @@ return {
     text = nil
     nf = nil
   end,
-
+  thousandSep = function(num, sep)
+    if not num or type(num) ~= "number" then num = 0 end
+    if not sep or type(sep) ~= "string" then sep = "," end
+    local numStr = tostring(math.abs(num))
+    local prefix = num < 0 and "-" or ""
+    local modPos = 3
+    if #numStr <= modPos then
+      return prefix..numStr
+    end
+    local result = ""
+    local digitPos = 0
+    for i=#numStr,1,-1 do
+      digitPos=digitPos+1
+      result = string.sub(numStr,i,i)..result
+      if digitPos % modPos == 0 and i > 1 then
+        result = sep..result
+      end
+    end
+    return prefix..result
+  end,
   tablePrint = function(tbl, indent)
     if not indent then indent = 0 end
     local toprint = string.rep(" ", indent) .. "{\r\n"

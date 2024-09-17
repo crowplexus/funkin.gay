@@ -6,6 +6,10 @@ function string:endsWith(pattern)
   return (self:sub(#self - #pattern + 1, #self) == pattern);
 end
 
+function math:round(x)
+  return math.floor(x+0.5)
+end
+
 --#region Global
 
 Object = require("libraries.classic") --- @class Object

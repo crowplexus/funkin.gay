@@ -60,9 +60,10 @@ function Object:__index(idx)
   -- custom get variable functionality
   return rawget(self,"get_"..idx) and rawget(self,"get_"..idx)() or rawget(self, idx) or Object[idx];
 end
+
 function Object:__newindex(idx,vl)
   -- custom set variable functionality
-  if(rawget(self, "set_"..idx))then
+  if(rawget(self,"set_"..idx))then
     return rawget(self,"set_"..idx)(self,vl);
   end
   rawset(self, idx, vl);
@@ -73,6 +74,5 @@ function Object:__call(...)
   obj:new(...)
   return obj
 end
-
 
 return Object
