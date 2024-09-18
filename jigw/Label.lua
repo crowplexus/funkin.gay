@@ -18,6 +18,7 @@ local function buildLabel(sel)
 end
 
 local Label = Object:extend()
+function Label:__tostring() return "Label" end
 
 local function _recreateFont(sel)
 	if sel._renderFont then sel._renderFont:release() end

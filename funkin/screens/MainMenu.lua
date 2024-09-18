@@ -1,11 +1,12 @@
 ---@diagnostic disable: duplicate-set-field
+local MainMenu = require("jigw.Screen"):extend()
+function MainMenu:__tostring() return "Main Menu" end
+
+-- "imports" ig lol
 
 local Label = require("jigw.Label")
 local Sprite = require("jigw.Sprite")
 local AnimatedSprite = require("jigw.AnimatedSprite")
-local Screen = require("jigw.Screen")
-local MainMenu = Screen:extend()
-MainMenu.__name = "Main Menu"
 
 local menuSounds = {
   confirm = love.audio.newSource("assets/audio/sfx/confirmMenu.ogg","static"),
@@ -13,10 +14,15 @@ local menuSounds = {
   cancel = love.audio.newSource("assets/audio/sfx/cancelMenu.ogg","static"),
 }
 local bgMusic = love.audio.newSource("assets/audio/bgm/freakyMenu.ogg","stream")
-local buttons = {}
-
-local selected = 1
-local options = {"storymode","freeplay","credits","options"}
+local options = {"storymode","freeplay","options","credits"}
+local optionFuncs = {
+  -- [positionInMenu] = function() end
+  [1] = function() ScreenManager:switchScreen("funkin.screens.StoryMenu") end,
+  [2] = function() ScreenManager:switchScreen("funkin.screens.FreeplayMenu") end,
+  [3] = function() ScreenManager:switchScreen("funkin.screens.OptionsMenu") end,
+  [4] = function() ScreenManager:switchScreen("funkin.screens.CreditsMenu") end,
+  -- functions may do anything they need to, other than switching screens
+}
 
 -- hud test --
 
@@ -24,6 +30,9 @@ local judgmentCounter
 local scoreText
 
 -- -- -- -- --
+
+local buttons = {}
+local selected = 1
 
 function MainMenu:new()
   MainMenu.super.new()
@@ -41,11 +50,12 @@ function MainMenu:enter()
   bgMusic:setVolume(0.05)
   bgMusic:play()
 
-  local nightmarevision = require("jigw.util.AtlasSpriteHelper")
+  -- TODO: make this easier, something like `spriteButton:loadAtlas(path,type)` or idk
+  local atlasHelper = require("jigw.util.AtlasSpriteHelper")
   for i,name in ipairs(options) do
     local path = "assets/images/menu/main/"..name
     local spriteButton = AnimatedSprite(0, (160 * i) - 80, love.graphics.newImage(path..".png"))
-    local bttnAnim = nightmarevision:getAnimationListSparrow(path..".xml")
+    local bttnAnim = atlasHelper:getAnimationListSparrow(path..".xml")
     spriteButton:addAnimationTransform("selected", bttnAnim[name.." selected"].frames, 24)
     spriteButton:addAnimationTransform("idle", bttnAnim[name.." idle"].frames, 24)
     spriteButton:playAnimation("idle", true)
@@ -63,7 +73,7 @@ function MainMenu:enter()
   -- i swear to god i just did this for testing
   -- please neb or anyone else just move this to a class or something LOL
 
-  local scoreText = Label(0,0,"Score: "..Utils.thousandSep(100000).." | Accuracy: 0% | (ClearFlag) Grade",20)
+  local scoreText = Label(0,0,"Score: "..Utils.thousandSep(1000).." | Accuracy: 0% | (ClearFlag) Grade",20)
   scoreText:centerPosition("sex") -- funny how that works huh.
   scoreText.position.y = (vph - scoreText.size.y) - 15
   scoreText.strokeSize = 1.25
@@ -71,18 +81,17 @@ function MainMenu:enter()
 
   -- make this better prob? idk !!!!
 
-  judgmentCounter = Label(5,0,"",20)
+  judgmentCounter = Label(5,0,getJudges(),20)
   judgmentCounter.position.y = (vph-judgmentCounter.size.y)*0.5
   judgmentCounter.strokeSize = 2
   self:add(judgmentCounter)
-
-  judgmentCounter:setText(getJudges())
+  --judgmentCounter.text = getJudges() -- doesn't really work cus setters are broken
 end
 
 function getJudges()
   local str = ""
-  local judges = {"Epics","Sicks","Goods","Bads","Shits"}
-  local counts = {0,      0,      0,      0,      0}
+  local judges = {"Epics","Sicks","Goods","Bads","Shits","Misses"}
+  local counts = {0,      0,      0,      0,      0,      0}
   for i=1,#judges do str = str..judges[i]..": "..counts[i].."\n" end
   return str
 end
@@ -98,14 +107,14 @@ function MainMenu:keypressed(x)
     love.audio.stop(menuSounds.scroll)
     love.audio.play(menuSounds.scroll)
   end
-  if x == "d" then
-
-    Utils.match(selected,{
-      [0] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
-      [1] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
-      [2] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
-      [3] = function() ScreenManager:switchScreen("funkin.screens.MainMenu") end,
-    })
+  if x == "return" then
+    if optionFuncs[selected] then
+      Utils.match(selected,optionFuncs)
+    else -- error handling
+      love.audio.stop(menuSounds.cancel)
+      love.audio.play(menuSounds.cancel)
+      print("this option doesn't really do anything! - selected "..selected)
+    end
   end
 end
 
@@ -117,8 +126,8 @@ end
 end]]
 
 function MainMenu:clear()
-  MainMenu.super.clear()
   if bgMusic then bgMusic:stop() end
+  MainMenu.super.clear()
 end
 
 return MainMenu

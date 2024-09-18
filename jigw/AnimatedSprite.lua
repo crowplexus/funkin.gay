@@ -45,7 +45,7 @@ local function buildAnimation()
 end
 
 local AnimatedSprite = Object:extend()
-
+function AnimatedSprite:__tostring() return "AnimatedSprite" end
 
 function AnimatedSprite:new(x,y,tex)
 	buildAnimatedSprite(self)

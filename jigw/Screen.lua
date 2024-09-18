@@ -1,7 +1,5 @@
 local Screen = Object:extend()
-Screen.objects = {}
-Screen.__name = "Screen"
---Screen.__index = Screen
+function Screen:__tostring() return "Screen" end
 
 function Screen:new()
   Screen.objects = {}

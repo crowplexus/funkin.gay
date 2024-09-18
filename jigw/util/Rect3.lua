@@ -1,4 +1,7 @@
 local Rect3 = Object:extend()
+function Rect3:__tostring()
+	return "(Rect3, X "..self.x.." Y "..self.y.." Z "..self.z.." Width "..self.width.." Height "..self.height.." Depth "..self.depth..")"
+end
 
 function Rect3:new(x,y,z,w,h,d)
 	self.x = x or 0
@@ -24,10 +27,6 @@ function Rect3:combine(with)
 	self.height = self.height+with.height
 	self.depth = self.depth+with.depth
 	return self
-end
-
-function Rect3:__tostring()
-	return "X: "..self.x.." Y: "..self.y.." Z: "..self.z.." Width: "..self.width.." Height: "..self.height.. " Depth: "..self.depth
 end
 
 return Rect3

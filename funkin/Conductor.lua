@@ -9,14 +9,16 @@ local function buildConductor(self)
   sel.beat = 0.0 --- @type number
   return sel
 end
-Conductor = Object:extend()
-buildConductor(Conductor)
+local Conductor = Object:extend()
+function Conductor:__tostring() return "(Conductor Time "..self.time.." Beat "..self.beat.." Step"..self.step..")" end
 
-function Conductor:init(startingBPM)
+function Conductor:new(startingBPM)
+  buildConductor(self)
   if type(startingBPM) ~= "number" or startingBPM < 0 then
     startingBPM = 100.0
   end
   self.bpm = startingBPM
+  return self
 end
 
 --#region Setters

@@ -1,4 +1,5 @@
 Transition = Object:extend()
+function Transition:__tostring() return "RectangleTransition" end
 
 local transIn = true --- @type boolean
 local finished = true --- @type boolean

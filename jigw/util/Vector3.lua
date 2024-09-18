@@ -1,4 +1,7 @@
 local Vector3 = Object:extend()
+function Vector3:__tostring()
+	return "X: "..self.x.." Y: "..self.y.." Z: "..self.z
+end
 
 function Vector3:new(x,y,z)
 	self.x = (x and type(x) == "number") and x or 0
@@ -25,10 +28,6 @@ end
 
 function Vector3:unpack()
     return self.x, self.y, self.z
-end
-
-function Vector3:__tostring()
-	return "X: "..self.x.." Y: "..self.y.." Z: "..self.z
 end
 
 return Vector3

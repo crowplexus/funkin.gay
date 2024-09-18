@@ -11,6 +11,7 @@ local function buildSprite(sel)
 end
 
 local Sprite = Object:extend()
+function Sprite:__tostring() return "Sprite" end
 
 function Sprite:new(x,y,tex)
 	buildSprite(self)

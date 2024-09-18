@@ -1,6 +1,15 @@
-local Gameplay = Utils:extend(require("jigw.Screen"))
-Gameplay.__name = "Gameplay"
+local Gameplay = require("jigw.Screen"):extend()
+function Gameplay:__tostring() return "Gameplay" end
 
-function Gameplay:new() end
+-- Gameplay.NoteDisplay
+-- Gameplay.Players
+-- Gameplay.Tally
+-- idk --
+
+
+function Gameplay:new()
+	Gameplay.super.new()
+	return self
+end
 
 return Gameplay
