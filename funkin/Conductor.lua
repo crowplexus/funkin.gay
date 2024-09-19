@@ -1,7 +1,7 @@
 local function buildConductor(self)
   sel.bpm = 100.0 --- @type number
-  sel.crotchet = (60 / Conductor.bpm) --- @type number
-  sel.semiquaver = (60 / Conductor.bpm) * 4.0 --- @type number
+  sel.crotchet = 0 --- @type number
+  sel.semiquaver = 0 --- @type number
   sel.stepsPerBeat = 4 --- @type number
   -- we really just need these two, bars aren't gonna be used often
   -- i'll add them later if its really needed.

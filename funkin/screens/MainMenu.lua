@@ -118,12 +118,14 @@ function MainMenu:keypressed(x)
   end
 end
 
---[[function MainMenu:update(dt)
+--[[
+function MainMenu:update(dt)
     MainMenu.super.update(MainMenu, dt)
     for i = 1, #buttons do
         buttons[i].rotation = buttons[i].rotation + dt;
     end
-end]]
+end
+]]
 
 function MainMenu:clear()
   if bgMusic then bgMusic:stop() end

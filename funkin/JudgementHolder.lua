@@ -2,10 +2,16 @@
 local JudgementHolder = Object:extend()
 function JudgementHolder:__tostring() return "JudgementHolder" end
 
+local list = JudgementHolder.getList()
+local timings = JudgementHolder.getTimings()
+
 function JudgementHolder:new()
   JudgementHolder.super.new()
   --Epic,Sick,Good,Bad,Shit,Miss
-  JudgementHolder.counters = {0,0,0,0,0,0}
+  JudgementHolder.counters = {}
+  for i=1,#list do
+    table.insert(JudgementHolder.counters,0,#JudgementHolder.counters)
+  end
   return self
 end
 
@@ -36,9 +42,6 @@ end
 function JudgementHolder.getTimings()
   return { 18.9, 37.8, 75.6, 113.4, 180.0 }
 end
-
-local list = JudgementHolder.getList()
-local timings = JudgementHolder.getTimings()
 
 --- Judges a window of time and returns a judgement from it.
 --- @param time number
