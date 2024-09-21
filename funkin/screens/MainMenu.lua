@@ -54,7 +54,7 @@ function MainMenu:enter()
   local atlasHelper = require("jigw.util.AtlasSpriteHelper")
   for i,name in ipairs(options) do
     local path = "assets/images/menu/main/"..name
-    local spriteButton = AnimatedSprite(0, (160 * i) - 80, love.graphics.newImage(path..".png"))
+    local spriteButton = AnimatedSprite(0, (160 * i) - 30, love.graphics.newImage(path..".png"))
     local bttnAnim = atlasHelper:getAnimationListSparrow(path..".xml")
     spriteButton:addAnimationTransform("selected", bttnAnim[name.." selected"].frames, 24)
     spriteButton:addAnimationTransform("idle", bttnAnim[name.." idle"].frames, 24)

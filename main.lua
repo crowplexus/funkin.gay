@@ -77,6 +77,7 @@ function love.draw()
 
   love.graphics.setColor(defaultColor)
   love.graphics.setCanvas(gameCanvas)
+
   --- in game canvas ---
   if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.draw then
     ScreenManager.activeScreen:draw()
@@ -95,16 +96,19 @@ function love.draw()
   love.graphics.draw(gameCanvas,0,0,0,sr.x,sr.y)
   -- the fps counter should render over everything else.
   if drawFPSCounter then drawFPS() end
-  --- -- ---- ------- ---
+  --- --- ---- ------- ---
 end
 
 function drawFPS()
+  local so = ScreenManager:isScreenOperating()
   Utils.drawTextWithStroke("FPS: "..love.timer.getFPS()
     .." - RAM: "..Utils.formatBytes(getMemoryUsage())
-    .."\nScreen: "..ScreenManager:getName()
+    ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
     .." - Draw Calls: "..love.graphics.getStats().drawcalls
     ,5,5)
 end
+
+local fuck = true
 
 function love.quit()
 end
