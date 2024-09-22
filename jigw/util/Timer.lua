@@ -2,9 +2,7 @@
 --- not to be confused with `love.timer.sleep`
 --- @class Timer
 local Timer = Object:extend()
-
 function Timer:__tostring() return "Timer" end
-Timer.list = {}
 
 function Timer:new()
   self.duration       = 0     --- @type number
@@ -81,8 +79,8 @@ function Timer:start(duration, cfinish, loops, oneshot)
   self._deltaTime = 0;
   self.oneshot = oneshot or false;
 
-  if not table.has(Timer.list, self)then
-    table.insert(Timer.list, self)
+  if not table.has(_G.GlobalTimers, self)then
+    table.insert(_G.GlobalTimers, self)
   end
   return self;
 end

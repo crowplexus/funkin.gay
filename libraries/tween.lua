@@ -355,13 +355,20 @@ end
 function tween.new(duration, subject, target, easing)
   easing = getEasingFunction(easing)
   checkNewParams(duration, subject, target, easing)
-  return setmetatable({
+  local t = setmetatable({
     duration  = duration,
     subject   = subject,
     target    = target,
     easing    = easing,
     clock     = 0
   }, Tween_mt)
+  table.insert(_G.GlobalTweens,t)
+  return tween
+end
+
+--- alias to: tween.new()
+function tween.create(duration,subject,target,easing)
+  return tween.new(duration,subject,target,easing)
 end
 
 return tween

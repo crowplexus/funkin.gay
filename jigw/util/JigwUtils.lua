@@ -23,8 +23,8 @@ return {
   --- @param text string
   --- @param x number
   --- @param y number
-  --- @param textColor table<number>
-  --- @param font love.graphics.Font
+  --- @param ?textColor table<number>
+  --- @param font? love.Font
   drawText = function(text,x,y,textColor,font)
     if not textColor then textColor = {1,1,1,1} end
     if not font then font = love.graphics.getFont() end

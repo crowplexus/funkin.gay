@@ -68,9 +68,6 @@ local counter = 1
 local path = "assets/images/ui/countdown/"
 local sprites = { "prepare", "ready", "set", "go" }
 local sounds = { "intro3", "intro2", "intro1", "introGo" }
-local Tween = require("libraries.tween")
-
-local tweens = {};
 
 function Gameplay:countdown()
   Timer.create(0.5, function(timer)
@@ -101,21 +98,9 @@ function Gameplay:progressCountdown()
       local countdownSprite = require("jigw.objects.Sprite")(0, 0, love.graphics.newImage(spritePath))
       countdownSprite:centerPosition("XY")
       self:add(countdownSprite)
-      table.insert(tweens, Tween.new(0.8, countdownSprite, { scale = {x = 0, y = 0} }, "inOutCubic"))
+      Tween.create(0.8, countdownSprite, { scale = {x = 0, y = 0} }, "inOutCubic")
       Timer.create(1.5, function() countdownSprite:dispose() end, 0)
     end
-  end
-end
-
-function Gameplay:update(dt)
-  local i = 1;
-  while i <= #tweens do
-    tweens[i]:update(dt);
-    if(tweens[i].clock >= tweens[i].duration)then
-      table.remove(tweens, i);
-      return;
-    end
-    i = i + 1;
   end
 end
 

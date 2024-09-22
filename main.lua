@@ -38,6 +38,9 @@ Utils = require("jigw.util.JigwUtils") --- @class Utils
 Timer = require("jigw.util.Timer") --- @class Timer
 Tween = require("libraries.tween") --- @class Tween
 
+_G.GlobalTweens = {} --- @type table<Tween>
+_G.GlobalTimers = {} --- @type table<Timer>
+
 --#endregion
 
 --- Date String, represents the current game version
@@ -68,18 +71,30 @@ function love.update(dt)
   if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.update then
     ScreenManager.activeScreen:update(dt)
   end
-  if Timer and #Timer.list ~= 0 then
-
+  if Timer and #_G.GlobalTimers ~= 0 then
     local i = 1;
-    while (i <= #Timer.list)do
-      local timer = Timer.list[i];
+    while (i <= #_G.GlobalTimers)do
+      local timer = _G.GlobalTimers[i];
       timer:update(dt);
       if timer.finished and timer.oneshot then
-        table.remove(Timer.list,i)
+        table.remove(_G.GlobalTimers,i)
+        --print('removed timer at ', i)
       end
       i = i + 1;
     end
-
+  end
+  if Tween and #_G.GlobalTweens ~= 0 then
+    local i = 1;
+    while i <= #_G.GlobalTweens do
+      local tween = _G.GlobalTweens[i];
+      tween:update(dt);
+      if(_G.GlobalTweens[i].clock >= _G.GlobalTweens[i].duration)then
+        table.remove(_G.GlobalTweens, i);
+        --print('removed tween at ', i)
+        return;
+      end
+      i = i + 1;
+    end
   end
 end
 
