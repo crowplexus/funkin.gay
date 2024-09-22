@@ -19,6 +19,28 @@ return {
     if pat[prop] ~= nil then pat[prop]()
     elseif pat.default ~= nil then pat.default() end
   end,
+    --- to draw text, that's it
+  --- @param text string
+  --- @param x number
+  --- @param y number
+  --- @param textColor table<number>
+  --- @param font love.graphics.Font
+  drawText = function(text,x,y,textColor,font)
+    if not textColor then textColor = {1,1,1,1} end
+    if not font then font = love.graphics.getFont() end
+    if not x then x = 0 end
+    if not y then y = 0 end
+    local nf = type(font) == "string" and love.graphics.newFont(font, 32) or font
+    local text = love.graphics.newText(nf,text)
+    love.graphics.setColor(textColor)
+    love.graphics.draw(text,x,y)
+    love.graphics.setColor(1,1,1,1)
+    -- free memory
+    text:release()
+    nf:release()
+    text = nil
+    nf = nil
+  end,
   --- to draw text with a stroke behind it.
   --- @param text string
   --- @param x number

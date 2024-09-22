@@ -36,7 +36,7 @@ function Gameplay:new()
 
 	local vpw, vph = love.graphics.getDimensions()
 
-  local bg = ColorShape(0,0,Color.BLACK,vpw,vph)
+  local bg = ColorShape(0,0,Color.rgb(80,80,80),vpw,vph)
   bg:centerPosition()
   self:add(bg)
 

@@ -102,7 +102,7 @@ end
 
 function drawFPS()
   local so = ScreenManager:isScreenOperating()
-  Utils.drawTextWithStroke("FPS: "..love.timer.getFPS()
+  Utils.drawText("FPS: "..love.timer.getFPS()
     .." - RAM: "..Utils.formatBytes(getMemoryUsage())
     ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
     .." - Draw Calls: "..love.graphics.getStats().drawcalls
