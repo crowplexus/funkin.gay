@@ -1,4 +1,4 @@
-local Screen = Object:extend()
+local Screen = Object:extend() --- @class Screen
 function Screen:__tostring() return "Screen" end
 
 function Screen:new()
@@ -10,7 +10,7 @@ function Screen:enter() end
 function Screen:update(dt)
   for i=1, #self.objects do
     local v = self.objects[i]
-    if v and v.update then v:update(dt) end
+    if v ~= nil and v.update then v:update(dt) end
   end
 end
 function Screen:keypressed(key) end
@@ -23,43 +23,40 @@ function Screen:draw()
 end
 
 function Screen:clear()
-  while #Screen.objects ~= 0 do
+  while #self.objects ~= 0 do
     local i = 1
-    if Screen.objects[i] then
-      if Screen.objects[i].dispose then
-        Screen.objects[i]:dispose()
-      elseif Screen.objects[i].release then
-        Screen.objects[i]:release()
+    if self.objects[i] ~= nil then
+      if self.objects[i].dispose then
+        self.objects[i]:dispose()
+      elseif self.objects[i].release then
+        self.objects[i]:release()
       end
-      if Screen.objects[i] ~= nil then
-        Screen.objects[i] = nil
+      if self.objects[i] ~= nil then
+        self.objects[i] = nil
       end
     end
-    table.remove(Screen.objects, i)
+    table.remove(self.objects, i)
   end
 end
 
 function Screen:add(obj)
-  if not Screen.objects[obj] then
-    table.insert(Screen.objects, obj)
+  if not self.objects[obj] ~= nil then
+    table.insert(self.objects, obj)
   end
 end
 
 function Screen:remove(obj)
-  for _,v in ipairs(Screen.objects) do
-    if v == obj then
-      table.remove(Screen.objects,_)
-    end
+  for _,v in ipairs(self.objects) do
+    if v == obj then table.remove(self.objects,_) end
   end
 end
 
 function Screen:sortDrawZ()
-  table.sort(Screen.objects, function(a,b)
+  table.sort(self.objects, function(a,b)
     if a and b and a.position.z and b.position.z then
       return Vector3.sortByZ(-1,a,b)
     end
   end)
 end
 
---return setmetatable(Screen, {__index = Screen})
 return Screen

@@ -4,14 +4,14 @@ function MainMenu:__tostring() return "Main Menu" end
 
 -- "imports" ig lol
 
-local Label = require("jigw.Label")
-local Sprite = require("jigw.Sprite")
-local AnimatedSprite = require("jigw.AnimatedSprite")
+local Label = require("jigw.objects.Label")
+local Sprite = require("jigw.objects.Sprite")
+local AnimatedSprite = require("jigw.objects.AnimatedSprite")
 
 local menuSounds = {
   confirm = love.audio.newSource("assets/audio/sfx/confirmMenu.ogg","static"),
-  scroll = love.audio.newSource("assets/audio/sfx/scrollMenu.ogg","static"),
-  cancel = love.audio.newSource("assets/audio/sfx/cancelMenu.ogg","static"),
+  scroll  = love.audio.newSource("assets/audio/sfx/scrollMenu.ogg","static"),
+  cancel  = love.audio.newSource("assets/audio/sfx/cancelMenu.ogg","static"),
 }
 local bgMusic = love.audio.newSource("assets/audio/bgm/freakyMenu.ogg","stream")
 local options = {"storymode","freeplay","options","credits"}
@@ -23,13 +23,6 @@ local optionFuncs = {
   [4] = function() ScreenManager:switchScreen("funkin.screens.CreditsMenu") end,
   -- functions may do anything they need to, other than switching screens
 }
-
--- hud test --
-
-local judgmentCounter
-local scoreText
-
--- -- -- -- --
 
 local buttons = {}
 local selected = 1
@@ -69,31 +62,6 @@ function MainMenu:enter()
   versionText.position.y = (vph - versionText.size.y) - 5 -- i think that's the original pos idk
   versionText.strokeSize = 1.5
   self:add(versionText)
-
-  -- i swear to god i just did this for testing
-  -- please neb or anyone else just move this to a class or something LOL
-
-  local scoreText = Label(0,0,"Score: "..Utils.thousandSep(1000).." | Accuracy: 0% | (ClearFlag) Grade",20)
-  scoreText:centerPosition("sex") -- funny how that works huh.
-  scoreText.position.y = (vph - scoreText.size.y) - 15
-  scoreText.strokeSize = 1.25
-  self:add(scoreText)
-
-  -- make this better prob? idk !!!!
-
-  judgmentCounter = Label(5,0,getJudges(),20)
-  judgmentCounter.position.y = (vph-judgmentCounter.size.y)*0.5
-  judgmentCounter.strokeSize = 2
-  self:add(judgmentCounter)
-  --judgmentCounter.text = getJudges() -- doesn't really work cus setters are broken
-end
-
-function getJudges()
-  local str = ""
-  local judges = {"Epics","Sicks","Goods","Bads","Shits","Misses"}
-  local counts = {0,      0,      0,      0,      0,      0}
-  for i=1,#judges do str = str..judges[i]..": "..counts[i].."\n" end
-  return str
 end
 
 function MainMenu:keypressed(x)

@@ -23,7 +23,7 @@ function Transition:draw()
   local circY = (canvasSize.y) * 0.5
 	love.graphics.setColor(Color.rgb(0,0,0))
   love.graphics.circle("fill",circX,circY,circS,circS)
-  love.graphics.setColor(Color.rgb(255,255,255))
+  love.graphics.setColor(Color.WHITE)
   if transIn then self:inwards() else self:outwards() end
   if circS < 0 then finished = true end
 end

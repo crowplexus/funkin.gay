@@ -21,6 +21,13 @@ function ScreenManager:switchScreen(modname)
     end
   end
 
+  if ScreenManager:isTransitionActive() then
+    ScreenManager.transition:reset()
+    if ScreenManager.skipNextTransIn == false then
+      ScreenManager.transition:inwards(true)
+    end
+  end
+
   if type(nextScreen) == "table" then
     -- clear the previous screen.
     if ScreenManager:isScreenOperating() then
@@ -36,13 +43,6 @@ function ScreenManager:switchScreen(modname)
   -- now that the new screen is set, enter it.
   if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.enter then
     ScreenManager.activeScreen:enter()
-  end
-
-  if ScreenManager:isTransitionActive() then
-    ScreenManager.transition:reset()
-    if ScreenManager.skipNextTransIn == false then
-      ScreenManager.transition:inwards(true)
-    end
   end
 
   ScreenManager.skipNextTransIn = false

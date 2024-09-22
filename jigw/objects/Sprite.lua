@@ -1,17 +1,16 @@
+local Sprite = Object:extend() --- @class Sprite
+function Sprite:__tostring() return "Sprite" end
 local function buildSprite(sel)
 	sel.position = Vector3(0,0,0) -- X, Y, Z
 	sel.zAsLayer = true -- treats Z position value as a layer index, is a toggle so you can use Z for something else
 	sel.scale = Vector2(1,1)
-	sel.color = Color.rgb(255,255,255)
+	sel.color = Color.WHITE
 	sel.visible = true
 	sel.rotation = 0
 	sel.alpha = 1.0
 	sel.texture = nil
 	return sel
 end
-
-local Sprite = Object:extend()
-function Sprite:__tostring() return "Sprite" end
 
 function Sprite:new(x,y,tex)
 	buildSprite(self)
@@ -28,7 +27,7 @@ function Sprite:draw()
 	if self and self.texture and self.visible and self.color[4] > 0.0 then
 		love.graphics.setColor(self.color)
 		love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
-		love.graphics.setColor(Color.rgb(1,1,1,1))
+		love.graphics.setColor(Color.WHITE)
 	end
 end
 
@@ -38,6 +37,7 @@ function Sprite:set_alpha(vl) return rawset(self,self.color[4],vl) end
 --#endregion
 
 function Sprite:centerPosition(_x_)
+	if type(_x_) ~= "string" then _x_ = "xy" end
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
 	if string.find(_x_,"x") then

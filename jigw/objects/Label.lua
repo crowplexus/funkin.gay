@@ -8,7 +8,7 @@ local function buildLabel(sel)
 	sel.scale = Vector2(1,1)
 	sel.strokeSize = 0
 	sel.strokeColor = Color.rgb(0,0,0)
-	sel.color = Color.rgb(255,255,255)
+	sel.color = Color.WHITE
 	sel.visible = true
 	sel.textWidth = 0
 	sel.textHeight = 0
@@ -17,7 +17,7 @@ local function buildLabel(sel)
 	return sel
 end
 
-local Label = Object:extend()
+local Label = Object:extend() --- @class Label
 function Label:__tostring() return "Label" end
 
 local function _recreateFont(sel)
@@ -118,6 +118,7 @@ function Label:changeFontSize(newSize, force)
 end
 
 function Label:centerPosition(_x_)
+	if type(_x_) ~= "string" then _x_ = "xy" end
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
 	if string.find(_x_,"x") then

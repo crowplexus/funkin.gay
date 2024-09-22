@@ -50,7 +50,8 @@ function love.load()
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
 
   ScreenManager.skipNextTransIn = true
-  ScreenManager:switchScreen("funkin.screens.MainMenu")
+  ScreenManager.skipNextTransOut = true
+  ScreenManager:switchScreen("funkin.screens.Gameplay")
 end
 
 function love.update()
@@ -73,7 +74,7 @@ end
 
 function love.draw()
   local screenWidth, screenHeight = love.graphics.getDimensions()
-  local defaultColor = Color.rgb(255,255,255)
+  local defaultColor = Color.WHITE
 
   love.graphics.setColor(defaultColor)
   love.graphics.setCanvas(gameCanvas)

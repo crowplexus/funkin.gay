@@ -1,17 +1,19 @@
--- contains a Judgement List + tools to work with said list.
-local JudgementHolder = Object:extend()
+-- Contains a Judgement List + tools to work with said list.
+local JudgementHolder = Object:extend() --- @class JudgementHolder
 function JudgementHolder:__tostring() return "JudgementHolder" end
+local function buildJudgementHolder(sel)
+  sel.counters = {} --- @type table<string>
+  for i=1,#list do
+    table.insert(sel.counters,0,#sel.counters)
+  end
+  return sel
+end
 
 local list = JudgementHolder.getList()
 local timings = JudgementHolder.getTimings()
 
 function JudgementHolder:new()
-  JudgementHolder.super.new()
-  --Epic,Sick,Good,Bad,Shit,Miss
-  JudgementHolder.counters = {}
-  for i=1,#list do
-    table.insert(JudgementHolder.counters,0,#JudgementHolder.counters)
-  end
+  buildJudgementHolder(self)
   return self
 end
 
@@ -23,7 +25,7 @@ end
 --- { "Display Name", score, accuracy, note_splash }
 --- ```
 ---
---- @type table<[string, number, number, boolean]>
+--- @return table<[string, number, number, boolean]>
 function JudgementHolder.getList()
   return {
     --            good judges               --
@@ -38,7 +40,7 @@ function JudgementHolder.getList()
   }
 end
 
---- @return number[]
+--- @return table<number>
 function JudgementHolder.getTimings()
   return { 18.9, 37.8, 75.6, 113.4, 180.0 }
 end

@@ -1,3 +1,5 @@
+local Conductor = Object:extend() --- @class Conductor
+function Conductor:__tostring() return "(Conductor Time "..self.time.." Beat "..self.beat.." Step"..self.step..")" end
 local function buildConductor(self)
   sel.bpm = 100.0 --- @type number
   sel.crotchet = 0 --- @type number
@@ -9,8 +11,6 @@ local function buildConductor(self)
   sel.beat = 0.0 --- @type number
   return sel
 end
-local Conductor = Object:extend()
-function Conductor:__tostring() return "(Conductor Time "..self.time.." Beat "..self.beat.." Step"..self.step..")" end
 
 function Conductor:new(startingBPM)
   buildConductor(self)

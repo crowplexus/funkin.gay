@@ -7,12 +7,11 @@ local AnimationRepeat = {
 
 local function buildAnimatedSprite(sel)
 	sel.position = Vector3(0,0,0) -- X, Y, Z
-    sel.centered = true
-    sel.offset = Vector2(0, 0)
-
-    sel.zAsLayer = true -- treats Z position value as a layer index, is a toggle so you can use Z for something else
+	sel.centered = true
+	sel.offset = Vector2(0, 0)
+	sel.zAsLayer = true -- treats Z position value as a layer index, is a toggle so you can use Z for something else
 	sel.scale = Vector2(1,1)
-	sel.color = Color.rgb(255,255,255)
+	sel.color = Color.WHITE
 	sel.visible = true
 	sel.rotation = 0
 	sel.alpha = 1.0
@@ -21,9 +20,9 @@ local function buildAnimatedSprite(sel)
 		name = "default",
 		progress = 0
 	}
-    sel.transform = love.math.newTransform()
+  sel.transform = love.math.newTransform()
 	sel.currentAnimation = nil
-    sel.currentFrame = nil;
+  sel.currentFrame = nil;
 	sel.animationProgress = 0
 	sel.texture = nil
 	return sel
@@ -44,7 +43,7 @@ local function buildAnimation()
 	}
 end
 
-local AnimatedSprite = Object:extend()
+local AnimatedSprite = Object:extend() --- @class AnimatedSprite
 function AnimatedSprite:__tostring() return "AnimatedSprite" end
 
 function AnimatedSprite:new(x,y,tex)
@@ -184,17 +183,18 @@ function AnimatedSprite:draw()
             if(self.centered)then
                 self.transform:translate(-frW * 0.5, -frH * 0.5)
             end
-			love.graphics.draw(
-                self.currentAnimation.tex,
-                currentFrame.quad,
-                self.transform
-            )
+						love.graphics.draw(
+											self.currentAnimation.tex,
+											currentFrame.quad,
+											self.transform
+									)
 		end
-		love.graphics.setColor(Color.rgb(1,1,1,1))
+		love.graphics.setColor(Color.WHITE)
 	end
 end
 
 function AnimatedSprite:centerPosition(_x_)
+	if type(_x_) ~= "string" then _x_ = "xy" end
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
     self.centered = true;

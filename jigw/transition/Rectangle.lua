@@ -1,4 +1,4 @@
-Transition = Object:extend()
+Transition = Object:extend() --- this one is broken.
 function Transition:__tostring() return "RectangleTransition" end
 
 local transIn = true --- @type boolean
@@ -23,7 +23,7 @@ function Transition:draw()
   local rectY = (canvasSize.y-rectS) * 0.5
 	love.graphics.setColor(Color.rgb(0,0,0))
   love.graphics.rectangle("fill",rectX,rectY,rectS,rectS)
-  love.graphics.setColor(Color.rgb(255,255,255))
+  love.graphics.setColor(Color.WHITE)
   if transIn then self:inwards() else self:outwards() end
   if rectS < 0 then finished = true end
 end

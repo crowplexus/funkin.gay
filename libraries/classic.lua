@@ -23,7 +23,7 @@ function Object:extend()
     end
   end
   cls.__index = cls
-  cls.super = self
+  cls.super = self --- @type metatable
   setmetatable(cls, self)
   return cls
 end
