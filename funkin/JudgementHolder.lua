@@ -1,21 +1,8 @@
 -- Contains a Judgement List + tools to work with said list.
 local JudgementHolder = Object:extend() --- @class JudgementHolder
 function JudgementHolder:__tostring() return "JudgementHolder" end
-local function buildJudgementHolder(sel)
-  sel.counters = {} --- @type table<string>
-  for i=1,#list do
-    table.insert(sel.counters,0,#sel.counters)
-  end
-  return sel
-end
 
-local list = JudgementHolder.getList()
-local timings = JudgementHolder.getTimings()
-
-function JudgementHolder:new()
-  buildJudgementHolder(self)
-  return self
-end
+--- STATICS ---
 
 --- Judgements list.
 ---
@@ -27,7 +14,7 @@ end
 ---
 --- @return table<[string, number, number, boolean]>
 function JudgementHolder.getList()
-  return {
+  local judgeList = {
     --            good judges               --
     {   "Epic",   350,    100.0,    true    },
     {   "Sick",   250,    90.0,     true    },
@@ -38,11 +25,47 @@ function JudgementHolder.getList()
     {   "Miss",   -150,   -30.0,    false   },
     --            ------------              --
   }
+  if not _G.PROJECT.allowEpics then table.remove(judgeList,1) end
+  return judgeList
+end
+
+function JudgementHolder.judgeToPlural(base)
+  base = string.lower(base)
+  local pluralTable = {
+    ["epic"] = "Epics",
+    ["sick"] = "Sicks",
+    ["good"] = "Goods",
+    ["bad"]  = "Bads" ,
+    ["shit"] = "Shits",
+    ["miss"] = "Misses",
+  }
+  if pluralTable[base] == nil then return "ERROR" end
+  return pluralTable[base]
 end
 
 --- @return table<number>
 function JudgementHolder.getTimings()
-  return { 18.9, 37.8, 75.6, 113.4, 180.0 }
+  local timings = { 18.9, 37.8, 75.6, 113.4, 180.0 }
+  if not _G.PROJECT.allowEpics then table.remove(timings,1) end
+  return timings
+end
+
+--- --- --- ---
+
+local list = JudgementHolder.getList()
+local timings = JudgementHolder.getTimings()
+
+local function buildJudgementHolder(sel)
+  sel.counters = {} --- @type table<string>
+  for i=1,#list do
+    table.insert(sel.counters,0,#sel.counters)
+  end
+  return sel
+end
+
+function JudgementHolder:new()
+  buildJudgementHolder(self)
+  return self
 end
 
 --- Judges a window of time and returns a judgement from it.

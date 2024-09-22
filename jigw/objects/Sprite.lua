@@ -6,6 +6,7 @@ local function buildSprite(sel)
 	sel.scale = Vector2(1,1)
 	sel.color = Color.WHITE
 	sel.visible = true
+	sel.centered = false;
 	sel.rotation = 0
 	sel.alpha = 1.0
 	sel.texture = nil
@@ -25,9 +26,18 @@ end
 
 function Sprite:draw()
 	if self and self.texture and self.visible and self.color[4] > 0.0 then
+		love.graphics.push()
 		love.graphics.setColor(self.color)
-		love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
+		local frW, frH = self.texture:getDimensions()
+		love.graphics.translate(self.position:unpack())
+		love.graphics.rotate(self.rotation)
+		love.graphics.scale(self.scale.x,self.scale.y); --- this is what fixed it i think loll
+		if(self.centered)then
+			love.graphics.translate(-frW * 0.5, -frH * 0.5)
+		end
+		love.graphics.draw(self.texture,0,0)
 		love.graphics.setColor(Color.WHITE)
+		love.graphics.pop()
 	end
 end
 
@@ -40,13 +50,12 @@ function Sprite:centerPosition(_x_)
 	if type(_x_) ~= "string" then _x_ = "xy" end
 	_x_ = string.lower(_x_)
 	local vpw, vph = love.graphics.getDimensions()
-	if string.find(_x_,"x") then
-		local width = self.texture:getWidth() or 0
-		self.position.x = (vpw-width)*0.5
+	self.centered = true;
+	if string.find(_x_, "x") then
+		self.position.x = vpw * 0.5;
 	end
-	if string.find(_x_,"y") then
-		local height = self.texture:getHeight() or 0
-		self.position.y = (vph-height)*0.5
+	if string.find(_x_, "y") then
+		self.position.y = vph * 0.5;
 	end
 end
 

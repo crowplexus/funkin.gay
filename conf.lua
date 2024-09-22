@@ -1,5 +1,12 @@
+local Project = require("project")
+
+-- all of this is pretty much default aside from using `project.lua` for window title and size
+-- it's not recommended for you to modify this, instead, modify the project.lua file
+-- or DO Modify it if you know what you're doing! I'm not your mom.
+
 function love.conf(t)
-  io.stdout:setvbuf('no')
+  io.stdout:setvbuf('no')             -- So printing to the standard output works properly
+
   t.identity = nil                    -- The name of the save directory (string)
   t.appendidentity = false            -- Search files in source directory before save directory (boolean)
   t.version = "11.4"                  -- The LÖVE version this game was made for (string)
@@ -11,10 +18,10 @@ function love.conf(t)
   t.audio.mic = false                 -- Request and use microphone capabilities in Android (boolean)
   t.audio.mixwithsystem = true        -- Keep background music playing when opening LOVE (boolean, iOS and Android only)
 
-  t.window.title = "Friday Night Funkin' (Kiskadee)"       -- The window title (string)
+  t.window.title = Project.title      -- The window title (string)
   t.window.icon = nil                 -- Filepath to an image to use as the window's icon (string)
-  t.window.width = 1280               -- The window width (number)
-  t.window.height = 720               -- The window height (number)
+  t.window.width = Project.wwidth     -- The window width (number)
+  t.window.height = Project.wheight   -- The window height (number)
   t.window.borderless = false         -- Remove all border visuals from the window (boolean)
   t.window.resizable = true           -- Let the window be user-resizable (boolean)
   t.window.minwidth = 1               -- Minimum window width if the window is resizable (number)
@@ -26,7 +33,7 @@ function love.conf(t)
   t.window.depth = nil                -- The number of bits per sample in the depth buffer
   t.window.stencil = nil              -- The number of bits per sample in the stencil buffer
   t.window.display = 1                -- Index of the monitor to show the window in (number)
-  t.window.highdpi = false            -- Enable high-dpi mode for the window on a Retina display (boolean)
+  t.window.highdpi = true             -- Enable high-dpi mode for the window on a Retina display (boolean)
   t.window.usedpiscale = true         -- Enable automatic DPI scaling when highdpi is set to true as well (boolean)
   t.window.x = nil                    -- The x-coordinate of the window's position in the specified display (number)
   t.window.y = nil                    -- The y-coordinate of the window's position in the specified display (number)

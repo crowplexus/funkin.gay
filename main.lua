@@ -6,6 +6,15 @@ function string:endsWith(pattern)
   return (self:sub(#self - #pattern + 1, #self) == pattern);
 end
 
+function table:has(val)
+  for i,v in next, self do
+    if v == val then
+    return true;
+  end
+end
+return false
+end
+
 function math:round(x)
   return math.floor(x+0.5)
 end
@@ -23,12 +32,11 @@ ScreenTransitions = {
 }
 DefaultScreenTransition = ScreenTransitions.Circle
 
---- @class Color
---- Utility containing functions and variables to work with colors
 Color = require("jigw.util.Color")
-Color = require("jigw.util.Color") --- @alias Color Color
-ScreenManager = require("jigw.ScreenManager") --- @class SceneManager
+ScreenManager = require("jigw.ScreenManager") --- @class ScreenManager
 Utils = require("jigw.util.JigwUtils") --- @class Utils
+Timer = require("jigw.util.Timer") --- @class Timer
+Tween = require("libraries.tween") --- @class Tween
 
 --#endregion
 
@@ -36,11 +44,13 @@ Utils = require("jigw.util.JigwUtils") --- @class Utils
 --- this doesn't follow SemVer, and instead is the date
 --- of when a version of the game was compiled
 --- @type string
-gameVersion = tostring(os.date("%Y.%m.%d"))
+_G.GAME_VER = tostring(os.date("%Y.%m.%d"))
 
-local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none") --- @type love.graphics.Font
+_G.PROJECT = require("project")
+
+local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none") --- @type love.Font
 local drawFPSCounter = true --- @type boolean
-local gameCanvas --- @type love.graphics.Canvas
+local gameCanvas --- @type love.Canvas
 
 function love.load()
   -- set default font
@@ -54,9 +64,22 @@ function love.load()
   ScreenManager:switchScreen("funkin.screens.Gameplay")
 end
 
-function love.update()
+function love.update(dt)
   if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.update then
-    ScreenManager.activeScreen:update(love.timer.getDelta())
+    ScreenManager.activeScreen:update(dt)
+  end
+  if Timer and #Timer.list ~= 0 then
+
+    local i = 1;
+    while (i <= #Timer.list)do
+      local timer = Timer.list[i];
+      timer:update(dt);
+      if timer.finished and timer.oneshot then
+        table.remove(Timer.list,i)
+      end
+      i = i + 1;
+    end
+
   end
 end
 
@@ -96,17 +119,17 @@ function love.draw()
   local sr = Vector2(screenWidth / gameCanvas:getWidth(),screenHeight / gameCanvas:getHeight())
   love.graphics.draw(gameCanvas,0,0,0,sr.x,sr.y)
   -- the fps counter should render over everything else.
-  if drawFPSCounter then drawFPS() end
+  if drawFPSCounter then drawFPS(5+sr.x,5+sr.y) end
   --- --- ---- ------- ---
 end
 
-function drawFPS()
+function drawFPS(x,y)
   local so = ScreenManager:isScreenOperating()
   Utils.drawText("FPS: "..love.timer.getFPS()
     .." - RAM: "..Utils.formatBytes(getMemoryUsage())
     ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
     .." - Draw Calls: "..love.graphics.getStats().drawcalls
-    ,5,5)
+    ,x,y)
 end
 
 local fuck = true

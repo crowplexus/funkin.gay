@@ -26,7 +26,7 @@ function Tally:new()
 end
 
 function Tally:getAccuracy()
-  return self.hitNotes == 0 and 0.00 or (self.hitNotes / self.msAccum)
+  return self.hitNotes == 0 and 0.00 or (self.hitNotes/self.msAccum)
 end
 
 function Tally:getCurrentGrade()
@@ -38,6 +38,7 @@ function Tally.getGrade(acc)
   if not acc or type(acc) ~= "number" then acc = 100 end
   local grade = gradeConditions[1][2]
   if acc < 100 then
+    --#region GradeCalc
     for i=1,#gradeConditions do
       local newgrade = gradeConditions[i]
       if acc >= newgrade[1] then
@@ -45,7 +46,9 @@ function Tally.getGrade(acc)
         break
       end
     end
+    --#endregion
   end
+
   return grade
 end
 

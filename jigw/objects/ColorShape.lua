@@ -27,8 +27,8 @@ end
 
 function ColorShape:draw()
   if self and self.visible and self.color[4] > 0.0 then
-    love.graphics.setColor(self.color)
     love.graphics.push()
+    love.graphics.setColor(self.color)
     Utils.match(self.shape, {
       [1] = function()
         local frW, frH = self.size:unpack()
@@ -49,8 +49,8 @@ function ColorShape:draw()
         love.graphics.circle("fill",0,0,-self.size.x,self.size.y)
       end,
     })
-    love.graphics.pop()
     love.graphics.setColor(Color.WHITE)
+    love.graphics.pop()
   end
 end
 
