@@ -1,4 +1,4 @@
---- @enum ColorShapeShape
+--- @enum ShapeType
 ShapeType = {
   RECTANGLE = 1,
   CIRCLE    = 2,
@@ -29,25 +29,26 @@ function ColorShape:draw()
   if self and self.visible and self.color[4] > 0.0 then
     love.graphics.setColor(self.color)
     love.graphics.push()
-
-    if self.shape == 1 then
-      local frW, frH = self.size:unpack()
-      love.graphics.translate(self.position:unpack())
-      love.graphics.rotate(self.rotation)
-      if(self.centered)then
-        love.graphics.translate(-frW * 0.5, -frH * 0.5)
-      end
-      love.graphics.rectangle("fill",0,0,self.size.x,self.size.y)
-    elseif self.shape == 2 then
-      local frW, frH = self.size:unpack()
-      love.graphics.translate(self.position:unpack())
-      love.graphics.rotate(self.rotation)
-      if(self.centered)then
-        love.graphics.translate(-frW * 0.5, -frH * 0.5)
-      end
-      love.graphics.circle("fill",0,0,self.size.x,self.size.y)
-    end
-
+    Utils.match(self.shape, {
+      [1] = function()
+        local frW, frH = self.size:unpack()
+        love.graphics.translate(self.position:unpack())
+        love.graphics.rotate(self.rotation)
+        if(self.centered)then
+          love.graphics.translate(-frW * 0.5, -frH * 0.5)
+        end
+        love.graphics.rectangle("fill",0,0,self.size.x,self.size.y)
+      end,
+      [2] = function()
+        local frW, frH = self.size:unpack()
+        love.graphics.translate(self.position:unpack())
+        love.graphics.rotate(self.rotation)
+        --if(self.centered)then
+        --  love.graphics.translate(-frW * 0.5, -frH * 0.5)
+        --end
+        love.graphics.circle("fill",0,0,-self.size.x,self.size.y)
+      end,
+    })
     love.graphics.pop()
     love.graphics.setColor(Color.WHITE)
   end
