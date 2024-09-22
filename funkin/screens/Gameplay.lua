@@ -17,8 +17,13 @@ local function getJudges()
   return str
 end
 
-local function getScoreText()
-	return "Score: "..Utils.thousandSep(1000).." | Accuracy: 0% | (ClearFlag) Grade"
+local function getScoreText(tally)
+  if tostring(tally) ~= "Tally" then
+    return "Score: N/A | Accuracy: N/A% | N/A"
+  end
+	return "Score: "..Utils.thousandSep(tally.score)
+        .." | Accuracy: "..tally:getAccuracy().."%"
+        .." | ("..tally.clear..") "..tally:getCurrentGrade()
 end
 
 function Gameplay:new()
@@ -27,6 +32,7 @@ function Gameplay:new()
 
 	local Label = require("jigw.objects.Label")
 	local ColorShape = require("jigw.objects.ColorShape")
+  local tally = require("funkin.data.Tally")()
 
 	local vpw, vph = love.graphics.getDimensions()
 
@@ -34,7 +40,7 @@ function Gameplay:new()
   bg:centerPosition()
   self:add(bg)
 
-  Gameplay.hud.scoreText = Label(0,0,getScoreText(),20)
+  Gameplay.hud.scoreText = Label(0,0,getScoreText(tally),20)
   Gameplay.hud.scoreText.position.y = (vph - Gameplay.hud.scoreText.size.y) - 15
   Gameplay.hud.scoreText:centerPosition("sex") -- funny how that works huh.
   Gameplay.hud.scoreText.strokeSize = 1.25
