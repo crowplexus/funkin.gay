@@ -22,7 +22,7 @@ local function getScoreText(tally)
     return "Score: N/A | Accuracy: N/A% | N/A"
   end
 	return "Score: "..Utils.thousandSep(tally.score)
-        .." | Accuracy: "..tally:getAccuracy().."%"
+        .." | Accuracy: "..string.format("%.2f", tally:getAccuracy()).."%"
         .." | ("..tally.clear..") "..tally:getCurrentGrade()
 end
 
