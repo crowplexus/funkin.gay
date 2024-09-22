@@ -82,7 +82,7 @@ function Gameplay:countdown()
       freaky:setVolume(0.3)
       freaky:play()
     end
-  end,0,true)
+  end,#sprites,true)
 end
 
 function Gameplay:progressCountdown()
