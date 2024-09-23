@@ -1,16 +1,28 @@
 local Sound = {
-	sourcesCached = {},
-	soundsPlaying = {},
-	music 				= nil,
+	sourcesCached = {},  --- @type table<love.audio.Source>
+	soundsPlaying = {},  --- @type table<love.audio.Source>
+	music 				= nil, --- @type love.audio.Source
+	masterVolume	= 1.0, --- @type number
+	musicVolume		= 1.0, --- @type number
+	soundVolume		= 1.0, --- @type number
+	masterMute		= false,
 }
 
 function Sound.update(dt)
+	local currentMV = love.audio.getVolume()
+	local newestMV = Sound.masterMute and 0.0 or Sound.masterVolume
+	if currentMV ~= newestMV then
+		love.audio.setVolume(newestMV)
+		-- TODO: ^ this, but with sound effects and music.
+	end
 	Sound.forEachSfx(function(sound,id)
 		-- this might not be the best solution but hwere we have it ig
-		if sound ~= nil and not sound:isPlaying() then
-			table.remove(Sound.soundsPlaying,id)
-			sound:release()
-			sound = nil
+		if sound ~= nil then
+			if not sound:isPlaying() then
+				table.remove(Sound.soundsPlaying,id)
+				sound:release()
+				sound = nil
+			end
 		end
 		--print("Sound Effects being played:"..#Sound.soundsPlaying)
 	end)
@@ -31,9 +43,10 @@ end
 --- @param volume 		Initial volume.
 --- @param looped			Sets whether the BGM should loop.
 function Sound.playMusic(file,sourceType,volume,looped)
+	local vol = (Sound.musicVolume) * (volume or 1.0)
 	local bgm = love.audio.newSource(file,sourceType)
 	bgm:setLooping(looped or false)
-	bgm:setVolume(volume or 1.0)
+	bgm:setVolume(vol)
 	bgm:play()
 	-- replace this later ig?
 	Sound.music = bgm
@@ -44,8 +57,9 @@ end
 --- @param sourceType Streaming or static source. ("static", stream")
 --- @param volume 		Initial volume.
 function Sound.playSound(file,sourceType,volume)
+	local vol = (Sound.soundVolume) * (volume or 1.0)
 	local sfx = love.audio.newSource(file,sourceType)
-	sfx:setVolume(volume or 1.0)
+	sfx:setVolume(vol)
 	sfx:play()
 	table.insert(Sound.soundsPlaying,sfx)
 end

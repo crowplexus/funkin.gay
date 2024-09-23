@@ -1,5 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
-local MainMenu = require("jigw.Screen"):extend()
+local MainMenu = require("jigw.Canvas"):extend()
 function MainMenu:__tostring() return "Main Menu" end
 
 -- "imports" ig lol
@@ -35,7 +35,7 @@ function MainMenu:new()
 end
 
 function MainMenu:enter()
-  Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.5,true)
+  Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.08,true) -- 80% volume
   local vpw, vph = love.graphics.getDimensions()
 
   local bg = Sprite(0,0,love.graphics.newImage("assets/images/backgrounds/menu/menuBG.png"))

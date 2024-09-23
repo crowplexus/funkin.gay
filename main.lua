@@ -8,14 +8,12 @@ end
 
 function table:has(val)
   for i,v in next, self do
-    if v == val then
-    return true;
+    if v == val then return true; end
   end
-end
-return false
+  return false
 end
 
-function math:round(x)
+function math.round(x)
   return math.floor(x+0.5)
 end
 
@@ -110,11 +108,32 @@ function love.keyreleased(key)
   if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keyreleased then
     ScreenManager.activeScreen:keyreleased(key)
   end
+  -- temporary --
+  if key == "-" or key == "kp-" then
+    Sound.masterVolume = Utils.clamp(Sound.masterVolume - 0.05,0.0,1.0)
+    Sound.playSound("assets/audio/sfx/soundtray/Voldown.ogg","static")
+    print("Volume: "..(Sound.masterVolume*100))
+  end
+  if key == "=" or key == "kp+" then
+    Sound.masterVolume = Utils.clamp(Sound.masterVolume + 0.05,0.0,1.0)
+    if Sound.masterVolume < 1.0 then
+      Sound.playSound("assets/audio/sfx/soundtray/Volup.ogg","static")
+    else
+      Sound.playSound("assets/audio/sfx/soundtray/VolMAX.ogg","static")
+    end
+    print("Volume: "..(Sound.masterVolume*100))
+  end
+  if key == "0" or key == "kp0" then
+    Sound.masterMute = not Sound.masterMute
+    Sound.playSound("assets/audio/sfx/soundtray/Voldown.ogg","static")
+    print("Volume Muted!")
+  end
 end
 
 function love.draw()
   local screenWidth, screenHeight = love.graphics.getDimensions()
   local defaultColor = Color.WHITE
+  local defaultCanvas = love.graphics.getCanvas()
 
   love.graphics.setColor(defaultColor)
   love.graphics.setCanvas(gameCanvas)
@@ -130,7 +149,7 @@ function love.draw()
     end
   end
   --- in main canvas ---
-  love.graphics.setCanvas()
+  love.graphics.setCanvas(defaultCanvas)
   love.graphics.clear(0.30,0.30,0.30,1.0)
   -- stretches the game's canvas.
   local sr = Vector2(screenWidth / gameCanvas:getWidth(),screenHeight / gameCanvas:getHeight())

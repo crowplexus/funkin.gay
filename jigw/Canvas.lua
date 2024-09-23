@@ -1,31 +1,31 @@
-local Screen = Object:extend() --- @class Screen
-function Screen:__tostring() return "Screen" end
+local Canvas = Object:extend() --- @class Canvas
+function Canvas:__tostring() return "Canvas" end
 
-function Screen:new()
-  Screen.objects = {}
-  return Screen
+function Canvas:new()
+  Canvas.objects = {}
+  return Canvas
 end
 
-function Screen:enter() end
-function Screen:update(dt)
+function Canvas:enter() end
+function Canvas:update(dt)
   for i=1, #self.objects do
     local v = self.objects[i]
     if v ~= nil and v.update then v:update(dt) end
   end
 end
-function Screen:keypressed(key) end
-function Screen:keyreleased(key) end
-function Screen:draw()
+function Canvas:keypressed(key) end
+function Canvas:keyreleased(key) end
+function Canvas:draw()
   for i,v in pairs(self.objects) do
     --local v = self.objects[i]
     if v and v.draw then v:draw() end
   end
 end
 
-function Screen:clear()
-  local i = #Screen.objects
+function Canvas:clear()
+  local i = #Canvas.objects
   while i > 1 do
-    local obi = Screen.objects[i]
+    local obi = Canvas.objects[i]
     if obi ~= nil then
       if obi.dispose then
         obi:dispose()
@@ -34,24 +34,24 @@ function Screen:clear()
       end
       obi = nil
     end
-    table.remove(Screen.objects, i)
+    table.remove(Canvas.objects, i)
     i = i - 1
   end
 end
 
-function Screen:add(obj)
+function Canvas:add(obj)
   if not self.objects[obj] ~= nil then
     table.insert(self.objects, obj)
   end
 end
 
-function Screen:remove(obj)
+function Canvas:remove(obj)
   for _,v in ipairs(self.objects) do
     if v == obj then table.remove(self.objects,_) end
   end
 end
 
-function Screen:sortDrawZ()
+function Canvas:sortDrawZ()
   table.sort(self.objects, function(a,b)
     if a and b and a.position.z and b.position.z then
       return Vector3.sortByZ(-1,a,b)
@@ -59,4 +59,4 @@ function Screen:sortDrawZ()
   end)
 end
 
-return Screen
+return Canvas
