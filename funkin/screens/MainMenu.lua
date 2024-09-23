@@ -16,10 +16,11 @@ local menuSounds = {
 local options = {"storymode","freeplay","options","credits"}
 local optionFuncs = {
   -- [positionInMenu] = function() end
-  [1] = function() ScreenManager:switchScreen("funkin.screens.StoryMenu") end,
-  [2] = function() ScreenManager:switchScreen("funkin.screens.FreeplayMenu") end,
-  [3] = function() ScreenManager:switchScreen("funkin.screens.OptionsMenu") end,
-  [4] = function() ScreenManager:switchScreen("funkin.screens.CreditsMenu") end,
+  --[1] = function() ScreenManager:switchScreen("funkin.screens.StoryMenu") end,
+  --[2] = function() ScreenManager:switchScreen("funkin.screens.FreeplayMenu") end,
+  --[3] = function() ScreenManager:switchScreen("funkin.screens.OptionsMenu") end,
+  --[4] = function() ScreenManager:switchScreen("funkin.screens.CreditsMenu") end,
+  [1] = function() ScreenManager:switchScreen("funkin.screens.Gameplay") end,
   -- functions may do anything they need to, other than switching screens
 }
 
@@ -68,7 +69,6 @@ function MainMenu:keypressed(x)
   if selected ~= oldS then
     buttons[oldS]:playAnimation("idle")
     buttons[selected]:playAnimation("selected")
-    buttons[selected]:centerPosition("X")
     Sound.playSound(menuSounds.scroll,"static",0.7)
   end
   if x == "return" then
@@ -76,7 +76,7 @@ function MainMenu:keypressed(x)
       Utils.match(selected,optionFuncs)
     else -- error handling
       Sound.playSound(menuSounds.cancel,"static",0.7)
-      print("this option doesn't really do anything! - selected "..selected)
+      print("option "..selected.." doesn't really do anything!")
     end
   end
 end
@@ -91,7 +91,7 @@ end
 ]]
 
 function MainMenu:clear()
-  if bgMusic then bgMusic:stop() end
+  Sound.stopMusic(true) -- this is going to crash. -- it didn't
   MainMenu.super.clear()
 end
 

@@ -20,29 +20,39 @@ function ScreenManager:switchScreen(modname)
       ScreenManager.transition:outwards(true)
     end
   end
-
+  local transitioned = true
   if ScreenManager:isTransitionActive() then
+    transitioned = false
     ScreenManager.transition:reset()
     if ScreenManager.skipNextTransIn == false then
       ScreenManager.transition:inwards(true)
     end
   end
 
-  if type(nextScreen) == "table" then
-    -- clear the previous screen.
-    if ScreenManager:isScreenOperating() then
-      ScreenManager.activeScreen:clear()
-      if ScreenManager.activeScreen ~= nil then
-        ScreenManager.activeScreen = nil
+  doSwitch = function()
+    if type(nextScreen) == "table" and transitioned then
+      -- clear the previous screen.
+      if ScreenManager:isScreenOperating() then
+        ScreenManager.activeScreen:clear()
+        if ScreenManager.activeScreen ~= nil then
+          ScreenManager.activeScreen = nil
+        end
       end
+      -- enable the requested screen.
+      if nextScreen.new then ScreenManager.activeScreen = nextScreen:new()
+      else ScreenManager.activeScreen = nextScreen end
     end
-    -- enable the requested screen.
-    if nextScreen.new then ScreenManager.activeScreen = nextScreen:new()
-    else ScreenManager.activeScreen = nextScreen end
+    -- now that the new screen is set, enter it.
+    if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.enter then
+      ScreenManager.activeScreen:enter()
+    end
   end
-  -- now that the new screen is set, enter it.
-  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.enter then
-    ScreenManager.activeScreen:enter()
+  if transitioned == true then doSwitch()
+  else -- TODO: make this take transition duration into account idk.
+    Timer.create(0.3,function()
+      transitioned = true
+      doSwitch()
+    end)
   end
 
   ScreenManager.skipNextTransIn = false

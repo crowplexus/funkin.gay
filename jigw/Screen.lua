@@ -3,7 +3,7 @@ function Screen:__tostring() return "Screen" end
 
 function Screen:new()
   Screen.objects = {}
-  return self
+  return Screen
 end
 
 function Screen:enter() end
@@ -23,19 +23,19 @@ function Screen:draw()
 end
 
 function Screen:clear()
-  while #self.objects ~= 0 do
-    local i = 1
-    if self.objects[i] ~= nil then
-      if self.objects[i].dispose then
-        self.objects[i]:dispose()
-      elseif self.objects[i].release then
-        self.objects[i]:release()
+  local i = #Screen.objects
+  while i > 1 do
+    local obi = Screen.objects[i]
+    if obi ~= nil then
+      if obi.dispose then
+        obi:dispose()
+      elseif obi.release then
+        obi:release()
       end
-      if self.objects[i] ~= nil then
-        self.objects[i] = nil
-      end
+      obi = nil
     end
-    table.remove(self.objects, i)
+    table.remove(Screen.objects, i)
+    i = i - 1
   end
 end
 
