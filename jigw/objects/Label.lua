@@ -79,6 +79,7 @@ end
 
 function Label:draw()
 	if self:hasAnyText() and self.visible and self.color[4] > 0.0 then
+		love.graphics.push("transform")
 		if self.strokeSize > 0 then
 			_drawWithStroke(
 				self._renderText,self.color,self.strokeColor,
@@ -88,7 +89,8 @@ function Label:draw()
 			love.graphics.setColor(self.color)
 			love.graphics.draw(self._renderText,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
 		end
-		love.graphics.setColor(1,1,1,1)
+		love.graphics.setColor(Color.WHITE)
+		love.graphics.pop()
 	end
 end
 

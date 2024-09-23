@@ -55,7 +55,7 @@ function Gameplay:enter()
   Gameplay.hud.judgementCounter.strokeSize = 1.25
   self:add(Gameplay.hud.judgementCounter)
 
-  Gameplay:countdown()
+  Gameplay:beginCountdown()
 end
 
 function Gameplay:keypressed(key)
@@ -69,15 +69,14 @@ local path = "assets/images/ui/countdown/"
 local sprites = { "prepare", "ready", "set", "go" }
 local sounds = { "intro3", "intro2", "intro1", "introGo" }
 
-function Gameplay:countdown()
-  Timer.create(0.5, function(timer)
+function Gameplay:beginCountdown()
+  Timer.create(0.5, function()
     Gameplay:progressCountdown()
     counter = counter + 1
     if counter == 5 then
-      local freaky = love.audio.newSource("assets/audio/bgm/freakyMenu.ogg","stream")
-      freaky:setLooping(true)
-      freaky:setVolume(0.3)
-      freaky:play()
+      Timer.create(0.5, function()
+        Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.3,true)
+      end)
     end
   end,#sprites,true)
 end

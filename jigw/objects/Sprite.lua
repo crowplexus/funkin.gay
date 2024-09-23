@@ -26,7 +26,7 @@ end
 
 function Sprite:draw()
 	if self and self.texture and self.visible and self.color[4] > 0.0 then
-		love.graphics.push()
+		love.graphics.push("transform")
 		love.graphics.setColor(self.color)
 		local frW, frH = self.texture:getDimensions()
 		love.graphics.translate(self.position:unpack())

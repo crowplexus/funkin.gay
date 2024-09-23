@@ -9,11 +9,10 @@ local Sprite = require("jigw.objects.Sprite")
 local AnimatedSprite = require("jigw.objects.AnimatedSprite")
 
 local menuSounds = {
-  confirm = love.audio.newSource("assets/audio/sfx/confirmMenu.ogg","static"),
-  scroll  = love.audio.newSource("assets/audio/sfx/scrollMenu.ogg","static"),
-  cancel  = love.audio.newSource("assets/audio/sfx/cancelMenu.ogg","static"),
+  confirm = "assets/audio/sfx/confirmMenu.ogg",
+  scroll  = "assets/audio/sfx/scrollMenu.ogg",
+  cancel  = "assets/audio/sfx/cancelMenu.ogg",
 }
-local bgMusic = love.audio.newSource("assets/audio/bgm/freakyMenu.ogg","stream")
 local options = {"storymode","freeplay","options","credits"}
 local optionFuncs = {
   -- [positionInMenu] = function() end
@@ -35,13 +34,11 @@ function MainMenu:new()
 end
 
 function MainMenu:enter()
+  Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.5,true)
   local vpw, vph = love.graphics.getDimensions()
 
   local bg = Sprite(0,0,love.graphics.newImage("assets/images/backgrounds/menu/menuBG.png"))
   self:add(bg)
-
-  bgMusic:setVolume(0.05)
-  bgMusic:play()
 
   -- TODO: make this easier, something like `spriteButton:loadAtlas(path,type)` or idk
   local atlasHelper = require("jigw.util.AtlasSpriteHelper")
@@ -72,15 +69,13 @@ function MainMenu:keypressed(x)
     buttons[oldS]:playAnimation("idle")
     buttons[selected]:playAnimation("selected")
     buttons[selected]:centerPosition("X")
-    love.audio.stop(menuSounds.scroll)
-    love.audio.play(menuSounds.scroll)
+    Sound.playSound(menuSounds.scroll,"static",0.7)
   end
   if x == "return" then
     if optionFuncs[selected] then
       Utils.match(selected,optionFuncs)
     else -- error handling
-      love.audio.stop(menuSounds.cancel)
-      love.audio.play(menuSounds.cancel)
+      Sound.playSound(menuSounds.cancel,"static",0.7)
       print("this option doesn't really do anything! - selected "..selected)
     end
   end

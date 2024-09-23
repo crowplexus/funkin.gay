@@ -27,7 +27,7 @@ end
 
 function ColorShape:draw()
   if self and self.visible and self.color[4] > 0.0 then
-    love.graphics.push()
+    love.graphics.push("transform")
     love.graphics.setColor(self.color)
     Utils.match(self.shape, {
       [1] = function()

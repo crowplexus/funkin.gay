@@ -37,6 +37,7 @@ ScreenManager = require("jigw.ScreenManager") --- @class ScreenManager
 Utils = require("jigw.util.JigwUtils") --- @class Utils
 Timer = require("jigw.util.Timer") --- @class Timer
 Tween = require("libraries.tween") --- @class Tween
+Sound = require("jigw.Sound") --- @class Sound
 
 _G.GlobalTweens = {} --- @type table<Tween>
 _G.GlobalTimers = {} --- @type table<Timer>
@@ -64,7 +65,7 @@ function love.load()
 
   ScreenManager.skipNextTransIn = true
   ScreenManager.skipNextTransOut = true
-  ScreenManager:switchScreen("funkin.screens.Gameplay")
+  ScreenManager:switchScreen("funkin.screens.MainMenu")
 end
 
 function love.update(dt)
@@ -96,6 +97,7 @@ function love.update(dt)
       i = i + 1;
     end
   end
+  if Sound and Sound.update then Sound.update(dt) end
 end
 
 function love.keypressed(key)

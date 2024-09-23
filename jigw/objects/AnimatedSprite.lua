@@ -167,6 +167,7 @@ end
 
 function AnimatedSprite:draw()
 	if self and self.texture and self.visible and self.color[4] ~= 0.0 then
+		love.graphics.push("transform")
 		love.graphics.setColor(self.color)
 		if self.currentFrame == nil then
 			love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
@@ -183,13 +184,14 @@ function AnimatedSprite:draw()
             if(self.centered)then
                 self.transform:translate(-frW * 0.5, -frH * 0.5)
             end
-						love.graphics.draw(
-											self.currentAnimation.tex,
-											currentFrame.quad,
-											self.transform
-									)
+				love.graphics.draw(
+					self.currentAnimation.tex,
+					currentFrame.quad,
+					self.transform
+				)
 		end
 		love.graphics.setColor(Color.WHITE)
+		love.graphics.pop()
 	end
 end
 
