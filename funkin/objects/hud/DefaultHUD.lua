@@ -2,7 +2,7 @@ local DefaultHUD = Object:extend()
 local judgeHolder = require("funkin.JudgementHolder")
 
 local function getScoreText(tally)
-  if tostring(tally) ~= "Tally" then
+  if not tally or tostring(tally) ~= "Tally" then
     return "Score: N/A | Accuracy: N/A% | N/A"
   end
   return "Score: " .. Utils.thousandSep(tally.score)
@@ -26,10 +26,9 @@ function DefaultHUD:new()
 	self.judgementCounter = nil --- @type jigw.objects.Label
 
 	local Label = require("jigw.objects.Label")
-	local tally = require("funkin.data.Tally")()
   local vpw, vph = love.graphics.getDimensions()
 
-	self.scoreText = Label(0, 0, getScoreText(tally), 20)
+	self.scoreText = Label(0, 0, getScoreText(), 20)
   self.scoreText.position.y = (vph - self.scoreText.size.y) - 15
   self.scoreText:centerPosition("sex") -- funny how that works huh.
   self.scoreText.strokeSize = 1.25
@@ -45,7 +44,7 @@ function DefaultHUD:new()
   local hpb = downscroll and vpw * 0.175 or vpw * 0.875
 
   self.healthBar = ProgressBar(0,hbp)
-  self.healthBar.fillDirection = ProgressFill.LTR -- LTR, RTL, BTT, TTB?
+  self.healthBar.fillDirection = ProgressFill.RTL -- LTR, RTL, BTT, TTB?
   self.healthBar.colors = { Color.rgb(255,0,0), Color.rgb(102,255,51) }
   self.healthBar.value = 50 -- center the primary rectangle in the bar
   self.healthBar.centerPosition("X")]]

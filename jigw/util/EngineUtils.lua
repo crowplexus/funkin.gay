@@ -23,7 +23,7 @@ return {
   --- @param text string
   --- @param x number
   --- @param y number
-  --- @param ?textColor table<number>
+  --- @param textColor? table<number>
   --- @param font? love.Font
   drawText = function(text,x,y,textColor,font)
     if not textColor then textColor = {1,1,1,1} end
@@ -47,7 +47,7 @@ return {
   --- @param y number
   --- @param textColor table<number>
   --- @param strokeColor table<number>
-  --- @param font love.graphics.Font
+  --- @param font love.Font
   --- @param strokeSize number
   drawTextWithStroke = function(text,x,y,textColor,strokeColor,font,strokeSize)
     if not strokeSize then strokeSize = 1 end

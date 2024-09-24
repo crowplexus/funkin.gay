@@ -32,7 +32,7 @@ DefaultScreenTransition = ScreenTransitions.Circle
 
 Color = require("jigw.util.Color")
 ScreenManager = require("jigw.ScreenManager") --- @class ScreenManager
-Utils = require("jigw.util.JigwUtils") --- @class Utils
+Utils = require("jigw.util.EngineUtils") --- @class Utils
 Timer = require("jigw.util.Timer") --- @class Timer
 Tween = require("libraries.tween") --- @class Tween
 Sound = require("jigw.Sound") --- @class Sound
@@ -53,6 +53,22 @@ _G.PROJECT = require("project")
 local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none") --- @type love.Font
 local drawFPSCounter = true --- @type boolean
 local gameCanvas --- @type love.Canvas
+
+local function getVRAM()
+  local imgBytes = love.graphics.getStats().images --- @type number
+  local fontBytes = love.graphics.getStats().fonts --- @type number
+  local canvasBytes = love.graphics.getStats().canvases --- @type number
+  return imgBytes + fontBytes + canvasBytes
+end
+
+local function drawFPS(x,y)
+  local so = ScreenManager:isScreenOperating()
+  Utils.drawText("FPS: "..love.timer.getFPS()
+    .." - VRAM: "..Utils.formatBytes(getVRAM())
+    ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
+    .." - Draw Calls: "..love.graphics.getStats().drawcalls
+    ,x,y)
+end
 
 function love.load()
   -- set default font
@@ -159,23 +175,5 @@ function love.draw()
   --- --- ---- ------- ---
 end
 
-function drawFPS(x,y)
-  local so = ScreenManager:isScreenOperating()
-  Utils.drawText("FPS: "..love.timer.getFPS()
-    .." - RAM: "..Utils.formatBytes(getMemoryUsage())
-    ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
-    .." - Draw Calls: "..love.graphics.getStats().drawcalls
-    ,x,y)
-end
-
-local fuck = true
-
 function love.quit()
-end
-
-function getMemoryUsage()
-  local imgBytes = love.graphics.getStats().images --- @type number
-  local fontBytes = love.graphics.getStats().fonts --- @type number
-  local canvasBytes = love.graphics.getStats().canvases --- @type number
-  return imgBytes + fontBytes + canvasBytes
 end

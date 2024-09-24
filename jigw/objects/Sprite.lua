@@ -20,7 +20,10 @@ function Sprite:new(x,y,tex)
 end
 
 function Sprite:dispose()
-	self.texture:release()
+	if self.texture ~= nil then
+		self.texture:release()
+		self.texture = nil
+	end
 	buildSprite(self)
 end
 

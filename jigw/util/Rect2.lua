@@ -12,8 +12,8 @@ end
 
 function Rect2:round()
 	return Rect2:new(
-		math.floor(x+0.5),math.floor(y+0.5),
-		math.floor(width+0.5),math.floor(height+0.5)
+		math.floor(self.x+0.5),math.floor(self.y+0.5),
+		math.floor(self.width+0.5),math.floor(self.height+0.5)
 	)
 end
 
