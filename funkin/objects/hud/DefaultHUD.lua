@@ -32,7 +32,7 @@ function DefaultHUD:new()
   local downscroll = true
   local healthBarY = downscroll and vpw * 0.05 or vpw * 0.5
 
-  self.healthBar = ProgressBar(0,healthBarY)
+  self.healthBar = ProgressBar(0,healthBarY,590,10)
   self.healthBar.colors = { Color.rgb(255,0,0), Color.rgb(102,255,51) }
   self.healthBar.percentage = 50 -- center the primary rectangle in the bar
   self.healthBar.fillMode = ProgressFill.RTL -- LTR, RTL, BTT, TTB
@@ -52,11 +52,24 @@ function DefaultHUD:new()
   --self:add(self.judgementCounter)
 end
 
+local health = 50
+local shit = false
+
 function DefaultHUD:draw()
 	-- TODO: better way to draw here??? idk
 	if self.healthBar and self.healthBar.draw then self.healthBar:draw() end
 	if self.scoreText and self.scoreText.draw then self.scoreText:draw() end
 	if self.judgementCounter and self.judgementCounter.draw then self.judgementCounter:draw() end
+  if shit == false then
+    health = health + 0.5
+    if health > 100 then shit = true end
+  end
+  if shit == true then
+    health = health - 0.5
+    if health < 1 then shit = false end
+  end
+  self.healthBar.percentage = health
+  --print(shit and "pong" or "ping")
 end
 
 return DefaultHUD

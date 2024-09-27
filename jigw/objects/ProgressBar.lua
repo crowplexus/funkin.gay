@@ -13,7 +13,7 @@ function ProgressBar:__tostring() return "ProgressBar" end
 
 function ProgressBar:new(x,y,w,h,colors)
   if colors == nil or #colors < 2 then
-    colors = {Color.GREEN_YELLOW, Color.RED}
+    colors = {Color.WHITE, Color.BLACK}
   end
   self.position   = Vector2(x,y)                    --- @class Vector2
   self.size       = Vector2(w or 590,h or 10)       --- @class Vector2
@@ -50,14 +50,14 @@ function ProgressBar:drawProgress()
   -- TODO: image filling?
 
   local vertical = self.fillMode == ProgressFill.TTB or self.fillMode == ProgressFill.BTT
+  local inReverse = not vertical and self.fillMode == ProgressFill.RTL or self.fillMode == ProgressFill.BTT
 
   local perRange = self.maxPercent - self.minPercent
   local rangeFrac = (self.percentage - self.minPercent) / perRange
   local dependingSize = not vertical and self:getWidth() or self:getHeight()
-  local inReverse = not vertical and self.fillMode == ProgressFill.RTL or self.fillMode == ProgressFill.BTT
 
   local fillSize = math.round(rangeFrac * dependingSize)
-  if inReverse then fillSize = dependingSize - fillSize end
+  if inReverse then fillSize = math.round(dependingSize - (rangeFrac * dependingSize)) end
 
 	love.graphics.translate(self.position:unpack())
 	love.graphics.rotate(self.rotation)

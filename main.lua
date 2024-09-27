@@ -83,7 +83,8 @@ function love.load()
 end
 
 function love.update(dt)
-  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.update then
+  local screenPaused = ScreenManager:isTransitionActive()
+  if not screenPaused and ScreenManager:isScreenOperating() and ScreenManager.activeScreen.update then
     ScreenManager.activeScreen:update(dt)
   end
   if Timer and #_G.GlobalTimers ~= 0 then
@@ -115,13 +116,15 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keypressed then
+  local screenPaused = ScreenManager:isTransitionActive()
+  if not screenPaused and ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keypressed then
     ScreenManager.activeScreen:keypressed(key)
   end
 end
 
 function love.keyreleased(key)
-  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keyreleased then
+  local screenPaused = ScreenManager:isTransitionActive()
+  if not screenPaused and ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keyreleased then
     ScreenManager.activeScreen:keyreleased(key)
   end
   -- temporary --

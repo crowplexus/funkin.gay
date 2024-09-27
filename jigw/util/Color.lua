@@ -16,6 +16,7 @@ local Color = {
   INDIGO          = {75/255,0,130/255,1},
   GREEN_YELLOW    = {173/255,1,47/255,1},
   PALE_GREEN      = {152/255,251/255,152/255,1},
+  GRAY            = {128/255,128/255,128/255,1},
 
   --- Returns a color table in RGBA, from 0 to 255
   --- @param r number Red Channel Value.
