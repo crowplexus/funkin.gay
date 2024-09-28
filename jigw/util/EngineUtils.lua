@@ -41,42 +41,6 @@ return {
     text = nil
     nf = nil
   end,
-  --- to draw text with a stroke behind it.
-  --- @param text string
-  --- @param x number
-  --- @param y number
-  --- @param textColor table<number>
-  --- @param strokeColor table<number>
-  --- @param font love.Font
-  --- @param strokeSize number
-  drawTextWithStroke = function(text,x,y,textColor,strokeColor,font,strokeSize)
-    if not strokeSize then strokeSize = 1 end
-    if not textColor then textColor = {1,1,1,1} end
-    if not strokeColor then strokeColor = {0,0,0,1} end
-    if not font then font = love.graphics.getFont() end
-    if not x then x = 0 end
-    if not y then y = 0 end
-
-    local nf = type(font) == "string" and love.graphics.newFont(font, 32) or font
-    local text = love.graphics.newText(nf,text)
-    local offset = -strokeSize
-    love.graphics.setColor(strokeColor)
-    for i=1,2 do
-      love.graphics.draw(text, x + strokeSize,          y + strokeSize + offset)
-      love.graphics.draw(text, x + strokeSize + offset, y + strokeSize)
-      love.graphics.draw(text, x + strokeSize - offset, y + strokeSize + offset)
-      love.graphics.draw(text, x + strokeSize + offset, y + strokeSize - offset)
-      offset = -offset
-    end
-    love.graphics.setColor(textColor)
-    love.graphics.draw(text,x + strokeSize,y + strokeSize)
-    love.graphics.setColor(1,1,1,1)
-    -- free memory
-    text:release()
-    nf:release()
-    text = nil
-    nf = nil
-  end,
   thousandSep = function(num, sep)
     if not num or type(num) ~= "number" then num = 0 end
     if not sep or type(sep) ~= "string" then sep = "," end

@@ -36,16 +36,16 @@ function DefaultHUD:new()
   self.healthBar.colors = { Color.rgb(255,0,0), Color.rgb(102,255,51) }
   self.healthBar.percentage = 50 -- center the primary rectangle in the bar
   self.healthBar.fillMode = ProgressFill.RTL -- LTR, RTL, BTT, TTB
-  self.healthBar:centerPosition("x")
+  self.healthBar:centerPosition(Axis.X)
 
 	self.scoreText = Label(0, (healthBarY + self.healthBar:getHeight()) + 20, getScoreText(), 20)
   --self.scoreText.position.y = (vph - self.scoreText.size.y) - 15
-  self.scoreText:centerPosition("x") -- funny how that works huh.
-  self.scoreText.strokeSize = 1.25
+  self.scoreText:centerPosition(Axis.X) -- funny how that works huh.
+  self.scoreText.strokeSize = 1.5
 
   self.judgementCounter = Label(5, 0, getJudges(), 20)
   self.judgementCounter.position.y = (vph - self.judgementCounter.size.y) * 0.5
-  self.judgementCounter.strokeSize = 1.25
+  self.judgementCounter.strokeSize = 1.5
 
   --self:add(self.healthBar)
   --self:add(self.scoreText)

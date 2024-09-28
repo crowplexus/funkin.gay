@@ -1,3 +1,10 @@
+--- @enum Axis
+Axis = {
+  X   = 0x01,
+  Y   = 0x02,
+  XY  = 0x03,
+}
+
 if arg[2] == "debug" then
   require("lldebugger").start()
 end
@@ -72,7 +79,7 @@ end
 
 function love.load()
   -- set default font
-  love.graphics.setFont(systemFont)
+  --love.graphics.setFont(systemFont)
   -- make a canvas for the actual game.
   local sz = Vector2(love.graphics.getWidth(),love.graphics.getHeight())
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)

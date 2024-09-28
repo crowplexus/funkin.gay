@@ -50,7 +50,7 @@ function MainMenu:enter()
     spriteButton:addAnimationTransform("selected", bttnAnim[name.." selected"].frames, 24)
     spriteButton:addAnimationTransform("idle", bttnAnim[name.." idle"].frames, 24)
     spriteButton:playAnimation("idle", true)
-    spriteButton:centerPosition("X")
+    spriteButton:centerPosition(Axis.X)
     self:add(spriteButton)
     table.insert(buttons,spriteButton)
     if i == selected then spriteButton:playAnimation("selected") end

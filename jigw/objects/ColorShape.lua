@@ -27,7 +27,7 @@ end
 
 function ColorShape:draw()
   if self and self.visible and self.color[4] > 0.0 then
-    love.graphics.push("transform")
+    love.graphics.push()
     love.graphics.setColor(self.color)
     Utils.match(self.shape, {
       [1] = function()
@@ -40,7 +40,7 @@ function ColorShape:draw()
         love.graphics.rectangle("fill",0,0,self.size.x,self.size.y)
       end,
       [2] = function()
-        local frW, frH = self.size:unpack()
+        --local frW, frH = self.size:unpack()
         love.graphics.translate(self.position:unpack())
         love.graphics.rotate(self.rotation)
         --if(self.centered)then
@@ -55,16 +55,17 @@ function ColorShape:draw()
 end
 
 function ColorShape:centerPosition(_x_)
-  if type(_x_) ~= "string" then _x_ = "xy" end
-	_x_ = string.lower(_x_)
+	assert(_x_, "Axis value must be either Axis.X, Axis.Y, or Axis.XY")
 	local vpw, vph = love.graphics.getDimensions()
-  self.centered = true;
-	if string.find(_x_,"x") then
-		self.position.x = vpw * 0.5;
+	local centerX = _x_ == Axis.X
+	local centerY = _x_ == Axis.Y
+	if(_x_ == Axis.XY)then
+		centerX = true
+		centerY = true
 	end
-	if string.find(_x_,"y") then
-		self.position.y = vph * 0.5;
-	end
+	if centerX then self.position.x = vpw* 0.5 end
+	if centerY then self.position.y = vph* 0.5 end
+  self.centered = centerX == true or centerY == true
 end
 
 return ColorShape

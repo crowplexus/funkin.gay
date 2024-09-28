@@ -29,7 +29,7 @@ end
 
 function Sprite:draw()
 	if self and self.texture and self.visible and self.color[4] > 0.0 then
-		love.graphics.push("transform")
+		love.graphics.push()
 		love.graphics.setColor(self.color)
 		local frW, frH = self.texture:getDimensions()
 		love.graphics.translate(self.position:unpack())
@@ -50,16 +50,17 @@ function Sprite:set_alpha(vl) return rawset(self,self.color[4],vl) end
 --#endregion
 
 function Sprite:centerPosition(_x_)
-	if type(_x_) ~= "string" then _x_ = "xy" end
-	_x_ = string.lower(_x_)
+	assert(_x_, "Axis value must be either Axis.X, Axis.Y, or Axis.XY")
 	local vpw, vph = love.graphics.getDimensions()
-	self.centered = true;
-	if string.find(_x_, "x") then
-		self.position.x = vpw * 0.5;
+	local centerX = _x_ == Axis.X
+	local centerY = _x_ == Axis.Y
+	if(_x_ == Axis.XY)then
+		centerX = true
+		centerY = true
 	end
-	if string.find(_x_, "y") then
-		self.position.y = vph * 0.5;
-	end
+	if centerX then self.position.x = vpw* 0.5 end
+	if centerY then self.position.y = vph* 0.5 end
+	self.centered = centerX == true or centerY == true
 end
 
 return Sprite

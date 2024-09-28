@@ -56,17 +56,21 @@ function ProgressShape:getHeight() return self.size.y end
 function ProgressShape:draw()
   -- TODO: image filling?
   if self.visible == true then
+    love.graphics.push()
+    love.graphics.translate(self.position:unpack())
+	  love.graphics.rotate(self.rotation)
+    if(self.border and self.border.width > 0) then
+      self:drawBorder()
+    end
     self:drawBackground()
-    self:drawProgress  ()
+    self:drawProgress()
+    love.graphics.pop()
   end
 end
 
 
 function ProgressShape:drawProgress()
-  love.graphics.push()
   love.graphics.setColor(self.colors[2])
-	love.graphics.translate(self.position:unpack())
-	love.graphics.rotate(self.rotation)
   local vertical = _isVertical(self)
   local fillSize = _calculateProgress(self)
   Utils.match(self.shape, {
@@ -81,27 +85,10 @@ function ProgressShape:drawProgress()
     end
   })
   love.graphics.setColor(Color.WHITE)
-  love.graphics.pop()
 end
 
 
 function ProgressShape:drawBackground()
-  love.graphics.push()
-  love.graphics.translate(self.position:unpack())
-	love.graphics.rotate(self.rotation)
-  if(self.border and self.border.width > 0) then
-    love.graphics.setColor(self.border.color or Color.BLACK)
-    love.graphics.setLineWidth(self.border.width)
-    Utils.match(self.shape, {
-      [ShapeType.RECTANGLE] = function()
-        love.graphics.rectangle("line",0,0,self:getWidth(),self:getHeight())
-      end,
-      [ShapeType.CIRCLE] = function()
-        love.graphics.circle("line",0,0,self:getWidth(),self:getHeight())
-      end,
-    })
-    love.graphics.setLineWidth(1)
-  end
   love.graphics.setColor(self.colors[1])
   Utils.match(self.shape, {
     [ShapeType.RECTANGLE] = function()
@@ -112,19 +99,33 @@ function ProgressShape:drawBackground()
     end,
   })
   love.graphics.setColor(Color.WHITE)
-  love.graphics.pop()
+end
+
+function ProgressShape:drawBorder()
+  love.graphics.setColor(self.border.color or Color.BLACK)
+  love.graphics.setLineWidth(self.border.width)
+  Utils.match(self.shape, {
+    [ShapeType.RECTANGLE] = function()
+      love.graphics.rectangle("line",0,0,self:getWidth(),self:getHeight())
+    end,
+    [ShapeType.CIRCLE] = function()
+      love.graphics.circle("line",0,0,self:getWidth(),self:getHeight())
+    end,
+  })
+  love.graphics.setLineWidth(1)
 end
 
 function ProgressShape:centerPosition(_x_)
-	if type(_x_) ~= "string" then _x_ = "xy" end
-	_x_ = string.lower(_x_)
+  assert(_x_, "Axis value must be either Axis.X, Axis.Y, or Axis.XY")
 	local vpw, vph = love.graphics.getDimensions()
-	if string.find(_x_, "x") then
-		self.position.x = (vpw - self:getWidth()) * 0.5;
+	local centerX = _x_ == Axis.X
+	local centerY = _x_ == Axis.Y
+	if(_x_ == Axis.XY)then
+		centerX = true
+		centerY = true
 	end
-	if string.find(_x_, "y") then
-		self.position.y = (vph - self:getWidth()) * 0.5;
-	end
+	if centerX then self.position.x = (vpw - self:getWidth())* 0.5 end
+	if centerY then self.position.y = (vph - self:getHeight())* 0.5 end
 end
 
 return ProgressShape

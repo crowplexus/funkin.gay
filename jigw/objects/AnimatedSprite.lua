@@ -31,8 +31,8 @@ end
 local function buildAnimation()
 	return {
 		name = "default",
-		texture = tex or nil, --- @type love.graphics.Image
-		frames = {}, --- @type love.graphics.Quad
+		texture = nil, --- @class love.graphics.Image
+		frames = {}, --- @class love.graphics.Quad
 		frameRate = 30, --- @type number
 		offset = Vector2(0,0),
 		repeatMode = AnimationRepeat.NEVER, --- @type number|AnimationRepeat
@@ -158,37 +158,30 @@ function AnimatedSprite:dispose()
 end
 
 function AnimatedSprite:getProgress()
-   local cur = self.currentAnimation
-   local progress = math.floor(self.animationProgress / cur.length * #cur.frames) + 1
-    if progress < 1 or progress > cur.length then progress = 1 end
-
-    return progress;
+  local cur = self.currentAnimation
+  local progress = math.floor(self.animationProgress / cur.length * #cur.frames) + 1
+	if progress < 1 or progress > cur.length then progress = 1 end
+  return progress;
 end
 
 function AnimatedSprite:draw()
 	if self and self.texture and self.visible and self.color[4] ~= 0.0 then
-		love.graphics.push("transform")
+		love.graphics.push()
 		love.graphics.setColor(self.color)
 		if self.currentFrame == nil then
 			love.graphics.draw(self.texture,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
 		else
-            local currentFrame = self.currentFrame;
+			local currentFrame = self.currentFrame;
+			local _, _, frW, frH = currentFrame.quad:getViewport()
 
-            local _, _, frW, frH = currentFrame.quad:getViewport()
-
-            self.transform:reset();
-
-            self.transform:translate(self.position:unpack())
-            self.transform:translate(self.offset.x, self.offset.y);
-            self.transform:rotate(self.rotation);
-            if(self.centered)then
-                self.transform:translate(-frW * 0.5, -frH * 0.5)
-            end
-				love.graphics.draw(
-					self.currentAnimation.tex,
-					currentFrame.quad,
-					self.transform
-				)
+			self.transform:reset();
+			self.transform:translate(self.position:unpack())
+			self.transform:translate(self.offset.x, self.offset.y);
+			self.transform:rotate(self.rotation);
+			if(self.centered)then
+					self.transform:translate(-frW * 0.5, -frH * 0.5)
+			end
+			love.graphics.draw(self.currentAnimation.tex,currentFrame.quad,self.transform)
 		end
 		love.graphics.setColor(Color.WHITE)
 		love.graphics.pop()
@@ -196,16 +189,17 @@ function AnimatedSprite:draw()
 end
 
 function AnimatedSprite:centerPosition(_x_)
-	if type(_x_) ~= "string" then _x_ = "xy" end
-	_x_ = string.lower(_x_)
+	assert(_x_, "Axis value must be either Axis.X, Axis.Y, or Axis.XY")
 	local vpw, vph = love.graphics.getDimensions()
-    self.centered = true;
-	if string.find(_x_,"x") then
-		self.position.x = vpw * 0.5;
+	local centerX = _x_ == Axis.X
+	local centerY = _x_ == Axis.Y
+	if(_x_ == Axis.XY)then
+		centerX = true
+		centerY = true
 	end
-	if string.find(_x_,"y") then
-		self.position.y = vph * 0.5;
-	end
+	if centerX then self.position.x = vpw* 0.5 end
+	if centerY then self.position.y = vph* 0.5 end
+	self.centered = centerX == true or centerY == true
 end
 
 return AnimatedSprite

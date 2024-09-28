@@ -2,16 +2,14 @@ local function buildLabel(sel)
 	sel.text = nil
 	sel.fontSize = 14
 	sel.fontPath = "assets/fonts/vcr.ttf"
-	sel.position = Vector3(0,0,0)
+	sel.position = Vector2(0,0)
 	sel.zAsLayer = true
 	sel.size = Vector2(0,0)
 	sel.scale = Vector2(1,1)
 	sel.strokeSize = 0
-	sel.strokeColor = Color.rgb(0,0,0)
+	sel.strokeColor = Color.BLACK
 	sel.color = Color.WHITE
 	sel.visible = true
-	sel.textWidth = 0
-	sel.textHeight = 0
 	sel.rotation = 0
 	sel.alpha = 1.0
 	return sel
@@ -25,40 +23,8 @@ local function _recreateFont(sel)
 	sel._renderFont = love.graphics.newFont(sel.fontPath,sel.fontSize,"none")
 end
 
-local function _recreateText(sel)
-	if sel._renderText then sel._renderText:release() end
-	sel._renderText = love.graphics.newText(sel._renderFont or love.graphics.getFont(),sel.text)
-	sel.size.x = sel._renderText:getWidth()
-	sel.size.y = sel._renderText:getHeight()
-end
-
 local function _isFontPath(p)
 	return p and type(p) == "string" and (p:sub(#".ttf") or p:sub(#".otf"))
-end
-
---- Function to draw a label's text field with a stroke below it.
---- @param t love.graphics.Text Text object.
---- @param c table<number> Text color.
---- @param sc table<number> Text stroke color.
---- @param x number Text X position.
---- @param y number Text Y position.
---- @param r number Text rotation.
---- @param sz number Text stroke size.
---- @param sx number X value for text scale.
---- @param sy number Y value for text scale.
-local function _drawWithStroke(t,c,sc,x,y,r,sz,sx,sy)
-	local offset = -sz
-  love.graphics.setColor(sc)
-  for i = 1,2 do
-    love.graphics.draw(t, x + sz, y + sz + offset, r, sx, sy)
-    love.graphics.draw(t, x + sz + offset, y + sz, r, sx, sy)
-    love.graphics.draw(t, x + sz - offset, y + sz + offset, r, sx, sy)
-    love.graphics.draw(t, x + sz + offset, y + sz - offset, r, sx, sy)
-    offset = -offset
-  end
-  love.graphics.setColor(c)
-  love.graphics.draw(t,x+sz,y+sz,r,sx,sy)
-  love.graphics.setColor(1,1,1,1)
 end
 
 function Label:new(x,y,text,size)
@@ -67,9 +33,7 @@ function Label:new(x,y,text,size)
 	self.text = text or nil
 	self.fontSize = size or 14
 	self._renderFont = nil
-	self._renderText = nil
 	self:changeFontSize(size,true)
-	--return self
 end
 
 function Label:dispose()
@@ -79,16 +43,29 @@ end
 
 function Label:draw()
 	if self:hasAnyText() and self.visible and self.color[4] > 0.0 then
-		love.graphics.push("transform")
+		love.graphics.push()
+		local so = 0
+		local sz = self.strokeSize
 		if self.strokeSize > 0 then
-			_drawWithStroke(
-				self._renderText,self.color,self.strokeColor,
-				self.position.x,self.position.y,self.rotation,self.strokeSize,
-				self.scale.x, self.scale.y)
-		else
-			love.graphics.setColor(self.color)
-			love.graphics.draw(self._renderText,self.position.x,self.position.y,self.rotation,self.scale.x,self.scale.y)
+			love.graphics.setColor(self.strokeColor)
+			local tx = self.position.x
+			local ty = self.position.y
+			local tr = self.rotation
+			local sx = self.scale.x
+			local sy = self.scale.y
+			so = sz
+			for i=1,8 do
+				love.graphics.print(self.text, self._renderFont, tx + sz, ty + sz + so, tr, sx, sy)
+				love.graphics.print(self.text, self._renderFont, tx + sz + so, ty + sz, tr, sx, sy)
+				love.graphics.print(self.text, self._renderFont, tx + sz - so, ty + sz + so, tr, sx, sy)
+				love.graphics.print(self.text, self._renderFont, tx + sz + so, ty + sz - so, tr, sx, sy)
+				so = -so
+			end
 		end
+		love.graphics.setColor(self.color)
+		love.graphics.print(self.text,self._renderFont,
+			self.position.x+sz,self.position.y+sz,
+			self.rotation,self.scale.x,self.scale.y)
 		love.graphics.setColor(Color.WHITE)
 		love.graphics.pop()
 	end
@@ -98,38 +75,35 @@ function Label:hasAnyText()
 	return type(self.text) == "string" and string.len(self.text) ~= 0
 end
 
-function Label:setText(newtext) -- setter wasn't working fuckkkkk
-	if not self._renderText then _recreateText(self) end
-	self._renderText:set(newtext)
-end
-
 function Label:changeFont(path)
 	local fi = love.filesystem.getInfo(path)
 	if _isFontPath(path) and fi and fi.size and self.fontPath ~= path then
 		self.fontPath = path
 		_recreateFont(self)
-		if self._renderText == nil then _recreateText(self) end
-		self._renderText.setFont(self._renderFont)
 	end
 end
 
 function Label:changeFontSize(newSize, force)
 	self.fontSize = newSize
 	_recreateFont(self)
-	_recreateText(self)
 end
 
 function Label:centerPosition(_x_)
-	if type(_x_) ~= "string" then _x_ = "xy" end
-	_x_ = string.lower(_x_)
+	assert(_x_, "Axis value must be either Axis.X, Axis.Y, or Axis.XY")
 	local vpw, vph = love.graphics.getDimensions()
-	if string.find(_x_,"x") then
-		local width = self._renderText:getWidth() or 0
-		self.position.x = (vpw-width)*0.5
+	local centerX = _x_ == Axis.X
+	local centerY = _x_ == Axis.Y
+	if(_x_ == Axis.XY)then
+		centerX = true
+		centerY = true
 	end
-	if string.find(_x_,"y") then
-		local height = self._renderText:getHeight() or 0
-		self.position.y = (vph-height)*0.5
+	if centerX then
+		local width = self._renderFont:getWidth(self.text) or 0
+		self.position.x = (vpw-width)* 0.5
+	end
+	if centerY then
+		local height = self._renderFont:getHeight() or 0
+		self.position.y = (vph-height)* 0.5
 	end
 end
 

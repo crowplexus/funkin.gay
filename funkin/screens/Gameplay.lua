@@ -17,10 +17,10 @@ function Gameplay:enter()
   local ColorShape = require("jigw.objects.ColorShape")
 
   local bg = ColorShape(0, 0, Color.rgb(80, 80, 80), vpw, vph)
-  bg:centerPosition()
+  bg:centerPosition(Axis.XY)
   self:add(bg)
 
-  hud = require("funkin.objects.hud.DefaultHUD")()
+  local hud = require("funkin.objects.hud.DefaultHUD")()
   self:add(hud)
 
   Gameplay:beginCountdown()
@@ -58,7 +58,7 @@ function Gameplay:progressCountdown()
     local spritePath = path .. sprites[counter] .. ".png"
     if love.filesystem.getInfo(spritePath) ~= nil then
       local countdownSprite = require("jigw.objects.Sprite")(0, 0, love.graphics.newImage(spritePath))
-      countdownSprite:centerPosition("XY")
+      countdownSprite:centerPosition(Axis.XY)
       self:add(countdownSprite)
       Tween.create(0.8, countdownSprite, { scale = {x = 0, y = 0} }, "inOutCubic")
       Timer.create(1.5, function() countdownSprite:dispose() end, 0)
