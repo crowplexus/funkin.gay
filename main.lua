@@ -61,6 +61,9 @@ local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none") ---
 local drawFPSCounter = true --- @type boolean
 local gameCanvas --- @type love.Canvas
 
+local fpsCap = 60 --- @type number
+local dtSince = 0 --- @type number
+
 local function getVRAM()
   local imgBytes = love.graphics.getStats().images --- @type number
   local fontBytes = love.graphics.getStats().fonts --- @type number
@@ -70,11 +73,9 @@ end
 
 local function drawFPS(x,y)
   local so = ScreenManager:isScreenOperating()
-  Utils.drawText("FPS: "..love.timer.getFPS()
-    .." - VRAM: "..Utils.formatBytes(getVRAM())
+  love.graphics.print("VRAM: "..Utils.formatBytes(getVRAM())
     ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
-    .." - Draw Calls: "..love.graphics.getStats().drawcalls
-    ,x,y)
+    .."\nDraw Calls: "..love.graphics.getStats().drawcalls,x,y)
 end
 
 function love.load()
@@ -90,6 +91,9 @@ function love.load()
 end
 
 function love.update(dt)
+  -- FRAMERATE CAP --
+  local sleep = 1/fpsCap
+  if dt < sleep then love.timer.sleep(sleep - dt) end
   local screenPaused = ScreenManager:isTransitionActive()
   if not screenPaused and ScreenManager:isScreenOperating() and ScreenManager.activeScreen.update then
     ScreenManager.activeScreen:update(dt)
@@ -120,6 +124,7 @@ function love.update(dt)
     end
   end
   if Sound and Sound.update then Sound.update(dt) end
+  dtSince = dtSince + dt
 end
 
 function love.keypressed(key)

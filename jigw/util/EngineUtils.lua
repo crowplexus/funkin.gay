@@ -91,10 +91,12 @@ return {
     if not min or type(min) ~= "number" then max = 1 end
     return num < min and max or num > max and min or num
   end,
-
   clamp = function(num, min, max)
     if not min or type(min) ~= "number" then min = 1 end
     if not min or type(min) ~= "number" then max = 1 end
     return num < min and min or num > max and max or num
   end,
+  calculateFramerate = function(time,since,framerate)
+    return 1/framerate - (time - since)
+  end
 }

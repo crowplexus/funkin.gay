@@ -5,7 +5,7 @@ local transIn = true --- @type boolean
 local finished = true --- @type boolean
 local started = false --- @type boolean
 
-local speed = 50 --- @type number
+local speed = 30 --- @type number
 local rectS = 0 --- @type number
 local canvasSize --- @class Vector2
 
