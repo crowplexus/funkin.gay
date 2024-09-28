@@ -1,7 +1,7 @@
 local Sound = {
 	sourcesCached = {},  --- @type table<love.audio.Source>
 	soundsPlaying = {},  --- @type table<love.audio.Source>
-	music 				= nil, --- @type love.audio.Source
+	music 				= nil, --- @class love.audio.Source
 	masterVolume	= 1.0, --- @type number
 	musicVolume		= 1.0, --- @type number
 	soundVolume		= 1.0, --- @type number
@@ -29,8 +29,8 @@ function Sound.update(dt)
 end
 
 --- Used for caching audio sources and releasing them later when finished.
---- @param file				File path (with sound extension included at the end)
---- @param sourceType Streaming or static source. ("static", stream")
+--- @param file				string File path (with sound extension included at the end)
+--- @param sourceType string Streaming or static source. ("static", stream")
 function Sound.makeSource(file,sourceType)
 	local src = love.audio.newSource(file,sourceType)
 	table.insert(Sound.soundsPlaying,src)
@@ -38,10 +38,10 @@ function Sound.makeSource(file,sourceType)
 end
 
 --- Creates a background music stream and immediately plays it.
---- @param file				File path (with sound extension included at the end)
---- @param sourceType Streaming or static source. ("static", stream")
---- @param volume 		Initial volume.
---- @param looped			Sets whether the BGM should loop.
+--- @param file				string File path (with sound extension included at the end)
+--- @param sourceType string Streaming or static source. ("static", stream")
+--- @param volume 		number Initial volume.
+--- @param looped			boolean Sets whether the BGM should loop.
 function Sound.playMusic(file,sourceType,volume,looped)
 	local vol = (Sound.musicVolume) * (volume or 1.0)
 	local bgm = love.audio.newSource(file,sourceType)
@@ -53,9 +53,9 @@ function Sound.playMusic(file,sourceType,volume,looped)
 end
 
 --- Creates a sound effect stream and immediately plays it.
---- @param file				File path (with sound extension included at the end)
---- @param sourceType Streaming or static source. ("static", stream")
---- @param volume 		Initial volume.
+--- @param file				string File path (with sound extension included at the end)
+--- @param sourceType string Streaming or static source. ("static", stream")
+--- @param volume 		number Initial volume.
 function Sound.playSound(file,sourceType,volume)
 	local vol = (Sound.soundVolume) * (volume or 1.0)
 	local sfx = love.audio.newSource(file,sourceType)
@@ -65,7 +65,7 @@ function Sound.playSound(file,sourceType,volume)
 end
 
 --- Stops the background music abruptly.
---- @param release			Clears the audio completely from memory.
+--- @param release			boolean Clears the audio completely from memory.
 function Sound.stopMusic(release)
 	if type(release) ~= "boolean" then release = true end
 	if Sound.music and Sound.music.stop then
@@ -78,7 +78,7 @@ function Sound.stopMusic(release)
 end
 
 --- Stops every sound effect abruptly.
---- @param releaseAll		Clears the sounds completely from memory.
+--- @param releaseAll		boolean Clears the sounds completely from memory.
 function Sound.stopAll(releaseAll)
 	if #Sound.soundsPlaying == 0 then return end
 	for i=1,#Sound.soundsPlaying do

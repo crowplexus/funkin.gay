@@ -1,19 +1,17 @@
 local Conductor = Object:extend() --- @class Conductor
 function Conductor:__tostring() return "(Conductor Time "..self.time.." Beat "..self.beat.." Step"..self.step..")" end
-local function buildConductor(self)
-  sel.bpm = 100.0 --- @type number
-  sel.crotchet = 0 --- @type number
-  sel.semiquaver = 0 --- @type number
-  sel.stepsPerBeat = 4 --- @type number
-  -- we really just need these two, bars aren't gonna be used often
-  -- i'll add them later if its really needed.
-  sel.step = 0.0 --- @type number
-  sel.beat = 0.0 --- @type number
-  return sel
-end
 
 function Conductor:new(startingBPM)
-  buildConductor(self)
+  self.bpm = 100.0 --- @type number
+  self.crotchet = 0 --- @type number
+  self.semiquaver = 0 --- @type number
+  self.stepsPerBeat = 4 --- @type number
+  self.time = 0.0 --- @type number
+  -- we really just need these two, bars aren't gonna be used often
+  -- i'll add them later if its really needed.
+  self.step = 0.0 --- @type number
+  self.beat = 0.0 --- @type number
+
   if type(startingBPM) ~= "number" or startingBPM < 0 then
     startingBPM = 100.0
   end

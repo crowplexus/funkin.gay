@@ -15,7 +15,7 @@ end
 
 function LevelDatabase:getLevels()
 	local wd = self.workingDir
-	if wd:endsWith("/") then
+	if wd:last("/") then
 		wd = string.sub(wd,0,-2) -- i.e: "assets/data/levels"
 	end
 	local moddedLevel = require(wd.."/modData.lua")
@@ -27,7 +27,7 @@ end
 function LevelDatabase:deepPackSearch(packs)
 	local levelsFound = {}
 	local wd = self.workingDir
-	if wd:endsWith("/") then
+	if wd:last("/") then
 		wd = string.sub(wd,0,-2) -- i.e: "assets/data/levels"
 	end
 
@@ -36,7 +36,7 @@ function LevelDatabase:deepPackSearch(packs)
 		local p = wd.."/"..tostring(v)..".lua"
 		if love.filesystem.getInfo(p) ~= nil then -- if its a script
 			local module = p:gsub("/", ".");
-			if module:endsWith(".lua")then
+			if module:last(".lua")then
 				module = module:sub(1, #module - 4)
 			end
 			local vv = require(module)

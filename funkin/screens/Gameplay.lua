@@ -23,7 +23,7 @@ function Gameplay:enter()
   local hud = require("funkin.objects.hud.DefaultHUD")()
   self:add(hud)
 
-  Gameplay:beginCountdown()
+  Timer.create(0.25, function() self:beginCountdown() end)
 end
 
 function Gameplay:keypressed(key)

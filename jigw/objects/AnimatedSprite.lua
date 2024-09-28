@@ -70,8 +70,21 @@ function AnimatedSprite:update(dt)
 			end
 			self.animationProgress = returnToFrame
 		end
-        self.currentFrame = self.currentAnimation.frames[self:getProgress()]
+		self.currentFrame = self.currentAnimation.frames[self:getProgress()]
 	end
+end
+
+function AnimatedSprite:loadAtlas(path, animTable)
+	local atlasHelper = require("jigw.util.AtlasSpriteHelper")
+	local animationList = atlasHelper:getAnimationListSparrow(path..".xml")
+	self.texture = love.graphics.newImage(path..".png")
+	if type(animTable) == "table" then
+		for i,v in ipairs(animTable) do
+			local x = v[2]
+			self:addAnimationTransform(v[1], animationList[x].frames, v[3])
+		end
+	end
+	return animationList
 end
 
 function AnimatedSprite:addAnimation(name,x,y,width,height,fps,duration,tex)
@@ -96,7 +109,7 @@ end
 
 function AnimatedSprite:addAnimationTransform(name,transform,fps,duration)
 	local anim = buildAnimation()
-	anim.tex = tex or self.texture
+	anim.tex = self.texture
 	if anim.tex == nil then
 		print("Cannot add animation to a texture-less AnimatedSprite.")
 		return nil

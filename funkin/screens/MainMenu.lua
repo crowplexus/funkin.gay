@@ -41,14 +41,13 @@ function MainMenu:enter()
   local bg = Sprite(0,0,love.graphics.newImage("assets/images/backgrounds/menu/menuBG.png"))
   self:add(bg)
 
-  -- TODO: make this easier, something like `spriteButton:loadAtlas(path,type)` or idk
-  local atlasHelper = require("jigw.util.AtlasSpriteHelper")
   for i,name in ipairs(options) do
     local path = "assets/images/menu/main/"..name
-    local spriteButton = AnimatedSprite(0, (160 * i) - 30, love.graphics.newImage(path..".png"))
-    local bttnAnim = atlasHelper:getAnimationListSparrow(path..".xml")
-    spriteButton:addAnimationTransform("selected", bttnAnim[name.." selected"].frames, 24)
-    spriteButton:addAnimationTransform("idle", bttnAnim[name.." idle"].frames, 24)
+    local spriteButton = AnimatedSprite(0, (160 * i) - 30)
+    spriteButton:loadAtlas(path, {
+      {"idle", name.." idle", 24},
+      {"selected", name.." selected", 24}
+    })
     spriteButton:playAnimation("idle", true)
     spriteButton:centerPosition(Axis.X)
     self:add(spriteButton)
@@ -60,6 +59,10 @@ function MainMenu:enter()
   versionText.position.y = (vph - versionText.size.y) - 25 -- i think that's the original pos idk
   versionText.strokeSize = 1.5
   self:add(versionText)
+
+  local alpha = require("funkin.objects.Alphabet")()
+  alpha:setText("TEST STRING")
+  self:add(alpha)
 end
 
 function MainMenu:keypressed(x)

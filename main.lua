@@ -9,8 +9,24 @@ if arg[2] == "debug" then
   require("lldebugger").start()
 end
 
-function string:endsWith(pattern)
+--- @return boolean
+function string:last(pattern)
   return (self:sub(#self - #pattern + 1, #self) == pattern);
+end
+
+--- @return table<string>
+function string:split(delimiter)
+  local result = {}
+  if delimiter == "" then
+    for i=1,#self do
+      table.insert(result,self:sub(i,i))
+    end
+  else
+    for match in (self..delimiter):gmatch("(.-)"..delimiter) do
+      table.insert(result, match)
+    end
+  end
+  return result
 end
 
 function table:has(val)
