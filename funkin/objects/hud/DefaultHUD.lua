@@ -26,13 +26,13 @@ function DefaultHUD:new()
 	self.judgementCounter = nil --- @class jigw.objects.Label
 
 	local Label = require("jigw.objects.Label")
-  local ProgressBar = require("jigw.objects.ProgressBar")
+  local ProgressShape = require("jigw.objects.ProgressShape")
   local vpw, vph = love.graphics.getDimensions()
 
   local downscroll = true
   local healthBarY = downscroll and vpw * 0.05 or vpw * 0.5
 
-  self.healthBar = ProgressBar(0,healthBarY,590,10)
+  self.healthBar = ProgressShape(0,healthBarY,590,10)
   self.healthBar.colors = { Color.rgb(255,0,0), Color.rgb(102,255,51) }
   self.healthBar.percentage = 50 -- center the primary rectangle in the bar
   self.healthBar.fillMode = ProgressFill.RTL -- LTR, RTL, BTT, TTB
