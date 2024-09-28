@@ -1,21 +1,21 @@
 local Sprite = Object:extend() --- @class Sprite
 function Sprite:__tostring() return "Sprite" end
 local function buildSprite(sel)
-	sel.position = Vector3(0,0,0) -- X, Y, Z
-	sel.zAsLayer = true -- treats Z position value as a layer index, is a toggle so you can use Z for something else
+	sel.position = Vector2(0,0) -- X, Y
 	sel.scale = Vector2(1,1)
 	sel.color = Color.WHITE
 	sel.visible = true
 	sel.centered = false;
+	sel.texture = nil
 	sel.rotation = 0
 	sel.alpha = 1.0
-	sel.texture = nil
 	return sel
 end
 
 function Sprite:new(x,y,tex)
 	buildSprite(self)
-	self.position = Vector3(x,y,0)
+	self.position.x = x
+	self.position.y = y
 	if tex then self.texture = tex end
 end
 
@@ -24,7 +24,6 @@ function Sprite:dispose()
 		self.texture:release()
 		self.texture = nil
 	end
-	buildSprite(self)
 end
 
 function Sprite:draw()

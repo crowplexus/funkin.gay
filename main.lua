@@ -38,7 +38,7 @@ ScreenTransitions = {
 DefaultScreenTransition = ScreenTransitions.Circle
 
 Color = require("jigw.util.Color")
-ScreenManager = require("jigw.ScreenManager") --- @class ScreenManager
+ScreenHandler = require("jigw.ScreenHandler") --- @class ScreenHandler
 Utils = require("jigw.util.EngineUtils") --- @class Utils
 Timer = require("jigw.util.Timer") --- @class Timer
 Tween = require("libraries.tween") --- @class Tween
@@ -72,9 +72,9 @@ local function getVRAM()
 end
 
 local function drawFPS(x,y)
-  local so = ScreenManager:isScreenOperating()
+  local so = ScreenHandler:isScreenOperating()
   love.graphics.print("VRAM: "..Utils.formatBytes(getVRAM())
-    ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
+    ..(so and "\nScreen: "..ScreenHandler.activeScreen:__tostring() or "")
     .."\nDraw Calls: "..love.graphics.getStats().drawcalls,x,y)
 end
 
@@ -85,18 +85,18 @@ function love.load()
   local sz = Vector2(love.graphics.getWidth(),love.graphics.getHeight())
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
 
-  ScreenManager.skipNextTransIn = true
-  ScreenManager.skipNextTransOut = true
-  ScreenManager:switchScreen("funkin.screens.MainMenu")
+  ScreenHandler.skipNextTransIn = true
+  ScreenHandler.skipNextTransOut = true
+  ScreenHandler:switchScreen("funkin.screens.MainMenu")
 end
 
 function love.update(dt)
   -- FRAMERATE CAP --
   local sleep = 1/fpsCap
   if dt < sleep then love.timer.sleep(sleep - dt) end
-  local screenPaused = ScreenManager:isTransitionActive()
-  if not screenPaused and ScreenManager:isScreenOperating() and ScreenManager.activeScreen.update then
-    ScreenManager.activeScreen:update(dt)
+  local screenPaused = ScreenHandler:isTransitionActive()
+  if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.update then
+    ScreenHandler.activeScreen:update(dt)
   end
   if Timer and #_G.GlobalTimers ~= 0 then
     local i = 1;
@@ -128,16 +128,16 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-  local screenPaused = ScreenManager:isTransitionActive()
-  if not screenPaused and ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keypressed then
-    ScreenManager.activeScreen:keypressed(key)
+  local screenPaused = ScreenHandler:isTransitionActive()
+  if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.keypressed then
+    ScreenHandler.activeScreen:keypressed(key)
   end
 end
 
 function love.keyreleased(key)
-  local screenPaused = ScreenManager:isTransitionActive()
-  if not screenPaused and ScreenManager:isScreenOperating() and ScreenManager.activeScreen.keyreleased then
-    ScreenManager.activeScreen:keyreleased(key)
+  local screenPaused = ScreenHandler:isTransitionActive()
+  if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.keyreleased then
+    ScreenHandler.activeScreen:keyreleased(key)
   end
   -- temporary --
   if key == "-" or key == "kp-" then
@@ -170,13 +170,13 @@ function love.draw()
   love.graphics.setCanvas(gameCanvas)
 
   --- in game canvas ---
-  if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.draw then
-    ScreenManager.activeScreen:draw()
+  if ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.draw then
+    ScreenHandler.activeScreen:draw()
   end
-  if ScreenManager:isTransitionActive() then
-    ScreenManager.transition:draw()
-    if ScreenManager.transition.finished == true then
-      ScreenManager.transition = nil
+  if ScreenHandler:isTransitionActive() then
+    ScreenHandler.transition:draw()
+    if ScreenHandler.transition.finished == true then
+      ScreenHandler.transition = nil
     end
   end
   --- in main canvas ---

@@ -29,7 +29,8 @@ end
 
 function Label:new(x,y,text,size)
 	buildLabel(self)
-	self.position = Vector3(x,y,0)
+	self.position.x = x
+	self.position.y = y
 	self.text = text or nil
 	self.fontSize = size or 14
 	self._renderFont = nil

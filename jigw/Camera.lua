@@ -1,9 +1,9 @@
-local Camera2D = Object:extend()
+local Camera = Object:extend() --- @class jigw.Camera
 
-function Camera2D:new(x,y)
+function Camera:new(x,y)
 	local sz = Vector2(love.graphics.getWidth(),love.graphics.getHeight())
   self._subCanvas = love.graphics.newCanvas(sz.x, sz.y) --- @class love.Canvas
-  self.position = Vector2() --- @class Vector2
+  self.position = Vector2(x,y) --- @class Vector2
 	self.color = Color.WHITE --- @class Color
   self.rotation = 0 --- @type number
 
@@ -19,15 +19,15 @@ function Camera2D:new(x,y)
   -- ngl kinda based it off of how the NES handles it lol.
 end
 
-function Camera2D:update(dt)
+function Camera:update(dt)
 end
 
-function Camera2D:draw()
+function Camera:draw()
 end
 
---[[function Camera2D:addLayer(type,offset)
-end]]
---[[function Camera2D:removeLayer(type,offset)
-]]
+function Camera:addLayer(type,offset)
+end
+function Camera:removeLayer(type,offset)
+end
 
-return Camera2D
+return Camera

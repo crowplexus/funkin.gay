@@ -1,5 +1,5 @@
 ---@diagnostic disable-next-line: undefined-field
-local Gameplay = require("jigw.Canvas"):extend()
+local Gameplay = require("jigw.Screen"):extend()
 function Gameplay:__tostring() return "Gameplay" end
 
 local function buildGameplay(sel) -- I really need a better system for this :p -star
@@ -28,7 +28,7 @@ end
 
 function Gameplay:keypressed(key)
   if key == "escape" then
-    ScreenManager:switchScreen("funkin.screens.MainMenu")
+    ScreenHandler:switchScreen("funkin.screens.MainMenu")
   end
 end
 

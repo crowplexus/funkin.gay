@@ -1,5 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
-local MainMenu = require("jigw.Canvas"):extend()
+local MainMenu = require("jigw.Screen"):extend()
 function MainMenu:__tostring() return "Main Menu" end
 
 -- "imports" ig lol
@@ -16,11 +16,11 @@ local menuSounds = {
 local options = {"storymode","freeplay","options","credits"}
 local optionFuncs = {
   -- [positionInMenu] = function() end
-  --[1] = function() ScreenManager:switchScreen("funkin.screens.StoryMenu") end,
-  --[2] = function() ScreenManager:switchScreen("funkin.screens.FreeplayMenu") end,
-  --[3] = function() ScreenManager:switchScreen("funkin.screens.OptionsMenu") end,
-  --[4] = function() ScreenManager:switchScreen("funkin.screens.CreditsMenu") end,
-  [1] = function() ScreenManager:switchScreen("funkin.screens.Gameplay") end,
+  --[1] = function() ScreenHandler:switchScreen("funkin.screens.StoryMenu") end,
+  --[2] = function() ScreenHandler:switchScreen("funkin.screens.FreeplayMenu") end,
+  --[3] = function() ScreenHandler:switchScreen("funkin.screens.OptionsMenu") end,
+  --[4] = function() ScreenHandler:switchScreen("funkin.screens.CreditsMenu") end,
+  [1] = function() ScreenHandler:switchScreen("funkin.screens.Gameplay") end,
   -- functions may do anything they need to, other than switching screens
 }
 

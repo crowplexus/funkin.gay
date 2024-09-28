@@ -6,12 +6,11 @@ local AnimationRepeat = {
 }
 
 local function buildAnimatedSprite(sel)
-	sel.position = Vector3(0,0,0) -- X, Y, Z
-	sel.centered = true
+	sel.position = Vector2(0,0) -- X, Y
 	sel.offset = Vector2(0, 0)
-	sel.zAsLayer = true -- treats Z position value as a layer index, is a toggle so you can use Z for something else
 	sel.scale = Vector2(1,1)
 	sel.color = Color.WHITE
+	sel.centered = true
 	sel.visible = true
 	sel.rotation = 0
 	sel.alpha = 1.0
@@ -48,7 +47,8 @@ function AnimatedSprite:__tostring() return "AnimatedSprite" end
 
 function AnimatedSprite:new(x,y,tex)
 	buildAnimatedSprite(self)
-	self.position = Vector3(x,y,0)
+	self.position.x = x
+	self.position.y = y
 	if tex then self.texture = tex end
 end
 
