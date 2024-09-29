@@ -109,8 +109,8 @@ function Label:centerPosition(_x_)
 end
 
 --#region Getters and Setters
-function Label:get_alpha() return rawget(self,self.color[4]) end
-function Label:set_alpha(vl) return rawset(self,self.color[4],vl) end
+function Label:get_alpha() return self.color[4] end
+function Label:set_alpha(vl) self.color[4] = vl end
 --#endregion
 
 return Label

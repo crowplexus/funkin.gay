@@ -61,7 +61,7 @@ function MainMenu:enter()
   self:add(versionText)
 
   local alpha = require("funkin.objects.Alphabet")()
-  alpha:setText("TEST STRING")
+  alpha.text = "TEST STRING"
   self:add(alpha)
 end
 

@@ -6,14 +6,16 @@ function Alphabet:new()
   self.text = "" --- @type string
 end
 
-function Alphabet:setText(__)
-  local v = rawset(self,rawget(self,"text"),__)
-  local chars = __:split("")
+--#region Setters
+function Alphabet:set_text(vl)
+  self._text = vl
+  local chars = vl:split()
   for i=1,#chars do
     local char = chars[i]
     print(char)
   end
-  return v
+  return vl
 end
+--#endregion
 
 return Alphabet
