@@ -19,7 +19,7 @@ SOURCE GUIDE:
       contains the scripts required for the actual game
   - jigw:
       contains backend scripts for extending LÖVE's functionality
-      
+
       - Q: what's with the name?
       - A: it's one of my oc's names lol. @crowplexus
   - libraries:
