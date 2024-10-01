@@ -38,7 +38,7 @@ function MainMenu:enter()
   Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.08,true) -- 80% volume
   local vpw, vph = love.graphics.getDimensions()
 
-  local bg = Sprite(0,0,love.graphics.newImage("assets/images/backgrounds/menu/menuBG.png"))
+  local bg = Sprite(0,0,love.graphics.newImage("assets/images/menu/menuBG.png"))
   self:add(bg)
 
   for i,name in ipairs(options) do

@@ -128,11 +128,13 @@ function love.keyreleased(key)
   end
   -- temporary --
   if key == "-" or key == "kp-" then
+		if Sound.masterMute == true then Sound.masterMute = false end
     Sound.masterVolume = Utils.clamp(Sound.masterVolume - 0.05,0.0,1.0)
     Sound.playSound("assets/audio/sfx/soundtray/Voldown.ogg","static")
     print("Volume: "..(Sound.masterVolume*100))
   end
   if key == "=" or key == "kp+" then
+		if Sound.masterMute == true then Sound.masterMute = false end
     Sound.masterVolume = Utils.clamp(Sound.masterVolume + 0.05,0.0,1.0)
     if Sound.masterVolume < 1.0 then
       Sound.playSound("assets/audio/sfx/soundtray/Volup.ogg","static")
@@ -144,16 +146,18 @@ function love.keyreleased(key)
   if key == "0" or key == "kp0" then
     Sound.masterMute = not Sound.masterMute
     Sound.playSound("assets/audio/sfx/soundtray/Voldown.ogg","static")
-    print("Volume Muted!")
+    if Sound.masterMute then print("Volume muted!")
+		else print("Volume unmuted!") end
   end
 end
 
 function love.draw()
   local screenWidth, screenHeight = love.graphics.getDimensions()
-  local defaultColor = Color.WHITE
   local defaultCanvas = love.graphics.getCanvas()
+  local defaultColor = {1,1,1,1}
 
   love.graphics.setColor(defaultColor)
+	love.graphics.push()
   love.graphics.setCanvas(gameCanvas)
 
   --- in game canvas ---
@@ -174,6 +178,7 @@ function love.draw()
   love.graphics.draw(gameCanvas,0,0,0,sr.x,sr.y)
   -- the fps counter should render over everything else.
   if drawFPSCounter then drawFPS(5+sr.x,5+sr.y) end
+	love.graphics.pop()
   --- --- ---- ------- ---
 end
 

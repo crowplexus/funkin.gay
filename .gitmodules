@@ -1,0 +1,3 @@
+[submodule "jigw"]
+	path = jigw
+	url = git@github.com:crowplexus/jigw.lua.git
