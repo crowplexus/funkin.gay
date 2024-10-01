@@ -67,7 +67,7 @@ function Gameplay:progressCountdown()
 			self:add(countdownSprite)
 			local ctime = Conductor.crotchet
       Timer.create(ctime + 1, function() countdownSprite:dispose() end)
-      Tween.create(ctime, countdownSprite, { alpha = 0 }, "inOutCubic")
+      Tween.create(ctime, countdownSprite, { scale = {x=0,y=0} }, "inOutCubic")
     end
   end
 end
