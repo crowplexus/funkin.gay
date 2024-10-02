@@ -4,14 +4,19 @@ local NoteDisplay = {
 	maxColumns = 4,
 }
 
-function NoteDisplay:generateNote(kind, column)
+function NoteDisplay.generateNote(kind,column)
+	if type(column) ~= "number" then column = 1 end
+	if column == 0 then column = column + 1 end
+
 	local AnimatedSprite = require("jigw.objects.AnimatedSprite")
-	local directions = {"Left","Down","Up","Right"}
+	local directions = {"left","down","up","right"}
+	local colours		 = {"purple","blue","green","red"}
+
 	local defaultNote = AnimatedSprite(0,0)
-	defaultNote:loadAtlas("assets/images/notes/normal/arrows", {
-		{"default", "note"..directions[column], 0}
+	defaultNote:loadAtlas("assets/images/notes/normal/notes", {
+		{"tap", colours[column], 0},
 	})
-	defaultNote:playAnimation("default")
+	defaultNote:playAnimation("tap", true)
 	return defaultNote
 end
 

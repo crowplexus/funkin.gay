@@ -53,6 +53,10 @@ function MainMenu:enter()
     self:add(spriteButton)
     table.insert(buttons,spriteButton)
     if i == selected then spriteButton:playAnimation("selected") end
+
+		local ndsp = require("funkin.objects.NoteDisplay")
+		local note = ndsp.generateNote("default",4)
+		self:add(note)
   end
 
   local versionText = Label(5,0,"Funkin' Kiskadee v".._G.GAME_VER, 20)
