@@ -1,5 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
-local MainMenu = require("jigw.Screen"):extend()
+local MainMenu = Screen:extend()
 function MainMenu:__tostring() return "Main Menu" end
 
 -- "imports" ig lol

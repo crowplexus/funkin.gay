@@ -1,5 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
-local FreeplayMenu = require("jigw.Screen"):extend()
+local FreeplayMenu = Screen:extend()
 function FreeplayMenu:__tostring() return "Freeplay Menu" end
 
 -- "imports" ig lol

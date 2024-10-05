@@ -1,5 +1,5 @@
 ---@diagnostic disable-next-line: undefined-field
-local Gameplay = require("jigw.Screen"):extend()
+local Gameplay = Screen:extend()
 local Conductor = nil
 
 function Gameplay:__tostring() return "Gameplay" end

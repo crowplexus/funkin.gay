@@ -9,39 +9,11 @@ if arg[2] == "debug" then
   require("lldebugger").start()
 end
 
-require("jigw.util.Override")
-
---#region Global
-
-Object = require("libraries.classic") --- @class Object
-Vector2 = require("jigw.util.Vector2") --- @class Vector2
-Vector3 = require("jigw.util.Vector3") --- @class Vector3
-Rect2 = require("jigw.util.Rect2") --- @class Rect2
-Rect3 = require("jigw.util.Rect3") --- @class Rect3
-ScreenTransitions = {
-  Circle = require("jigw.transition.Circle"),
-  Rectangle = require("jigw.transition.Rectangle"),
-}
-DefaultScreenTransition = ScreenTransitions.Circle
-
-Color = require("jigw.util.Color")
-ScreenHandler = require("jigw.ScreenHandler") --- @class ScreenHandler
-Utils = require("jigw.util.EngineUtils") --- @class Utils
-Timer = require("jigw.util.Timer") --- @class Timer
-Tween = require("libraries.tween") --- @class Tween
-Sound = require("jigw.Sound") --- @class Sound
-
-_G.GlobalTweens = {} --- @type table<Tween>
-_G.GlobalTimers = {} --- @type table<Timer>
-
---#endregion
-
 --- Date String, represents the current game version
 --- this doesn't follow SemVer, and instead is the date
 --- of when a version of the game was compiled
 --- @type string
 _G.GAME_VER = tostring(os.date("%Y.%m.%d"))
-
 _G.PROJECT = require("project")
 
 local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none") --- @type love.Font
@@ -52,6 +24,8 @@ local fpsCap = 60 --- @type number
 local dtSince = 0 --- @type number
 
 local defaultCanvas = love.graphics.getCanvas()
+
+local bootStrapper = require("jigw.Boot")
 
 local function getVRAM()
   local imgBytes = love.graphics.getStats().images --- @type number
@@ -68,6 +42,7 @@ local function drawFPS(x,y)
 end
 
 function love.load()
+  bootStrapper.init()
   -- set default font
   --love.graphics.setFont(systemFont)
   -- make a canvas for the actual game.
@@ -83,51 +58,16 @@ function love.update(dt)
   -- FRAMERATE CAP --
   local sleep = 1/fpsCap
   if dt < sleep then love.timer.sleep(sleep - dt) end
-  local screenPaused = ScreenHandler.inTransition
-  if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.update then
-    ScreenHandler.activeScreen:update(dt)
-  end
-  if Timer and #_G.GlobalTimers ~= 0 then
-    local i = 1;
-    while (i <= #_G.GlobalTimers)do
-      local timer = _G.GlobalTimers[i];
-      timer:update(dt);
-      if timer.finished and timer.oneshot then
-        table.remove(_G.GlobalTimers,i)
-        --print('removed timer at ', i)
-      end
-      i = i + 1;
-    end
-  end
-  if Tween and #_G.GlobalTweens ~= 0 then
-    local i = 1;
-    while i <= #_G.GlobalTweens do
-      local tween = _G.GlobalTweens[i];
-      tween:update(dt);
-      if(_G.GlobalTweens[i].clock >= _G.GlobalTweens[i].duration)then
-        table.remove(_G.GlobalTweens, i);
-        --print('removed tween at ', i)
-        return;
-      end
-      i = i + 1;
-    end
-  end
-  if Sound and Sound.update then Sound.update(dt) end
+  bootStrapper.update(dt)
   dtSince = dtSince + dt
 end
 
 function love.keypressed(key)
-  local screenPaused = ScreenHandler.inTransition
-  if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.keypressed then
-    ScreenHandler.activeScreen:keypressed(key)
-  end
+  bootStrapper.keypressed(key)
 end
 
 function love.keyreleased(key)
-  local screenPaused = ScreenHandler.inTransition
-  if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.keyreleased then
-    ScreenHandler.activeScreen:keyreleased(key)
-  end
+  bootStrapper.keyreleased(key)
   -- temporary --
   if key == "-" or key == "kp-" then
 		if Sound.masterMute == true then Sound.masterMute = false end

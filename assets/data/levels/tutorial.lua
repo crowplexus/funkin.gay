@@ -3,7 +3,7 @@ return {
 	id="tutorial",
 	levelTitle="ui/story/labels/tutorial.png", -- looks in assets/images.
 	songs={"Tutorial"}, -- Level song list.
-	color=Color.rgb(249,207,81), -- Background Color in story menu.
+	Color=Color.rgb(249,207,81), -- Background Color in story menu.
 	otherProperties={
 		allowModifiers=true, -- i.e: User Scroll Speed, User Playback Rate.
 		allowMultiplayer=true, -- i.e: playing as the opponent with the alternative keybinds, if enabled.
