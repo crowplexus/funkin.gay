@@ -16,16 +16,12 @@ end
 _G.GAME_VER = tostring(os.date("%Y.%m.%d"))
 _G.PROJECT = require("project")
 
-local systemFont = love.graphics.newFont("assets/fonts/vcr.ttf", 16, "none") --- @type love.Font
 local drawFPSCounter = true --- @type boolean
 local gameCanvas --- @type love.Canvas
 
-local fpsCap = 60 --- @type number
-local dtSince = 0 --- @type number
+local defaultCanvas = love.graphics.getCanvas() --- @class love.Canvas
+local jigwBootstrapper = require("jigw.Boot") --- @class jigw.Boot
 
-local defaultCanvas = love.graphics.getCanvas()
-
-local bootStrapper = require("jigw.Boot")
 
 local function getVRAM()
   local imgBytes = love.graphics.getStats().images --- @type number
@@ -37,38 +33,39 @@ end
 local function drawFPS(x,y)
   local so = ScreenHandler:isScreenOperating()
   love.graphics.print("VRAM: "..Utils.formatBytes(getVRAM())
-    ..(so and "\nScreen: "..ScreenHandler.activeScreen:__tostring() or "")
-    .."\nDraw Calls: "..love.graphics.getStats().drawcalls,x,y)
+  ..(so and "\nScreen: "..ScreenHandler.activeScreen:__tostring() or "")
+  .."\nDraw Calls: "..love.graphics.getStats().drawcalls,x,y)
 end
 
 function love.load()
-  bootStrapper.init()
-  -- set default font
-  --love.graphics.setFont(systemFont)
+  jigwBootstrapper.init()
   -- make a canvas for the actual game.
-  local sz = Vector2(love.graphics.getWidth(),love.graphics.getHeight())
+  local sz = {x=love.graphics.getWidth(),y=love.graphics.getHeight()}
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
-
+  -- switch to the main menu screen for now.
   ScreenHandler.skipNextTransIn = true
   ScreenHandler.skipNextTransOut = true
   ScreenHandler:switchScreen("funkin.screens.MainMenu")
 end
 
+local fpsCap = 60 --- @type number
+local dtSince = 0 --- @type number
+
 function love.update(dt)
   -- FRAMERATE CAP --
   local sleep = 1/fpsCap
   if dt < sleep then love.timer.sleep(sleep - dt) end
-  bootStrapper.update(dt)
+  jigwBootstrapper.update(dt)
   dtSince = dtSince + dt
 end
 
 function love.keypressed(key)
-  bootStrapper.keypressed(key)
+  jigwBootstrapper.keypressed(key)
 end
 
 function love.keyreleased(key)
-  bootStrapper.keyreleased(key)
-  -- temporary --
+  jigwBootstrapper.keyreleased(key)
+-- #region Soundtray (temporary)
   if key == "-" or key == "kp-" then
 		if Sound.masterMute == true then Sound.masterMute = false end
     Sound.masterVolume = Utils.clamp(Sound.masterVolume - 0.05,0.0,1.0)
@@ -91,6 +88,7 @@ function love.keyreleased(key)
     if Sound.masterMute then print("Volume muted!")
 		else print("Volume unmuted!") end
   end
+--#endregion
 end
 
 function love.draw()
