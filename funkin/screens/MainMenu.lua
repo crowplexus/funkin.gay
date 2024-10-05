@@ -16,12 +16,10 @@ local menuSounds = {
 local options = {"storymode","freeplay","options","credits"}
 local optionFuncs = {
   -- [positionInMenu] = function() end
-  --[1] = function() ScreenHandler:switchScreen("funkin.screens.StoryMenu") end,
-  --[2] = function() ScreenHandler:switchScreen("funkin.screens.FreeplayMenu") end,
+  [1] = function() ScreenHandler:switchScreen("funkin.screens.StoryMenu") end,
+  [2] = function() ScreenHandler:switchScreen("funkin.screens.FreeplayMenu") end,
   --[3] = function() ScreenHandler:switchScreen("funkin.screens.OptionsMenu") end,
   --[4] = function() ScreenHandler:switchScreen("funkin.screens.CreditsMenu") end,
-  [1] = function() ScreenHandler:switchScreen("funkin.screens.Gameplay") end,
-  -- functions may do anything they need to, other than switching screens
 }
 
 local buttons = {}
@@ -35,7 +33,9 @@ function MainMenu:new()
 end
 
 function MainMenu:enter()
-  Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.08,true) -- 80% volume
+  if not Sound.isMusicPlaying() then
+    Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.08,true) -- 80% volume
+  end
   local vpw, vph = love.graphics.getDimensions()
 
   local bg = Sprite(0,0,love.graphics.newImage("assets/images/menu/menuBG.png"))
@@ -53,10 +53,6 @@ function MainMenu:enter()
     self:add(spriteButton)
     table.insert(buttons,spriteButton)
     if i == selected then spriteButton:playAnimation("selected") end
-
-		local ndsp = require("funkin.objects.NoteDisplay")
-		local note = ndsp.generateNote("default",4)
-		self:add(note)
   end
 
   local versionText = Label(5,0,"Funkin' Kiskadee v".._G.GAME_VER, 20)
@@ -64,15 +60,15 @@ function MainMenu:enter()
   versionText.strokeSize = 1.5
   self:add(versionText)
 
-  local alpha = require("funkin.objects.Alphabet")()
-  alpha.text = "TEST STRING"
-  self:add(alpha)
+  --local ndsp = require("funkin.objects.NoteDisplay")
+  --local note = ndsp.generateNote("default",4)
+  --self:add(note)
 end
 
 function MainMenu:keypressed(x)
   local oldS = selected
-  if x == "up" then selected = Utils.wrap(selected - 1, 1, #buttons) end
-  if x == "down" then selected = Utils.wrap(selected + 1, 1, #buttons) end
+	local sMult = x == "up" and -1 or x == "down" and 1 or 0
+  if sMult ~= 0 then selected = Utils.wrap(selected + sMult, 1, #buttons) end
   if selected ~= oldS then
     buttons[oldS]:playAnimation("idle")
     buttons[selected]:playAnimation("selected")
@@ -86,20 +82,6 @@ function MainMenu:keypressed(x)
       print("option "..selected.." doesn't really do anything!")
     end
   end
-end
-
---[[
-function MainMenu:update(dt)
-    MainMenu.super.update(MainMenu, dt)
-    for i = 1, #buttons do
-        buttons[i].rotation = buttons[i].rotation + dt;
-    end
-end
-]]
-
-function MainMenu:clear()
-  Sound.stopMusic(true) -- this is going to crash. -- it didn't
-  MainMenu.super.clear()
 end
 
 return MainMenu

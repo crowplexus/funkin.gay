@@ -51,6 +51,8 @@ local gameCanvas --- @type love.Canvas
 local fpsCap = 60 --- @type number
 local dtSince = 0 --- @type number
 
+local defaultCanvas = love.graphics.getCanvas()
+
 local function getVRAM()
   local imgBytes = love.graphics.getStats().images --- @type number
   local fontBytes = love.graphics.getStats().fonts --- @type number
@@ -81,7 +83,7 @@ function love.update(dt)
   -- FRAMERATE CAP --
   local sleep = 1/fpsCap
   if dt < sleep then love.timer.sleep(sleep - dt) end
-  local screenPaused = ScreenHandler:isTransitionActive()
+  local screenPaused = ScreenHandler.inTransition
   if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.update then
     ScreenHandler.activeScreen:update(dt)
   end
@@ -115,14 +117,14 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-  local screenPaused = ScreenHandler:isTransitionActive()
+  local screenPaused = ScreenHandler.inTransition
   if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.keypressed then
     ScreenHandler.activeScreen:keypressed(key)
   end
 end
 
 function love.keyreleased(key)
-  local screenPaused = ScreenHandler:isTransitionActive()
+  local screenPaused = ScreenHandler.inTransition
   if not screenPaused and ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.keyreleased then
     ScreenHandler.activeScreen:keyreleased(key)
   end
@@ -153,18 +155,17 @@ end
 
 function love.draw()
   local screenWidth, screenHeight = love.graphics.getDimensions()
-  local defaultCanvas = love.graphics.getCanvas()
   local defaultColor = {1,1,1,1}
+  local clearColor = Color.GRAY
 
-  love.graphics.setColor(defaultColor)
-	love.graphics.push()
+  love.graphics.clear(clearColor)
   love.graphics.setCanvas(gameCanvas)
 
   --- in game canvas ---
   if ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.draw then
     ScreenHandler.activeScreen:draw()
   end
-  if ScreenHandler:isTransitionActive() then
+  if ScreenHandler.canTransition() then
     ScreenHandler.transition:draw()
     if ScreenHandler.transition.finished == true then
       ScreenHandler.transition = nil
@@ -172,13 +173,14 @@ function love.draw()
   end
   --- in main canvas ---
   love.graphics.setCanvas(defaultCanvas)
-  love.graphics.clear(0.30,0.30,0.30,1.0)
+  -- kinda fixes the alpha issue but creates another where labels will be darkened
+  -- TODO: fix colours being weird in-game
+  love.graphics.setColor(defaultColor)
   -- stretches the game's canvas.
   local sr = Vector2(screenWidth / gameCanvas:getWidth(),screenHeight / gameCanvas:getHeight())
   love.graphics.draw(gameCanvas,0,0,0,sr.x,sr.y)
   -- the fps counter should render over everything else.
   if drawFPSCounter then drawFPS(5+sr.x,5+sr.y) end
-	love.graphics.pop()
   --- --- ---- ------- ---
 end
 
