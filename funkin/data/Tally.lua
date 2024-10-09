@@ -1,14 +1,5 @@
 local Tally = Object:extend()
 function Tally:__tostring() return "Tally" end
-local function buildTally(sel)
-  sel.score     = 0 --- @type number
-  sel.misses    = 0 --- @type number
-  sel.cbs       = 0 --- @type number
-  sel.clear     = "NOPLAY" --- @type string
-  sel.hitNotes  = 0 --- @type number
-  sel.msAccum   = 0.00 --- @type number
-  sel.grade     = "?" --- @type string
-end
 
 local gradeConditions = {
   {100,"SSSSS"}, {99,"SSSS"}, {98,"SSS"}, {96,"SS"}, -- the Stars
@@ -21,7 +12,13 @@ local gradeConditions = {
 };
 
 function Tally:new()
-  buildTally(Tally)
+  self.score     = 0 --- @type number
+  self.misses    = 0 --- @type number
+  self.cbs       = 0 --- @type number
+  self.clear     = "NOPLAY" --- @type string
+  self.hitNotes  = 0 --- @type number
+  self.msAccum   = 0.00 --- @type number
+  self.grade     = "?" --- @type string
   return self
 end
 

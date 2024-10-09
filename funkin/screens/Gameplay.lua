@@ -4,13 +4,8 @@ local Conductor = nil
 
 function Gameplay:__tostring() return "Gameplay" end
 
-local function buildGameplay(sel) -- I really need a better system for this :p -star
-  return sel
-end
-
 function Gameplay:new()
   Gameplay.super.new()
-  buildGameplay(self)
   return Gameplay
 end
 
@@ -62,12 +57,13 @@ function Gameplay:progressCountdown()
     if love.filesystem.getInfo(spritePath) ~= nil then
       local countdownSprite = require("jigw.objects.Sprite")(0, 0, love.graphics.newImage(spritePath))
       countdownSprite:centerPosition(Axis.XY)
- 			local xx = countdownSprite.position.x
 			local yy = countdownSprite.position.y
 			self:add(countdownSprite)
+
 			local ctime = Conductor.crotchet
       Timer.create(ctime + 0.001, function() countdownSprite:dispose() end)
-      Tween.create(ctime, countdownSprite, { scale = {x=0,y=0} }, "inOutCubic")
+      Tween.create(0.5, countdownSprite.position, { y = yy - 50 }, "inBack")
+      Tween.create(ctime, countdownSprite, { alpha = 0.0 }, "inOutCubic")
     end
   end
 end

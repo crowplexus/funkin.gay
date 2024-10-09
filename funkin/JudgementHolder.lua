@@ -55,16 +55,11 @@ end
 local list = JudgementHolder.getList()
 local timings = JudgementHolder.getTimings()
 
-local function buildJudgementHolder(sel)
-  sel.counters = {} --- @type table<string>
-  for i=1,#list do
-    table.insert(sel.counters,0,#sel.counters)
-  end
-  return sel
-end
-
 function JudgementHolder:new()
-  buildJudgementHolder(self)
+  self.counters = {} --- @type table<string>
+  for i=1,#list do
+    table.insert(self.counters,0,#self.counters)
+  end
   return self
 end
 
