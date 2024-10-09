@@ -36,6 +36,7 @@ function FreeplayMenu:enter()
 
 	for i=1, #testSongs do
 		local songLabel = Label(0,5+(60*i),testSongs[i],64)
+		songLabel:changeFontFromPath("assets/fonts/vcr.ttf")
 		songLabel.scale.x = i == selected and 1.0 or 0.6
 		songLabel.strokeSize = 1.5
 		table.insert(songTable,i,songLabel)

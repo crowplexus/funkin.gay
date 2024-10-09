@@ -40,7 +40,8 @@ function DefaultHUD:new()
 
 	self.scoreText = Label(0, (healthBarY + self.healthBar:getHeight()) + 20, getScoreText(), 20)
   --self.scoreText.position.y = (vph - self.scoreText.size.y) - 15
-  self.scoreText:centerPosition(Axis.X) -- funny how that works huh.
+  self.scoreText:changeFontFromPath("assets/fonts/vcr.ttf")
+  self.scoreText:centerPosition(Axis.X)
   self.scoreText.strokeSize = 1.5
 
   self.judgementCounter = Label(5, 0, getJudges(), 20)
