@@ -19,9 +19,7 @@ _G.PROJECT = require("project")
 local drawFPSCounter = true --- @type boolean
 local gameCanvas --- @type love.Canvas
 
-local defaultCanvas = love.graphics.getCanvas() --- @class love.Canvas
 local jigwBootstrapper = require("jigw.Boot") --- @class jigw.Boot
-
 
 local function getVRAM()
   local imgBytes = love.graphics.getStats().images --- @type number
@@ -93,34 +91,29 @@ end
 
 function love.draw()
   local screenWidth, screenHeight = love.graphics.getDimensions()
-  local defaultColor = {1,1,1,1}
-  local clearColor = Color.GRAY
-
-  love.graphics.clear(clearColor)
-  love.graphics.setCanvas(gameCanvas)
-
-  --- in game canvas ---
-  if ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.draw then
-    ScreenHandler.activeScreen:draw()
+  local clearCanvas = function()
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.clear(Color.GRAY())
   end
-  if ScreenHandler.canTransition() then
-    ScreenHandler.transition:draw()
-    if ScreenHandler.transition.finished == true then
-      ScreenHandler.transition = nil
+  gameCanvas:renderTo(function()
+    clearCanvas()
+    if ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.draw then
+      ScreenHandler.activeScreen:draw()
     end
-  end
-  --- in main canvas ---
-  love.graphics.setCanvas(defaultCanvas)
-  -- kinda fixes the alpha issue but creates another where labels will be darkened
-  -- TODO: fix colours being weird in-game
-  love.graphics.setColor(defaultColor)
-  -- stretches the game's canvas.
-  local sr = Vector2(screenWidth / gameCanvas:getWidth(),screenHeight / gameCanvas:getHeight())
-  love.graphics.draw(gameCanvas,0,0,0,sr.x,sr.y)
-  -- the fps counter should render over everything else.
-  if drawFPSCounter then drawFPS(5+sr.x,5+sr.y) end
-  --- --- ---- ------- ---
-end
+    if ScreenHandler.canTransition() then
+      ScreenHandler.transition:draw()
+      if ScreenHandler.transition.finished == true then
+        ScreenHandler.transition = nil
+      end
+    end
+  end)
 
-function love.quit()
+  love.graphics.setCanvas()
+  clearCanvas()
+  -- stretches the game's canvas.
+  local srx,sry = screenWidth / gameCanvas:getWidth(),screenHeight / gameCanvas:getHeight()
+  love.graphics.draw(gameCanvas,0,0,0,srx,sry)
+  -- the fps counter should render over everything else.
+  if drawFPSCounter then drawFPS(5+srx,5+sry) end
+  --- --- ---- ------- ---
 end
