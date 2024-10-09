@@ -37,7 +37,7 @@ function FreeplayMenu:enter()
 	for i=1, #testSongs do
 		local songLabel = Label(0,5+(60*i),testSongs[i],64)
 		songLabel:changeFontFromPath("assets/fonts/vcr.ttf")
-		songLabel.scale.x = i == selected and 1.0 or 0.6
+		songLabel.alpha = i == selected and 1.0 or 0.6
 		songLabel.strokeSize = 1.5
 		table.insert(songTable,i,songLabel)
 		self:add(songLabel)
@@ -49,8 +49,8 @@ function FreeplayMenu:keypressed(x)
 	local sMult = x == "up" and -1 or x == "down" and 1 or 0
   if sMult ~= 0 then selected = Utils.wrap(selected + sMult, 1, #songTable) end
   if selected ~= oldS then
-		songTable[oldS].scale.x = 0.6
-		songTable[selected].scale.x = 1.0
+		songTable[oldS].alpha = 0.6
+		songTable[selected].alpha = 1.0
 		Sound.playSound(menuSounds.scroll,"static",0.7)
   end
   if x == "return" then
