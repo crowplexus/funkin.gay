@@ -25,20 +25,22 @@ function Translator.parseFile(file, change)
 	return data
 end
 
-function Translator.getString(name,page,...)
-	local t = Translator.localeData[page][name]
-	if string.first(t,'"') and string.last(t,'"') then
-		t = t:sub(2,#t-1)
+function Translator.getString(name,category,...)
+	local t = Translator.localeData[category][name]
+	if t ~= nil then
+		if string.first(t,'"') and string.last(t,'"') then
+			t = t:sub(2,#t-1)
+		end
+		local replacements = ... or {}
+		if #replacements ~= 0 then
+		  for i=1, #replacements do
+				--print("replacing {"..i.."} with "..tostring(replacements[i]))
+				t = string.gsub(t,"{"..i.."}",tostring(replacements[i]))
+		  end
+		end
+		return t
 	end
-	local replacements = ... or {}
-	if #replacements ~= 0 then
-	  for i=1, #replacements do
-			--print("replacing {"..i.."} with "..tostring(replacements[i]))
-			t = string.gsub(t,"{"..i.."}",tostring(replacements[i]))
-	  end
-	end
-	if t then return t end
-	return "TRANSLATION MISSING "..name.." IN PAGE "..page
+	return "TRANSLATION MISSING \""..name.."\" IN \""..category.."\" CATEGORY"
 end
 
 return Translator
