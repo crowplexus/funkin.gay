@@ -14,7 +14,10 @@ end
 --- of when a version of the game was compiled
 --- @type string
 _G.GAME_VER = tostring(os.date("%Y.%m.%d"))
+
 _G.PROJECT = require("project")
+
+Translator = require("funkin.data.Translator")
 
 local drawFPSCounter = true --- @type boolean
 local gameCanvas --- @type love.Canvas
@@ -37,6 +40,9 @@ end
 
 function love.load()
   jigwBootstrapper.init()
+  --- TODO: get locale list -> Translator.parseListed("id-ID")
+  Translator.parseFile("assets/data/locale/id-ID.ini")
+
   -- make a canvas for the actual game.
   local sz = {x=love.graphics.getWidth(),y=love.graphics.getHeight()}
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)

@@ -2,12 +2,15 @@ local DefaultHUD = Object:extend()
 local judgeHolder = require("funkin.JudgementHolder")
 
 local function getScoreText(tally)
-  if not tally or tostring(tally) ~= "Tally" then
-    return "Score: N/A | Accuracy: N/A% | N/A"
-  end
-  return "Score: " .. Utils.thousandSep(tally.score)
-      .. " | Accuracy: " .. string.format("%.2f", tally:getAccuracy()) .. "%"
-      .. " | (" .. tally.clear .. ") " .. tally:getCurrentGrade()
+  local scrRep   = tally and tally.score or "0"
+  local accRep   = tally and tally:getAccuracy() or "0.00"
+  local clearRep = tally and tally.clear or "(NOPLAY) "
+  local gradeRep = tally and tally.grade or ""
+  --return "Score: " .. Utils.thousandSep(tally.score)
+  --    .. " | Accuracy: " .. string.format("%.2f", tally:getAccuracy()) .. "%"
+  --    .. " | (" .. tally.clear .. ") " .. tally:getCurrentGrade()
+  local scoreString = Translator.getString("scoreText","Gameplay",{scrRep,accRep,clearRep,gradeRep})
+  return scoreString
 end
 
 local function getJudges()
