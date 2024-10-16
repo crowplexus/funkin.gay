@@ -41,8 +41,9 @@ end
 function love.load()
   jigwBootstrapper.init()
   --- TODO: get locale list -> Translator.parseListed("id-ID")
-  Translator.parseFile("assets/data/locale/id-ID.ini")
-
+	if _G.PROJECT.allowLocales == true then
+    Translator.parseFile("assets/data/locale/en.ini",true)
+  end
   -- make a canvas for the actual game.
   local sz = {x=love.graphics.getWidth(),y=love.graphics.getHeight()}
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
