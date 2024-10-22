@@ -54,7 +54,7 @@ function FreeplayMenu:keypressed(x)
 		songTable[selected].alpha = 1.0
 		Sound.playSound(menuSounds.scroll,"static",0.7)
   end
-  if x == "return" then
+  if InputManager.getJustPressed("ui_accept",true) then
 		local switch = true --- change this to a filesystem check then error when needed
 		if not switch then
 			Sound.playSound(menuSounds.cancel,"static",0.7)

@@ -53,6 +53,7 @@ function love.load()
   InputManager.rebindAction("ui_down",  {"s", "down"})
   InputManager.rebindAction("ui_up",    {"w", "up"})
   InputManager.rebindAction("ui_right", {"d", "right"})
+  --InputManager.rebindAction("ui_accept", {"return"})
 
   -- switch to the main menu screen for now.
   ScreenManager.skipNextTransIn = true
