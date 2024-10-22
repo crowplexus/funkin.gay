@@ -48,6 +48,7 @@ function DefaultHUD:new()
   self.scoreText.strokeSize = 1.5
 
   self.judgementCounter = Label(5, 0, getJudges(), 20)
+  self.judgementCounter:changeFontFromPath("assets/fonts/vcr.ttf")
   self.judgementCounter.position.y = (vph - self.judgementCounter.size.y) * 0.5
   self.judgementCounter.strokeSize = 1.5
 

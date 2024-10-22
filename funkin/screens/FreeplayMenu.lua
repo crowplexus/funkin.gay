@@ -46,7 +46,8 @@ end
 
 function FreeplayMenu:keypressed(x)
   local oldS = selected
-	local sMult = x == "up" and -1 or x == "down" and 1 or 0
+	local sMult = InputManager.getActionAxis("ui_down", "ui_up")
+
   if sMult ~= 0 then selected = Utils.wrap(selected + sMult, 1, #songTable) end
   if selected ~= oldS then
 		songTable[oldS].alpha = 0.6
@@ -59,7 +60,7 @@ function FreeplayMenu:keypressed(x)
 			Sound.playSound(menuSounds.cancel,"static",0.7)
 		else
 			Sound.stopMusic(true)
-			ScreenHandler:switchScreen("funkin.screens.Gameplay")
+			ScreenManager:switchScreen("funkin.screens.Gameplay")
 		end
   end
 end

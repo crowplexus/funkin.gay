@@ -27,7 +27,7 @@ function Gameplay:enter()
 end
 
 function Gameplay:keypressed(key)
-  if key == "escape" then ScreenHandler:switchScreen("funkin.screens.MainMenu") end
+  if key == "escape" then ScreenManager:switchScreen("funkin.screens.MainMenu") end
 end
 
 local counter = 1

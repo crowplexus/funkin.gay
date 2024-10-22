@@ -16,10 +16,10 @@ local menuSounds = {
 local options = {"storymode","freeplay","options","credits"}
 local optionFuncs = {
   -- [positionInMenu] = function() end
-  [1] = function() ScreenHandler:switchScreen("funkin.screens.StoryMenu") end,
-  [2] = function() ScreenHandler:switchScreen("funkin.screens.FreeplayMenu") end,
-  --[3] = function() ScreenHandler:switchScreen("funkin.screens.OptionsMenu") end,
-  --[4] = function() ScreenHandler:switchScreen("funkin.screens.CreditsMenu") end,
+  --[1] = function() ScreenManager:switchScreen("funkin.screens.StoryMenu") end,
+  [2] = function() ScreenManager:switchScreen("funkin.screens.FreeplayMenu") end,
+  --[3] = function() ScreenManager:switchScreen("funkin.screens.OptionsMenu") end,
+  --[4] = function() ScreenManager:switchScreen("funkin.screens.CreditsMenu") end,
 }
 
 local buttons = {}
@@ -68,7 +68,8 @@ end
 
 function MainMenu:keypressed(x)
   local oldS = selected
-	local sMult = x == "up" and -1 or x == "down" and 1 or 0
+  local sMult = InputManager.getActionAxis("ui_down", "ui_up")
+
   if sMult ~= 0 then selected = Utils.wrap(selected + sMult, 1, #buttons) end
   if selected ~= oldS then
     buttons[oldS]:playAnimation("idle")

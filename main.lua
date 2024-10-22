@@ -32,9 +32,9 @@ local function getVRAM()
 end
 
 local function drawFPS(x,y)
-  local so = ScreenHandler:isScreenOperating()
+  local so = ScreenManager:isScreenOperating()
   love.graphics.print("VRAM: "..Utils.formatBytes(getVRAM())
-  ..(so and "\nScreen: "..ScreenHandler.activeScreen:__tostring() or "")
+  ..(so and "\nScreen: "..ScreenManager.activeScreen:__tostring() or "")
   .."\nDraw Calls: "..love.graphics.getStats().drawcalls,x,y)
 end
 
@@ -47,10 +47,17 @@ function love.load()
   -- make a canvas for the actual game.
   local sz = {x=love.graphics.getWidth(),y=love.graphics.getHeight()}
   gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
+
+  -- bind default actions (temporary until savedata is made)
+  InputManager.rebindAction("ui_left",  {"a", "left"})
+  InputManager.rebindAction("ui_down",  {"s", "down"})
+  InputManager.rebindAction("ui_up",    {"w", "up"})
+  InputManager.rebindAction("ui_right", {"d", "right"})
+
   -- switch to the main menu screen for now.
-  ScreenHandler.skipNextTransIn = true
-  ScreenHandler.skipNextTransOut = true
-  ScreenHandler:switchScreen("funkin.screens.MainMenu")
+  ScreenManager.skipNextTransIn = true
+  ScreenManager.skipNextTransOut = true
+  ScreenManager:switchScreen("funkin.screens.MainMenu")
 end
 
 local fpsCap = 60 --- @type number
@@ -104,13 +111,13 @@ function love.draw()
   end
   gameCanvas:renderTo(function()
     clearCanvas()
-    if ScreenHandler:isScreenOperating() and ScreenHandler.activeScreen.draw then
-      ScreenHandler.activeScreen:draw()
+    if ScreenManager:isScreenOperating() and ScreenManager.activeScreen.draw then
+      ScreenManager.activeScreen:draw()
     end
-    if ScreenHandler.canTransition() then
-      ScreenHandler.transition:draw()
-      if ScreenHandler.transition.finished == true then
-        ScreenHandler.transition = nil
+    if ScreenManager.canTransition() then
+      ScreenManager.transition:draw()
+      if ScreenManager.transition.finished == true then
+        ScreenManager.transition = nil
       end
     end
   end)
