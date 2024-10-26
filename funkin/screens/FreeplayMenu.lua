@@ -8,9 +8,9 @@ local Label = require("jigw.objects.Label")
 local Sprite = require("jigw.objects.Sprite")
 
 local menuSounds = {
-  confirm = "assets/audio/sfx/confirmMenu.ogg",
-  scroll  = "assets/audio/sfx/scrollMenu.ogg",
-  cancel  = "assets/audio/sfx/cancelMenu.ogg",
+  confirm = "assets/ui/menu/sfx/confirmMenu.ogg",
+  scroll  = "assets/ui/menu/sfx/scrollMenu.ogg",
+  cancel  = "assets/ui/menu/sfx/cancelMenu.ogg",
 }
 
 local testSongs = {"tutorial","bopeebo","fresh","dadbattle"}
@@ -26,17 +26,17 @@ end
 
 function FreeplayMenu:enter()
 	if not Sound.isMusicPlaying() then
-  	Sound.playMusic("assets/audio/bgm/freakyMenu.ogg","stream",0.08,true) -- 80% volume
+  	Sound.playMusic("assets/ui/menu/bgm/freakyMenu.ogg","stream",0.08,true) -- 80% volume
 	end
   --local vpw, vph = love.graphics.getDimensions()
 
-  local bg = Sprite(0,0,love.graphics.newImage("assets/images/menu/menuDesat.png"))
+  local bg = Sprite(0,0,love.graphics.newImage("assets/ui/menu/menuDesat.png"))
 	bg.color = Color.rgb(227, 125, 255)
   self:add(bg)
 
 	for i=1, #testSongs do
 		local songLabel = Label(0,5+(60*i),testSongs[i],64)
-		songLabel:changeFontFromPath("assets/fonts/vcr.ttf")
+		songLabel:changeFontFromPath("assets/ui/fonts/vcr.ttf")
 		songLabel.alpha = i == selected and 1.0 or 0.6
 		songLabel.strokeSize = 1.5
 		table.insert(songTable,i,songLabel)

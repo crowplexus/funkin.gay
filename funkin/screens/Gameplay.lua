@@ -43,7 +43,7 @@ end
 
 function Gameplay:progressCountdown()
   if counter <= #sounds then
-    local audioPath = "assets/audio/sfx/" .. sounds[counter] .. ".ogg"
+    local audioPath = "assets/play/countdown/sfx/" .. sounds[counter] .. ".ogg"
     if love.filesystem.getInfo(audioPath) ~= nil then
       local countdownSound = love.audio.newSource(audioPath, "static")
       countdownSound:setVolume(0.5)
@@ -52,7 +52,7 @@ function Gameplay:progressCountdown()
     end
   end
   if counter <= #sprites then
-		local path = "assets/images/ui/game/"
+		local path = "assets/play/countdown/"
     local spritePath = path .. sprites[counter] .. ".png"
     if love.filesystem.getInfo(spritePath) ~= nil then
       local countdownSprite = require("jigw.objects.Sprite")(0, 0, love.graphics.newImage(spritePath))

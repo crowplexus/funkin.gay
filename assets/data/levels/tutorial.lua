@@ -1,7 +1,7 @@
 return {
 	name="TEACHING TIME", -- Top-Right Display String.
 	id="tutorial",
-	levelTitle="ui/story/labels/tutorial.png", -- looks in assets/images.
+	levelTitle="ui/story/labels/tutorial.png", -- looks in assets.
 	songs={"Tutorial"}, -- Level song list.
 	color=Color.rgb(249,207,81), -- Background Color in story menu.
 	otherProperties={

@@ -82,22 +82,22 @@ function love.keyreleased(key)
   if key == "-" or key == "kp-" then
 		if Sound.masterMute == true then Sound.masterMute = false end
     Sound.masterVolume = Utils.clamp(Sound.masterVolume - 0.05,0.0,1.0)
-    Sound.playSound("assets/audio/sfx/soundtray/Voldown.ogg","static")
+    Sound.playSound("assets/ui/soundtray/sfx/Voldown.ogg","static")
     print("Volume: "..(Sound.masterVolume*100))
   end
   if key == "=" or key == "kp+" then
 		if Sound.masterMute == true then Sound.masterMute = false end
     Sound.masterVolume = Utils.clamp(Sound.masterVolume + 0.05,0.0,1.0)
     if Sound.masterVolume < 1.0 then
-      Sound.playSound("assets/audio/sfx/soundtray/Volup.ogg","static")
+      Sound.playSound("assets/ui/soundtray/sfx/Volup.ogg","static")
     else
-      Sound.playSound("assets/audio/sfx/soundtray/VolMAX.ogg","static")
+      Sound.playSound("assets/ui/soundtray/sfx/VolMAX.ogg","static")
     end
     print("Volume: "..(Sound.masterVolume*100))
   end
   if key == "0" or key == "kp0" then
     Sound.masterMute = not Sound.masterMute
-    Sound.playSound("assets/audio/sfx/soundtray/Voldown.ogg","static")
+    Sound.playSound("assets/ui/soundtray/sfx/Voldown.ogg","static")
     if Sound.masterMute then print("Volume muted!")
 		else print("Volume unmuted!") end
   end

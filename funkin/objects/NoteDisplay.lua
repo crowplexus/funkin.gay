@@ -13,7 +13,7 @@ function NoteDisplay.generateNote(kind,column)
 	local colours		 = {"purple","blue","green","red"}
 
 	local defaultNote = AnimatedSprite(0,0)
-	defaultNote:loadAtlas("assets/images/notes/normal/notes", {
+	defaultNote:loadAtlas("assets/play/notes/normal/notes", {
 		{"tap", colours[column], 0},
 	})
 	defaultNote:playAnimation("tap", true)
