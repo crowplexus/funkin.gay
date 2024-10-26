@@ -1,4 +1,4 @@
-local Alphabet = Object:extend() --- @class Alphabet
+local Alphabet = Object:extend("Alphabet") --- @class Alphabet
 function Alphabet:__tostring() return "Alphabet" end
 
 local X_PER_SPACE = 40
@@ -16,7 +16,7 @@ function Alphabet:set_text(vl)
   self._text = vl
 	local offsetX = 0
 	local offsetY = 0
-  local chars = vl:split()
+  local chars = string.split(vl)
 	local ASpr = require("jigw.objects.AnimatedSprite")
 
   for i=1,#chars do

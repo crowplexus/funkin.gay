@@ -1,5 +1,5 @@
 ---@diagnostic disable-next-line: undefined-field
-local Gameplay = Screen:extend()
+local Gameplay = Screen:extend("Gameplay")
 local Conductor = nil
 
 function Gameplay:__tostring() return "Gameplay" end
@@ -20,14 +20,18 @@ function Gameplay:enter()
   bg:centerPosition(Axis.XY)
   self:add(bg)
 
-  local hud = require("funkin.objects.hud.DefaultHUD")()
-  self:add(hud)
+  self.hud = require("funkin.objects.hud.DefaultHUD")()
+  self:add(self.hud)
 
   Timer.create(0.25, function() self:beginCountdown() end, 0, true)
 end
 
 function Gameplay:keypressed(key)
   if key == "escape" then ScreenManager:switchScreen("funkin.screens.MainMenu") end
+  if key == "d" then
+    self.hud:displayJudgement("sick")
+    self.hud:displayCombo(math.random(0,1000000))
+  end
 end
 
 local counter = 1

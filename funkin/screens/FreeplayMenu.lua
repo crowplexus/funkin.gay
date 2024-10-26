@@ -1,5 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
-local FreeplayMenu = Screen:extend()
+local FreeplayMenu = Screen:extend("FreeplayMenu")
 function FreeplayMenu:__tostring() return "Freeplay Menu" end
 
 -- "imports" ig lol

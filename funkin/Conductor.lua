@@ -1,4 +1,4 @@
-local Conductor = Object:extend() --- @class Conductor
+local Conductor = Object:extend("Conductor") --- @class Conductor
 function Conductor:__tostring()
 	return "(Conductor Time "..self.time.." Beat "..self.beat.." Step"..self.step..")"
 end

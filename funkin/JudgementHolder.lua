@@ -1,5 +1,5 @@
 -- Contains a Judgement List + tools to work with said list.
-local JudgementHolder = Object:extend() --- @class JudgementHolder
+local JudgementHolder = Object:extend("JudgementHolder") --- @class JudgementHolder
 function JudgementHolder:__tostring() return "JudgementHolder" end
 
 --- STATICS ---

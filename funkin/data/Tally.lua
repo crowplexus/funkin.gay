@@ -1,4 +1,4 @@
-local Tally = Object:extend()
+local Tally = Object:extend("Tally")
 function Tally:__tostring() return "Tally" end
 
 local gradeConditions = {

@@ -1,5 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
-local MainMenu = Screen:extend()
+local MainMenu = Screen:extend("MainMenu")
 function MainMenu:__tostring() return "Main Menu" end
 
 -- "imports" ig lol
