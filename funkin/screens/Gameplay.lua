@@ -29,7 +29,7 @@ end
 function Gameplay:keypressed(key)
   if key == "escape" then ScreenManager:switchScreen("funkin.screens.MainMenu") end
   if key == "d" then
-    self.hud:displayJudgement("sick")
+    self.hud:displayJudgement("epic")
     self.hud:displayCombo(math.random(0,1000000))
   end
 end

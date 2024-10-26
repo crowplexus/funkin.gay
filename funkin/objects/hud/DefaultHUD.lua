@@ -91,12 +91,14 @@ function DefaultHUD:draw()
   --print(shit and "pong" or "ping")
 end
 
-function DefaultHUD:displayJudgement(name)
+function DefaultHUD:displayJudgement(name,offsetx,offsety)
   local tex = love.graphics.newImage("assets/play/scoring/"..name..".png")
   if not tex then return end
   local judgement = PopupSprite(0,0,tex)
   if judgement then
     judgement:centerPosition(Axis.XY)
+    judgement.position.x = judgement.position.x + (offsetx or 0)
+    judgement.position.y = judgement.position.y + (offsety or 0)
     judgement.moving = true
     judgement.scale.x = 0.65
     judgement.scale.y = 0.65
@@ -129,7 +131,7 @@ function DefaultHUD:displayCombo(comboCount)
 
       local offset = ((90 * comboDigit.scale.x) * (i - xOff)) - 60
       comboDigit.position.x = (comboDigit.position.x) + offset
-      comboDigit.position.y = (comboDigit.position.y + comboDigit:getHeight()) - 40
+      comboDigit.position.y = (comboDigit.position.y + comboDigit:getHeight()) - 30
 
       comboDigit.velocity.x = math.random(-5, 5)
       comboDigit.acceleration.y = math.random(250, 300);
