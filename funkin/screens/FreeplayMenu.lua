@@ -8,39 +8,73 @@ local Label = require("jigw.objects.Label")
 local Sprite = require("jigw.objects.Sprite")
 
 local menuSounds = {
-  confirm = "assets/ui/menu/sfx/confirmMenu.ogg",
-  scroll  = "assets/ui/menu/sfx/scrollMenu.ogg",
-  cancel  = "assets/ui/menu/sfx/cancelMenu.ogg",
+  confirm = Paths.getPath("ui/menu/sfx/confirmMenu.ogg"),
+  scroll  = Paths.getPath("ui/menu/sfx/scrollMenu.ogg"),
+  cancel  = Paths.getPath("ui/menu/sfx/cancelMenu.ogg"),
 }
 
-local testSongs = {"tutorial","bopeebo","fresh","dadbattle"}
-local songTable = {}
+local songList = {
+	{
+		name = "Tutorial",
+		folder = "tutorial",
+		icon = "ui/icons/gf",
+		colors = {Color.rgb(146,113,253), Color.WHITE()}, -- {Background Colour, Capsule Colour}
+	},
+	{
+		name = "Bopeebo",
+		folder = "bopeebo",
+		icon = "ui/icons/dad",
+		colors = {Color.rgb(146,113,253), Color.WHITE()},
+	},
+	{
+		name = "Fresh",
+		folder = "fresh",
+		icon = "ui/icons/dad",
+		colors = {Color.rgb(146,113,253), Color.WHITE()},
+	},
+	{
+		name = "DadBattle",
+		folder = "dadbattle",
+		icon = "ui/icons/dad",
+		colors = {Color.rgb(146,113,253), Color.WHITE()},
+	},
+}
 local selected = 1
+local background = nil
+local songTable = {}
 
 function FreeplayMenu:new()
   FreeplayMenu.super.new()
-  FreeplayMenu.songTable = {}
-  FreeplayMenu.selected = 1
   return self
 end
 
 function FreeplayMenu:enter()
 	if not Sound.isMusicPlaying() then
-  	Sound.playMusic("assets/ui/menu/bgm/freakyMenu.ogg","stream",0.08,true) -- 80% volume
+  	Sound.playMusic(Paths.getPath("ui/menu/bgm/freakyMenu.ogg"),"stream",0.08,true) -- 80% volume
 	end
   --local vpw, vph = love.graphics.getDimensions()
 
-  local bg = Sprite(0,0,love.graphics.newImage("assets/ui/menu/menuDesat.png"))
-	bg.color = Color.rgb(227, 125, 255)
-  self:add(bg)
+  background = Sprite(0,0,Paths.getImage("ui/menu/menuDesat"))
+	background.color = songList[1].colors[1]
+  self:add(background)
 
-	for i=1, #testSongs do
-		local songLabel = Label(0,5+(60*i),testSongs[i],64)
-		songLabel:changeFontFromPath("assets/ui/fonts/vcr.ttf")
+	for i=1, #songList do
+		local song = songList[i]
+		local songLabel = Label(0,5+(60*i),song.name,64)
+		songLabel:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
 		songLabel.alpha = i == selected and 1.0 or 0.6
 		songLabel.strokeSize = 1.5
 		table.insert(songTable,i,songLabel)
 		self:add(songLabel)
+
+		local iconX, iconY = songLabel.position.x + songLabel:getWidth() + 5, songLabel.position.y
+		print(" dad engine ")
+		local songIcon = Sprite(0,0,Paths.getImage(song.icon),2,1)
+		songIcon.hframes = 2
+		songIcon.scale.x, songIcon.scale.y = 0.6, 0.6
+		songIcon.position.x, songIcon.position.y = iconX, iconY - 5
+		print(" h frmeams "..songIcon.hframes)
+		self:add(songIcon)
 	end
 end
 
@@ -54,6 +88,13 @@ function FreeplayMenu:keypressed(x)
 		songTable[selected].alpha = 1.0
 		Sound.playSound(menuSounds.scroll,"static",0.7)
   end
+
+	if background ~= nil and background.color ~= songList[selected].colors[1] then
+		Tween.cancelTweensIn(background)
+		Tween.create(0.5, background, {color = songList[selected].colors[1]})
+		--background.color = songList[selected].colors[1] or Color.WHITE()
+	end
+
   if InputManager.getJustPressed("ui_accept",true) then
 		local switch = true --- change this to a filesystem check then error when needed
 		if not switch then

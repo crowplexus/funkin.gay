@@ -35,19 +35,19 @@ function Gameplay:keypressed(key)
 end
 
 local counter = 1
-local sprites = { "prepare", "ready", "set", "go" }
-local sounds = { "intro3", "intro2", "intro1", "introGo" }
+local countdownSprites = { "prepare", "ready", "set", "go" }
+local countdownSounds = { "intro3", "intro2", "intro1", "introGo" }
 
 function Gameplay:beginCountdown()
   Timer.create(Conductor.crotchet, function()
     Gameplay:progressCountdown()
     counter = counter + 1
-  end,#sprites,true)
+  end,#countdownSounds,true)
 end
 
 function Gameplay:progressCountdown()
-  if counter <= #sounds then
-    local audioPath = "assets/play/countdown/sfx/" .. sounds[counter] .. ".ogg"
+  if counter <= #countdownSounds then
+    local audioPath = Paths.getPath("play/countdown/sfx/" .. countdownSounds[counter] .. ".ogg")
     if love.filesystem.getInfo(audioPath) ~= nil then
       local countdownSound = love.audio.newSource(audioPath, "static")
       countdownSound:setVolume(0.5)
@@ -55,11 +55,10 @@ function Gameplay:progressCountdown()
       Timer.create(countdownSound:getDuration("seconds"), function() countdownSound:release() end, 0)
     end
   end
-  if counter <= #sprites then
-		local path = "assets/play/countdown/"
-    local spritePath = path .. sprites[counter] .. ".png"
-    if love.filesystem.getInfo(spritePath) ~= nil then
-      local countdownSprite = require("jigw.objects.Sprite")(0, 0, love.graphics.newImage(spritePath))
+  if counter <= #countdownSprites then
+		local counterTex = Paths.getImage("play/countdown/"..countdownSprites[counter])
+    if counterTex ~= nil then
+      local countdownSprite = require("jigw.objects.Sprite")(0, 0, counterTex)
       countdownSprite:centerPosition(Axis.XY)
 			local yy = countdownSprite.position.y
 			self:add(countdownSprite)

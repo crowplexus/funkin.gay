@@ -48,12 +48,12 @@ function DefaultHUD:new()
 	self.scoreText = Label(0, healthBarY + self.healthBar:getHeight() + 15, getScoreText(), 16)
   self.scoreText.position.x = self.healthBar.position.x + self.healthBar:getWidth() - 190
   --self.scoreText.position.y = (vph - self.scoreText.size.y) - 15
-  self.scoreText:changeFontFromPath("assets/ui/fonts/vcr.ttf")
+  self.scoreText:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
   --self.scoreText:centerPosition(Axis.X)
   self.scoreText.strokeSize = 1.0
 
   --self.judgementCounter = Label(5, 0, getJudges(), 18)
-  --self.judgementCounter:changeFontFromPath("assets/ui/fonts/vcr.ttf")
+  --self.judgementCounter:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
   --self.judgementCounter.position.y = (vph - self.judgementCounter.size.y) * 0.5
   --self.judgementCounter.strokeSize = 1.25
 
@@ -91,9 +91,9 @@ function DefaultHUD:draw()
   --print(shit and "pong" or "ping")
 end
 
-function DefaultHUD:displayJudgement(name,offsetx,offsety)
-  local tex = love.graphics.newImage("assets/play/scoring/"..name..".png")
-  if not tex then return end
+function DefaultHUD:displayJudgement(name,offestx,offsety)
+  local tex = Paths.getImage("play/scoring/"..name)
+  if tex == nil then return end
   local judgement = PopupSprite(0,0,tex)
   if judgement then
     judgement:centerPosition(Axis.XY)
@@ -119,8 +119,8 @@ function DefaultHUD:displayCombo(comboCount)
 
   for i=1,#comboTable do
     local digit = comboTable[i]
-    local tex = love.graphics.newImage("assets/play/scoring/num"..digit..".png")
-    if not tex then return end
+    local tex = Paths.getImage("play/scoring/num"..digit)
+    if tex == nil then return end
     local comboDigit = PopupSprite(0,0,tex)
     if comboDigit then
       comboDigit.moving = true

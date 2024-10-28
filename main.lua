@@ -17,6 +17,7 @@ _G.GAME_VER = tostring(os.date("%Y.%m.%d"))
 
 _G.PROJECT = require("project")
 
+Paths = require("funkin.data.Paths")
 Translator = require("funkin.data.Translator")
 
 local drawFPSCounter = true --- @type boolean
@@ -40,9 +41,10 @@ end
 
 function love.load()
   jigwBootstrapper.init()
+
   --- TODO: get locale list -> Translator.parseListed("id-ID")
 	if _G.PROJECT.allowLocales == true then
-    Translator.parseFile("assets/data/locale/en.ini",true)
+    Translator.parseFile(Paths.getPath("data/locale/en.ini"),true)
   end
   -- make a canvas for the actual game.
   local sz = {x=love.graphics.getWidth(),y=love.graphics.getHeight()}
@@ -81,23 +83,23 @@ function love.keyreleased(key)
 -- #region Soundtray (temporary)
   if key == "-" or key == "kp-" then
 		if Sound.masterMute == true then Sound.masterMute = false end
-    Sound.masterVolume = Utils.clamp(Sound.masterVolume - 0.05,0.0,1.0)
-    Sound.playSound("assets/ui/soundtray/sfx/Voldown.ogg","static")
+    Sound.masterVolume = Utils.clamp(Sound.masterVolume - 0.15,0.0,1.0)
+    Sound.playSound(Paths.getPath("ui/soundtray/sfx/Voldown.ogg"),"static")
     print("Volume: "..(Sound.masterVolume*100))
   end
   if key == "=" or key == "kp+" then
 		if Sound.masterMute == true then Sound.masterMute = false end
-    Sound.masterVolume = Utils.clamp(Sound.masterVolume + 0.05,0.0,1.0)
+    Sound.masterVolume = Utils.clamp(Sound.masterVolume + 0.15,0.0,1.0)
     if Sound.masterVolume < 1.0 then
-      Sound.playSound("assets/ui/soundtray/sfx/Volup.ogg","static")
+      Sound.playSound(Paths.getPath("ui/soundtray/sfx/Volup.ogg"),"static")
     else
-      Sound.playSound("assets/ui/soundtray/sfx/VolMAX.ogg","static")
+      Sound.playSound(Paths.getPath("ui/soundtray/sfx/VolMAX.ogg"),"static")
     end
     print("Volume: "..(Sound.masterVolume*100))
   end
   if key == "0" or key == "kp0" then
     Sound.masterMute = not Sound.masterMute
-    Sound.playSound("assets/ui/soundtray/sfx/Voldown.ogg","static")
+    Sound.playSound(Paths.getPath("ui/soundtray/sfx/Voldown.ogg"),"static")
     if Sound.masterMute then print("Volume muted!")
 		else print("Volume unmuted!") end
   end
