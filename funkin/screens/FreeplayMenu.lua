@@ -97,6 +97,9 @@ function FreeplayMenu:keypressed(x)
 			ScreenManager:switchScreen("funkin.screens.Gameplay", { "test", "test" })
 		end
 	end
+	if InputManager.getJustPressed("ui_cancel", true) then
+		ScreenManager:switchScreen("funkin.screens.MainMenu")
+	end
 end
 
 return FreeplayMenu
