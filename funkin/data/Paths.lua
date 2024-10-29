@@ -1,6 +1,6 @@
 local Paths = {}
 
-local currentMod = ""
+local currentMod = "" --- @type string
 
 function Paths.getPath(key)
   local root = "assets/"
