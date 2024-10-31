@@ -14,6 +14,9 @@ end
 function Gameplay:enter()
 	local vpw, vph = love.graphics.getDimensions()
 	local ColorShape = require("jigw.objects.ColorShape")
+	local ChartLoader = require("funkin.data.ChartLoader")
+	local chart = ChartLoader:readLegacy("2hot", "hard")
+	print("notes caught in the fire: "..#chart.notes)
 
 	-- make a conductor here for gameplay, bpm is placeholder.
 	Conductor = require("funkin.Conductor")(100)

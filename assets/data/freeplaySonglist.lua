@@ -3,7 +3,8 @@ local list = {
 		name = "Tutorial",
 		folder = "tutorial",
 		icon = "ui/icons/gf",
-		colors = { Color.rgb(146, 113, 253), Color.WHITE() }, -- {Background Colour, Capsule Colour}
+		-- {Background Colour, Capsule Colour}
+		colors = { Color.rgb(146, 113, 253), Color.WHITE() },
 	},
 	{
 		name = "Bopeebo",

@@ -67,7 +67,7 @@ function love.load()
 	-- switch to the main menu screen for now.
 	ScreenManager.skipNextTransIn = true
 	ScreenManager.skipNextTransOut = true
-	ScreenManager:switchScreen("funkin.screens.MainMenu")
+	ScreenManager:switchScreen("funkin.screens.Gameplay")
 end
 
 local fpsCap = 60 --- @type number
