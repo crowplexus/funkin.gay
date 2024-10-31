@@ -27,8 +27,7 @@ local list = {
 }
 
 local function getSongsInLevels()
-	local modData = Paths.getPath("data/modData")
-	local levels = require(string.gsub(modData, "/", "."))
+	local levels = Paths.getModule("data/modData")
 	print(levels.GetLevels())
 end
 

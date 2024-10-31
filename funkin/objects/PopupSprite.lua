@@ -6,16 +6,8 @@ local function computeVelocity(vel, accel, dt)
 	return vel + accel * delta
 end
 
-function PopupSprite:new(x, y, tex)
-	self.position = Vector2(x, y) -- X, Y
-	self.scale = Vector2(1, 1)
-	self.color = Color.WHITE()
-	self.visible = true
-	self.centered = false
-	self.texture = tex or nil
-	self.rotation = 0
-	self.alpha = 1.0
-
+function PopupSprite:construct(x, y, tex)
+	self.super.construct(self, x, y, tex)
 	self.velocity = Vector2(0, 0)
 	self.acceleration = Vector2(0, 0)
 	self.moving = false
@@ -23,7 +15,7 @@ end
 
 function PopupSprite:update(dt)
 	if self.super.update then
-		self.super.update(dt)
+		self.super:update(dt)
 	end
 	if self.moving then
 		self:updateVelocity(dt)
@@ -44,16 +36,5 @@ function PopupSprite:updateVelocity(dt)
 
 	return velocityDelta
 end
-
---#region Getters and Setters
-function PopupSprite:get_alpha()
-	return self.color[4]
-end
-function PopupSprite:set_alpha(vl)
-	if self.color then
-		self.color[4] = vl
-	end
-end
---#endregion
 
 return PopupSprite

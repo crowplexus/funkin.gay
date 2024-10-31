@@ -1,5 +1,4 @@
-local Tally = Object:extend("Tally")
-function Tally:__tostring() return "Tally" end
+local Tally = Classic:extend("Tally")
 
 local gradeConditions = {
   {100,"SSSSS"}, {99,"SSSS"}, {98,"SSS"}, {96,"SS"}, -- the Stars
@@ -11,7 +10,7 @@ local gradeConditions = {
   {0,"F"}, {-100,"YOU SUCK"},     -- the you sucks
 };
 
-function Tally:new()
+function Tally:construct()
   self.score     = 0 --- @type number
   self.misses    = 0 --- @type number
   self.cbs       = 0 --- @type number

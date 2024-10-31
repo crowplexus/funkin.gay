@@ -1,4 +1,4 @@
-local DefaultHUD = Object:extend("DefaultHUD")
+local DefaultHUD = Classic:extend("DefaultHUD")
 local judgeHolder = require("funkin.JudgementHolder")
 local PopupSprite = require("funkin.objects.PopupSprite")
 
@@ -25,8 +25,8 @@ local function getJudges()
 	return str
 end
 
-function DefaultHUD:new()
-	DefaultHUD.super.new()
+function DefaultHUD:construct()
+	self.super.construct(self)
 
 	self.scoreText = nil --- @class jigw.objects.Label
 	self.judgementCounter = nil --- @class jigw.objects.Label

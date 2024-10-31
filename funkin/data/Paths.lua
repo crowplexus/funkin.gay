@@ -11,6 +11,11 @@ function Paths.getPath(key)
   return root..key
 end
 
+function Paths.getModule(key)
+  local assetFolder = Paths.getPath(key)
+	return string.gsub(assetFolder, "/", ".")
+end
+
 --- Grabs the specified path and generates a love.Texture from it, nil if failed
 ---
 --- @param key string       Path to image.

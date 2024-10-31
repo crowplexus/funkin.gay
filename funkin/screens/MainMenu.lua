@@ -1,8 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
 local MainMenu = Screen:extend("MainMenu")
-function MainMenu:__tostring()
-	return "Main Menu"
-end
 
 -- "imports" ig lol
 
@@ -28,13 +25,6 @@ local optionFuncs = {
 
 local buttons = {}
 local selected = 1
-
-function MainMenu:new()
-	MainMenu.super.new()
-	MainMenu.buttons = {}
-	MainMenu.selected = 1
-	return self
-end
 
 function MainMenu:enter()
 	if not Sound.isMusicPlaying() then

@@ -1,8 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
 local FreeplayMenu = Screen:extend("FreeplayMenu")
-function FreeplayMenu:__tostring()
-	return "Freeplay Menu"
-end
 
 -- "imports" ig lol
 
@@ -27,19 +24,13 @@ local selected = 1
 local background = nil
 local songTable = {}
 
-function FreeplayMenu:new()
-	FreeplayMenu.super.new()
-	return self
-end
-
 function FreeplayMenu:enter()
 	if not Sound.isMusicPlaying() then
 		Sound.playMusic(Paths.getPath("ui/menu/bgm/freakyMenu.ogg"), "stream", 0.08, true) -- 80% volume
 	end
 	--local vpw, vph = love.graphics.getDimensions()
 
-	local assetFolder = Paths.getPath("data/freeplaySonglist")
-	local customSongList = require(string.gsub(assetFolder, "/", "."))
+	local customSongList = require(Paths.getModule("data/freeplaySonglist"))
 	if type(customSongList) == "table" then
 		songList = customSongList
 		print("loaded custom songs in freeplay")
