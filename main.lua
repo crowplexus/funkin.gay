@@ -47,6 +47,7 @@ end
 
 function love.load()
 	jigwBootstrapper.init()
+	require("funkin.data.Global") -- import funkin stuff
 
 	--- TODO: get locale list -> Translator.parseListed("id-ID")
 	if _G.PROJECT.allowLocales == true then

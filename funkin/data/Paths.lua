@@ -16,6 +16,10 @@ function Paths.getModule(key)
 	return string.gsub(assetFolder, "/", ".")
 end
 
+function Paths.getModuleRaw(key)
+	return string.gsub(key, "/", ".")
+end
+
 --- Grabs the specified path and generates a love.Texture from it, nil if failed
 ---
 --- @param key string       Path to image.
@@ -29,6 +33,19 @@ function Paths.getImage(key)
   end
   print("failed to grab image at path "..path)
   return nil
+end
+
+--- Checks whether a file existing using the LOVE filesystem API.
+---
+--- @param path string      File to look for.
+--- @param fileType string  Type of file (i.e: file, directory, symlink, other)
+---
+--- @return boolean
+function Paths.fileExists(path, fileType)
+  local file = love.filesystem.getInfo(path)
+  local typelowercase = string.lower(fileType)
+  if file ~= nil and (not fileType or file.type == typelowercase)then return true end 
+  return false
 end
 
 --- Switches from the current mod to a new one.

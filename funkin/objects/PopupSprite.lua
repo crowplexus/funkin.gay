@@ -17,7 +17,7 @@ function PopupSprite:update(dt)
 	if self.super.update then
 		self.super:update(dt)
 	end
-	if self.moving then
+	if self.moving and self.texture then
 		self:updateVelocity(dt)
 	end
 end

@@ -19,9 +19,9 @@ local function generateNote()
 		--- Note judgement, given to a note when hitting or missing it.
 		--- @type table<any>
 		judgement = nil,
-    --- Player Notefield ID.
-    --- @type number
-    player = 0,
+		--- Player Notefield ID.
+		--- @type number
+		player = 0,
 	}
 end
 
@@ -46,10 +46,10 @@ end
 
 local function generateTimeChange()
 	return {
-		bpm = nil, --- @type number
-		beat = nil, --- @type number
-		time = nil, --- @type number
-		crotchet = nil, --- @type number
+		bpm = nil,                    --- @type number
+		beat = nil,                   --- @type number
+		time = nil,                   --- @type number
+		crotchet = nil,               --- @type number
 		signature = { nume = 4, deno = 4 }, --- @type table<table<number>>
 	}
 end
@@ -89,11 +89,11 @@ function ChartLoader:readLegacy(name, difficulty)
 	local curBPM = legacyChart.bpm or 100
 	local crotchet = (60.0 / curBPM)
 	local timePassed = 0.0
-  local keyCount = 4
+	local keyCount = 4
 
 	local i = 1
-  print("sections: "..#legacyChart.notes)
-  local total = 1
+	print("sections: " .. #legacyChart.notes)
+	local total = 1
 
 	while i <= #legacyChart.notes do
 		local curSection = legacyChart.notes[i]
@@ -102,31 +102,31 @@ function ChartLoader:readLegacy(name, difficulty)
 			isPsych = true
 		end
 
-    -- NOTE GENERATION --
+		-- NOTE GENERATION --
 		if curSection.sectionNotes ~= nil then
-      local mustHitSection = curSection.mustHitSection or false
+			local mustHitSection = curSection.mustHitSection or false
 			for j = 1, #curSection.sectionNotes do --- actual notes
 				-- i genuinely hate this format
 				local curNote = curSection.sectionNotes[j]
 				if curNote ~= nil and curNote[1] ~= nil then
 					local note = generateNote()
-          local rawColumn = math.floor(curNote[2])
-          note.time = tonumber(curNote[1] * 0.001) or 0.0
-          note.column = math.floor(curNote[2] % 4)
-          note.player = mustHitSection and 1 or 2
-          if math.floor(curNote[1]) % (keyCount * 2) >= keyCount then
-            note.player = not mustHitSection and 1 or 2
-          end
+					local rawColumn = math.floor(curNote[2])
+					note.time = tonumber(curNote[1] * 0.001) or 0.0
+					note.column = math.floor(curNote[2] % 4)
+					note.player = mustHitSection and 1 or 2
+					if math.floor(curNote[1]) % (keyCount * 2) >= keyCount then
+						note.player = not mustHitSection and 1 or 2
+					end
 					note.hold = { curNote[3], nil }
 					note.type = curNote[4] or "normal"
 					chart.notes[j] = note
 				end
 			end
-      total = total + #curSection.sectionNotes
+			total = total + #curSection.sectionNotes
 		end
 
-    -- EVENT GENERATION --
-    if curSection.changeBPM == true and curSection.bpm ~= curBPM then
+		-- EVENT GENERATION --
+		if curSection.changeBPM == true and curSection.bpm ~= curBPM then
 			local bpmChange = generateTimeChange()
 			bpmChange.bpm = curSection.bpm
 			bpmChange.time = timePassed
@@ -147,10 +147,10 @@ function ChartLoader:readLegacy(name, difficulty)
 		timePassed = timePassed + crotchet * 4
 		i = i + 1
 	end
-  print("total notes meant to be generated: "..total)
+	print("total notes meant to be generated: " .. total)
 
 	table.sort(chart.notes, function(a, b) return a.time < b.time end)
-  table.sort(chart.events, function(a, b) return a.time < b.time end)
+	table.sort(chart.events, function(a, b) return a.time < b.time end)
 
 	return chart
 end
@@ -161,7 +161,7 @@ function ChartLoader.getTemplateSong()
 		artist = "Unknown",
 		charter = "Unknown",
 		generatedBy = "Hand",
-		notes = {}, --- @type table
+		notes = {},  --- @type table
 		type = ChartType.FNF_LEGACY,
 		events = {}, --- @type table
 		tempoChanges = {}, --- @type table

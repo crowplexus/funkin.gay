@@ -68,6 +68,10 @@ function DefaultHUD:update(dt)
 			local judge = self.comboSprites[i]
 			if judge and judge.update then
 				judge:update(dt)
+				if judge.alpha <= 0.0 then
+					judge:dispose()
+					table.remove(self.comboSprites, i)
+				end
 			end
 		end
 	end
@@ -89,10 +93,6 @@ function DefaultHUD:draw()
 			local judge = self.comboSprites[i]
 			if judge and judge.draw then
 				judge:draw()
-				if judge.alpha <= 0.0 then
-					judge:dispose()
-					table.remove(self.comboSprites, i)
-				end
 			end
 		end
 	end
