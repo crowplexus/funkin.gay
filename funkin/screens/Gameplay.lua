@@ -2,6 +2,7 @@ local Gameplay = Screen:extend("Gameplay")
 
 local PopupSprite = require("funkin.objects.PopupSprite")
 local Character = require("funkin.objects.Character")
+local ScriptsHandler = require("funkin.data.scripting.ScriptsHandler")
 
 local player = nil
 
@@ -15,6 +16,10 @@ function Gameplay:enter()
 	-- make a conductor here for gameplay, bpm is placeholder.
 	self["Conductor"] = require("funkin.Conductor")(100)
 
+	self.scriptsHandler = ScriptsHandler()
+	self.scriptsHandler:loadDirectory("assets/data/scripts")
+	self.scriptsHandler:call("enter")
+
 	local bg = ColorShape(0, 0, Color.rgb(80, 80, 80), vpw, vph)
 	bg:centerPosition(Axis.XY)
 	self:add(bg)
@@ -22,6 +27,7 @@ function Gameplay:enter()
 	player = Character.load(Paths.getModule("data/characters/bf"))
 	player.position.x = 640
 	player.position.y = 480
+	self.player = player
 	self:add(player)
 
 	self.hud = require("funkin.objects.hud.DefaultHUD")()
@@ -32,9 +38,12 @@ function Gameplay:enter()
 	Timer.create(0.25, function()
 		self:beginCountdown(true)
 	end, 0, true)
+
+	self.scriptsHandler:call("postEnter")
 end
 
 function Gameplay:update(dt)
+	self.scriptsHandler:call("update")
 	Gameplay.super.update(self, dt)
 	if player and player.texture then
 		local fatnuts = {
@@ -49,6 +58,7 @@ function Gameplay:update(dt)
 			end
 		end
 	end
+	self.scriptsHandler:call("postUpdate")
 end
 
 function Gameplay:keypressed(key)
