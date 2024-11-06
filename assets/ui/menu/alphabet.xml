@@ -26,14 +26,14 @@
 	<SubTexture name="% bold0001" x="467" y="3" width="51" height="58"/>
 	<SubTexture name="% bold0002" x="521" y="3" width="51" height="58"/>
 	<SubTexture name="% bold0003" x="521" y="3" width="51" height="58"/>
-	<SubTexture name="&0000" x="575" y="3" width="36" height="58"/>
-	<SubTexture name="&0001" x="575" y="3" width="36" height="58"/>
-	<SubTexture name="&0002" x="614" y="3" width="36" height="58"/>
-	<SubTexture name="&0003" x="614" y="3" width="36" height="58"/>
-	<SubTexture name="& bold0000" x="653" y="3" width="47" height="65"/>
-	<SubTexture name="& bold0001" x="653" y="3" width="47" height="65"/>
-	<SubTexture name="& bold0002" x="703" y="3" width="47" height="65"/>
-	<SubTexture name="& bold0003" x="703" y="3" width="47" height="65"/>
+	<SubTexture name="amp0000" x="575" y="3" width="36" height="58"/>
+	<SubTexture name="amp0001" x="575" y="3" width="36" height="58"/>
+	<SubTexture name="amp0002" x="614" y="3" width="36" height="58"/>
+	<SubTexture name="amp0003" x="614" y="3" width="36" height="58"/>
+	<SubTexture name="amp bold0000" x="653" y="3" width="47" height="65"/>
+	<SubTexture name="amp bold0001" x="653" y="3" width="47" height="65"/>
+	<SubTexture name="amp bold0002" x="703" y="3" width="47" height="65"/>
+	<SubTexture name="amp bold0003" x="703" y="3" width="47" height="65"/>
 	<SubTexture name="(0000" x="753" y="3" width="26" height="57"/>
 	<SubTexture name="(0001" x="753" y="3" width="26" height="57"/>
 	<SubTexture name="(0002" x="782" y="3" width="26" height="56" frameX="0" frameY="0" frameWidth="26" frameHeight="57"/>

@@ -5,6 +5,7 @@ local FreeplayMenu = Screen:extend("FreeplayMenu")
 
 local Label = require("jigw.objects.Label")
 local Sprite = require("jigw.objects.Sprite")
+local Alphabet = require("funkin.objects.Alphabet")
 
 local menuSounds = {
 	confirm = Paths.getPath("ui/menu/sfx/confirmMenu.ogg"),
@@ -42,23 +43,37 @@ function FreeplayMenu:enter()
 
 	for i = 1, #songList do
 		local song = songList[i]
-		local songLabel = Label(0, 5 + (60 * i), song.name, 64)
-		songLabel:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
+		--local songLabel = Label(0, 5 + (60 * i), song.name, 64)
+		--songLabel:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
+		--songLabel.alpha = i == selected and 1.0 or 0.6
+		--songLabel.strokeSize = 1.5
+		local songLabel = Alphabet(10, 0, song.name)
 		songLabel.alpha = i == selected and 1.0 or 0.6
-		songLabel.strokeSize = 1.5
+		songLabel:centerPosition(Axis.Y)
+		--10 + (10 * i), 5 + (80 * i)
+		--songLabel.position.x = 10 + (10 * i)
+		songLabel.position.y = (songLabel.position.y - 250) + (80 * i)
 		table.insert(songTable, i, songLabel)
 		self:add(songLabel)
 
-		local iconX, iconY = songLabel.position.x + songLabel:getWidth() + 5, songLabel.position.y
-		--print(" dad engine ")
-		local songIcon = Sprite(0, 0, Paths.getImage(song.icon), 2, 1)
-		songIcon.hframes = 2
-		songIcon.scale.x, songIcon.scale.y = 0.6, 0.6
-		songIcon.position.x, songIcon.position.y = iconX, iconY - 5
-		--print(" h frmeams "..songIcon.hframes)
-		self:add(songIcon)
+		--local iconX, iconY = songLabel.position.x + songLabel:getWidth() + 5, songLabel.position.y
+		----print(" dad engine ")
+		--local songIcon = Sprite(0, 0, Paths.getImage(song.icon), 2, 1)
+		--songIcon.hframes = 2
+		--songIcon.scale.x, songIcon.scale.y = 0.6, 0.6
+		--songIcon.position.x, songIcon.position.y = iconX, iconY - 5
+		----print(" h frmeams "..songIcon.hframes)
+		--self:add(songIcon)
 	end
 end
+
+--[[function FreeplayMenu:update(dt)
+	self.super.update(self, dt)
+	for i = 1, #songTable do
+		local song = songTable[i]
+		song.rotation = song.rotation + 0.01
+	end
+end]]
 
 function FreeplayMenu:keypressed(x)
 	local oldS = selected
