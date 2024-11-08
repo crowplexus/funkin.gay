@@ -70,7 +70,7 @@ function MainMenu:keypressed(x)
 		buttons[selected]:playAnimation("selected")
 		Sound.playSound(menuSounds.scroll, "static", 0.7)
 	end
-	if InputManager.getJustPressed("ui_accept", true) then
+	if InputManager.getJustPressed("ui_accept") then
 		if optionFuncs[selected] then
 			Utils.match(selected, optionFuncs)
 		else -- error handling

@@ -94,7 +94,7 @@ function FreeplayMenu:keypressed(x)
 		--background.color = songList[selected].colors[1] or Color.WHITE()
 	end
 
-	if InputManager.getJustPressed("ui_accept", true) then
+	if InputManager.getJustPressed("ui_accept") then
 		local switch = true --- change this to a filesystem check then error when needed
 		if not switch then
 			Sound.playSound(menuSounds.cancel, "static", 0.7)
@@ -103,7 +103,7 @@ function FreeplayMenu:keypressed(x)
 			ScreenManager:switchScreen("funkin.screens.Gameplay", { "test", "test" })
 		end
 	end
-	if InputManager.getJustPressed("ui_cancel", true) then
+	if InputManager.getJustPressed("ui_cancel") then
 		ScreenManager:switchScreen("funkin.screens.MainMenu")
 	end
 end

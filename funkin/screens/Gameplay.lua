@@ -47,10 +47,10 @@ function Gameplay:update(dt)
 	Gameplay.super.update(self, dt)
 	if player and player.texture then
 		local fatnuts = {
-			InputManager.getJustPressed("ui_left", true),
-			InputManager.getJustPressed("ui_down", true),
-			InputManager.getJustPressed("ui_up", true),
-			InputManager.getJustPressed("ui_right", true),
+			InputManager.getJustPressed("ui_left"),
+			InputManager.getJustPressed("ui_down"),
+			InputManager.getJustPressed("ui_up"),
+			InputManager.getJustPressed("ui_right"),
 		}
 		for i = 1, #fatnuts do
 			if fatnuts[i] == true then
