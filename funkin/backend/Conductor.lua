@@ -10,7 +10,7 @@ local TimeUtil = require("funkin.TimeUtil")
 --- @return table
 function Conductor.getCurrent()
   ---@diagnostic disable-next-line: missing-parameter
-  return ScreenManager.activeScreen["Conductor"] or TimeUtil.makeFakeConductor()
+  return ScreenManager.activeScreen.conductor or TimeUtil.makeFakeConductor()
 end
 
 function Conductor:__tostring()

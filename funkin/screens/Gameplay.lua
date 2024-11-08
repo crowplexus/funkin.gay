@@ -14,7 +14,7 @@ function Gameplay:enter()
 	--print("notes caught in the fire: " .. #chart.notes)
 
 	-- make a conductor here for gameplay, bpm is placeholder.
-	self["Conductor"] = require("funkin.backend.Conductor")(100)
+	self.conductor = Conductor(--[[chart.bpm or]] 100)
 
 	self.scriptsHandler = ScriptsHandler()
 	self.scriptsHandler:loadDirectory("assets/data/scripts")

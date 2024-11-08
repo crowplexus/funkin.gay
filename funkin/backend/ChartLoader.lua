@@ -82,7 +82,7 @@ function ChartLoader:readLegacy(name, difficulty)
 
 	--Utils.tablePrint(legacyChart, "json")
 
-	local chart = ChartLoader.getTemplateSong()
+	local chart = ChartLoader.getTemplateChart()
 	chart.type = ChartType.FNF_LEGACY
 
 	local isPsych = false
@@ -155,16 +155,17 @@ function ChartLoader:readLegacy(name, difficulty)
 	return chart
 end
 
-function ChartLoader.getTemplateSong()
+--- I still don't know how I'm gonna do this and all
+function ChartLoader.getTemplateChart()
 	return {
 		name = "Unknown",
 		artist = "Unknown",
 		charter = "Unknown",
-		generatedBy = "Hand",
 		notes = {},  --- @type table
-		type = ChartType.FNF_LEGACY,
 		events = {}, --- @type table
 		tempoChanges = {}, --- @type table
+		type = ChartType.FNF_LEGACY,
+		generatedBy = "Hand",
 	}
 end
 
