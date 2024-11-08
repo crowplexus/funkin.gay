@@ -1,6 +1,6 @@
 local DefaultHUD = Classic:extend("DefaultHUD")
-local judgeHolder = require("funkin.JudgementHolder")
-local PopupSprite = require("funkin.objects.PopupSprite")
+local judgeHolder = require("funkin.gameplay.JudgementHolder")
+local PopupSprite = require("funkin.gameplay.hud.PopupSprite")
 
 local function getScoreText(tally)
 	local scrRep = tally and Utils.thousandSep(tally.score) or "0"
@@ -30,7 +30,7 @@ function DefaultHUD:construct()
 
 	self.scoreText = nil --- @class jigw.objects.Label
 	self.judgementCounter = nil --- @class jigw.objects.Label
-	self.comboSprites = {} --- @class table<funkin.objects.PopupSprite>
+	self.comboSprites = {} --- @class table<funkin.gameplay.hud.PopupSprite>
 
 	local Label = require("jigw.objects.Label")
 	local ProgressShape = require("jigw.objects.ProgressShape")

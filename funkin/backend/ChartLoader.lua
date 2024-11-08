@@ -54,7 +54,7 @@ local function generateTimeChange()
 	}
 end
 
---- contains different IDs for chart types
+--- Contains different IDs for chart types
 --- @enum ChartType
 ChartType = {
 	FNF_LEGACY = 0,

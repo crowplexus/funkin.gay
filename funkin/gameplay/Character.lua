@@ -19,7 +19,7 @@ end
 function Character:update(dt)
 	Character.super.update(self, dt)
 	if not self:isDancing() then
-		_idleTimer = _idleTimer - dt * (self.singDuration * (Conductor.getActive().semiquaver * 0.25))
+		_idleTimer = _idleTimer - dt * (self.singDuration * (Conductor.getCurrent().semiquaver * 0.25))
 		if _idleTimer <= 0.0 then
 			self:dance(true)
 		end
@@ -41,7 +41,7 @@ end
 function Character:sing(dir, force, suffix)
 	suffix = suffix or ""
 	self:playAnimation(self.singList[dir]..suffix, force)
-	_idleTimer = 0.5 * Conductor.getActive().semiquaver
+	_idleTimer = 0.5 * Conductor.getCurrent().semiquaver
 end
 
 function Character.load(module,x,y)

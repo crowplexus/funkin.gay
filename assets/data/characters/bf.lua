@@ -1,4 +1,4 @@
-local Boyfriend = require("funkin.objects.Character"):extend()
+local Boyfriend = require("funkin.gameplay.Character"):extend()
 
 function Boyfriend:construct()
 	self.super.construct(self)

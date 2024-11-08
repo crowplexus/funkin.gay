@@ -5,7 +5,7 @@ local FreeplayMenu = Screen:extend("FreeplayMenu")
 
 local Label = require("jigw.objects.Label")
 local Sprite = require("jigw.objects.Sprite")
-local Alphabet = require("funkin.objects.Alphabet")
+local Alphabet = require("funkin.Alphabet")
 
 local menuSounds = {
 	confirm = Paths.getPath("ui/menu/sfx/confirmMenu.ogg"),

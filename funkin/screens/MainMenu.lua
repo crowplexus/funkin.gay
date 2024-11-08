@@ -56,10 +56,6 @@ function MainMenu:enter()
 	versionText.position.y = (vph - versionText.size.y) - 25 -- i think that's the original pos idk
 	versionText.strokeSize = 1.5
 	self:add(versionText)
-
-	--local ndsp = require("funkin.objects.NoteDisplay")
-	--local note = ndsp.generateNote("default",4)
-	--self:add(note)
 end
 
 function MainMenu:keypressed(x)

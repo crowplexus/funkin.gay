@@ -17,8 +17,8 @@ _G.GAME_VER = tostring(os.date("%Y.%m.%d"))
 
 _G.PROJECT = require("project")
 
-Paths = require("funkin.data.Paths")
-Translator = require("funkin.data.Translator")
+Paths = require("funkin.backend.Paths")
+Translator = require("funkin.backend.Translator")
 
 local drawFPSCounter = true --- @type boolean
 local gameCanvas --- @type love.Canvas
@@ -47,7 +47,7 @@ end
 
 function love.load()
 	jigwBootstrapper.init()
-	require("funkin.data.Global") -- import funkin stuff
+	require("funkin.backend.Global") -- import funkin stuff
 
 	--- TODO: get locale list -> Translator.parseListed("id-ID")
 	if _G.PROJECT.allowLocales == true then

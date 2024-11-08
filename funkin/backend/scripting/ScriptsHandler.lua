@@ -1,6 +1,6 @@
 local classic = require("jigw.lib.classic")
 
-local Script = require("funkin.data.scripting.Script") 
+local Script = require("funkin.backend.scripting.Script") 
 
 local ScriptsHandler = classic:extend("ScriptsHandler") --- @class ScriptsHandler
 

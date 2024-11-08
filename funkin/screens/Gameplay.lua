@@ -1,20 +1,20 @@
 local Gameplay = Screen:extend("Gameplay")
 
-local PopupSprite = require("funkin.objects.PopupSprite")
-local Character = require("funkin.objects.Character")
-local ScriptsHandler = require("funkin.data.scripting.ScriptsHandler")
+local PopupSprite = require("funkin.gameplay.hud.PopupSprite")
+local Character = require("funkin.gameplay.Character")
+local ScriptsHandler = require("funkin.backend.scripting.ScriptsHandler")
 
 local player = nil
 
 function Gameplay:enter()
 	local vpw, vph = love.graphics.getDimensions()
 	local ColorShape = require("jigw.objects.ColorShape")
-	--local ChartLoader = require("funkin.data.ChartLoader")
+	--local ChartLoader = require("funkin.backend.ChartLoader")
 	--local chart = ChartLoader:readLegacy("2hot", "hard")
 	--print("notes caught in the fire: " .. #chart.notes)
 
 	-- make a conductor here for gameplay, bpm is placeholder.
-	self["Conductor"] = require("funkin.Conductor")(100)
+	self["Conductor"] = require("funkin.backend.Conductor")(100)
 
 	self.scriptsHandler = ScriptsHandler()
 	self.scriptsHandler:loadDirectory("assets/data/scripts")
@@ -30,7 +30,7 @@ function Gameplay:enter()
 	self.player = player
 	self:add(player)
 
-	self.hud = require("funkin.objects.hud.DefaultHUD")()
+	self.hud = require("funkin.gameplay.hud.DefaultHUD")()
 	self:add(self.hud)
 
 	Sound.playMusic(Paths.getPath("ui/menu/bgm/chartEditorLoop.ogg"), "stream", 0.3, true)
@@ -76,7 +76,7 @@ local countdownSprites = { "prepare", "ready", "set", "go" }
 local countdownSounds = { "intro3", "intro2", "intro1", "introGo" }
 
 function Gameplay:beginCountdown(silent)
-	Timer.create(Conductor.getActive().crotchet, function()
+	Timer.create(Conductor.getCurrent().crotchet, function()
 		Gameplay:progressCountdown(silent)
 		counter = counter + 1
 	end, #countdownSounds, true)
@@ -96,7 +96,7 @@ function Gameplay:progressCountdown(silent)
 			countdownSprite.scale.y = 0.8
 			self:add(countdownSprite)
 
-			local ctime = Conductor.getActive().crotchet
+			local ctime = Conductor.getCurrent().crotchet
 			Timer.create(ctime + 0.001, function()
 				countdownSprite:dispose()
 			end)
