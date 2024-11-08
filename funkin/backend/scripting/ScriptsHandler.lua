@@ -1,8 +1,5 @@
-local classic = require("jigw.lib.classic")
-
-local Script = require("funkin.backend.scripting.Script") 
-
-local ScriptsHandler = classic:extend("ScriptsHandler") --- @class ScriptsHandler
+local Script = require("funkin.backend.scripting.Script")
+local ScriptsHandler = Classic:extend("ScriptsHandler") --- @class ScriptsHandler
 
 function ScriptsHandler:construct()
     ---@type table <Script> holds instances of active lua scripts
@@ -17,25 +14,25 @@ function ScriptsHandler:loadScript(tag, path)
 end
 
 function ScriptsHandler:loadDirectory(...)
-	for _, directory in ipairs({...}) do
+    for _, directory in ipairs({ ... }) do
         print(directory)
-		for _, file in ipairs(love.filesystem.getDirectoryItems(directory)) do
-			if file:last('.lua') then 
-                self:loadScript(directory .. "/".. file, directory .. "/".. file)
+        for _, file in ipairs(love.filesystem.getDirectoryItems(directory)) do
+            if file:last('.lua') then
+                self:loadScript(directory .. "/" .. file, directory .. "/" .. file)
             end
-		end
-	end
+        end
+    end
 end
 
 ---gets a script from its tag
----@param tag string 
+---@param tag string
 ---@return Script
 function ScriptsHandler:getScript(tag)
     return self.scripts[tag]
 end
 
----gets all the values for a variable across every script instance 
----@param key string 
+---gets all the values for a variable across every script instance
+---@param key string
 ---@return table <any>
 function ScriptsHandler:get(key, removeNil)
     local list = {}
@@ -66,10 +63,10 @@ function ScriptsHandler:call(key, ...)
 end
 
 function ScriptsHandler:close()
-	for _, script in pairs(self.scripts) do
+    for _, script in pairs(self.scripts) do
         script:close()
-	end
-	self.scripts = nil
+    end
+    self.scripts = nil
 end
 
 return ScriptsHandler

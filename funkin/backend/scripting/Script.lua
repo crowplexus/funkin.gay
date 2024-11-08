@@ -3,9 +3,9 @@ local classic = require("jigw.lib.classic")
 local Script = classic:extend("Script") --- @class Script
 
 -- NOT IMPLIMENTATION
-local scriptENV = {Script = Script}
+local scriptENV = { Script = Script }
 
-local trustedENV = {Script = Script}
+local trustedENV = { Script = Script }
 
 local function blockFunction(name)
     return function()
@@ -51,7 +51,7 @@ function Script:construct(path, trusted)
         end
 
         -- this just uses the trustedENV for right now
-        setfenv(chunk, setmetatable(self.vars, {__index = (trusted and trustedENV or trustedENV)}))
+        setfenv(chunk, setmetatable(self.vars, { __index = (trusted and trustedENV or trustedENV) }))
 
         self.vars.screen = ScreenManager.activeScreen -- instance of the current state
 
@@ -81,15 +81,15 @@ function Script:call(key, ...)
 
     if not status then
         self.failedFunctions[key] = true
-        print("Error running function:" .. err) 
+        print("Error running function:" .. err)
     end
 end
 
 function Script:close()
     self.closed = true
-        for key, value in ipairs({"set", "get", "call"}) do
-            self[value] = function() end
-        end
+    for key, value in ipairs({ "set", "get", "call" }) do
+        self[value] = function() end
+    end
 
     for key in next, self.vars do rawset(self.vars, key, nil) end
     if self.chunk then setfenv(self.chunk, closedENV) end
