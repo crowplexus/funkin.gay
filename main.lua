@@ -57,13 +57,12 @@ function love.load()
 	local sz = { x = love.graphics.getWidth(), y = love.graphics.getHeight() }
 	gameCanvas = love.graphics.newCanvas(sz.x, sz.y)
 
-	-- bind default actions (temporary until savedata is made)
-	InputManager.rebindAction("ui_left", { "a", "left" })
-	InputManager.rebindAction("ui_down", { "s", "down" })
-	InputManager.rebindAction("ui_up", { "w", "up" })
-	InputManager.rebindAction("ui_right", { "d", "right" })
-	InputManager.rebindAction("ui_accept", { "return" })
-	InputManager.rebindAction("ui_cancel", { "escape", "backspace" })
+	-- InputManager.rebindAction("ui_left", { "a", "left" })
+	-- InputManager.rebindAction("ui_down", { "s", "down" })
+	-- InputManager.rebindAction("ui_up", { "w", "up" })
+	-- InputManager.rebindAction("ui_right", { "d", "right" })
+	-- InputManager.rebindAction("ui_accept", { "return" })
+	-- InputManager.rebindAction("ui_cancel", { "escape" })
 
 	-- switch to the main menu screen for now.
 	ScreenManager.skipNextTransIn = true

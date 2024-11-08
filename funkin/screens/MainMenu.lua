@@ -58,13 +58,12 @@ function MainMenu:enter()
 	self:add(versionText)
 end
 
-function MainMenu:keypressed(x)
+function MainMenu:keypressed()
 	local oldS = selected
 	local sMult = InputManager.getActionAxis("ui_down", "ui_up")
 
-	if sMult ~= 0 then
-		selected = Utils.wrap(selected + sMult, 1, #buttons)
-	end
+	selected = Utils.wrap(selected + sMult, 1, #buttons)
+
 	if selected ~= oldS then
 		buttons[oldS]:playAnimation("idle")
 		buttons[selected]:playAnimation("selected")
