@@ -51,7 +51,7 @@ function love.load()
 
 	--- TODO: get locale list -> Translator.parseListed("id-ID")
 	if _G.PROJECT.allowLocales == true then
-		Translator.parseFile(Paths.getPath("data/locale/en.ini"), true)
+		Translator.parseFile(Paths.getPath("data/locale/toki-pona.ini"), true)
 	end
 	-- make a canvas for the actual game.
 	local sz = { x = love.graphics.getWidth(), y = love.graphics.getHeight() }
