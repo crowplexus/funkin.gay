@@ -36,8 +36,8 @@ function DefaultHUD:construct()
 	local ProgressShape = require("jigw.objects.ProgressShape")
 	local vpw, vph = love.graphics.getDimensions()
 
-	local downscroll = true
-	local healthBarY = downscroll and vpw * 0.05 or vpw * 0.5
+	local downscroll = false
+	local healthBarY = downscroll and vph * 0.1 or vph * 0.9
 
 	self.healthBar = ProgressShape(0, healthBarY, 590, 10)
 	self.healthBar.colors = { Color.rgb(255, 0, 0), Color.rgb(102, 255, 51) }

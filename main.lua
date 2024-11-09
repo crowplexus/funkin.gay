@@ -64,10 +64,15 @@ function love.load()
 	-- InputManager.rebindAction("ui_accept", { "return" })
 	-- InputManager.rebindAction("ui_cancel", { "escape" })
 
+	InputManager.rebindAction("noteL", { "d", "left" })
+	InputManager.rebindAction("noteD", { "f", "down" })
+	InputManager.rebindAction("noteU", { "j", "up" })
+	InputManager.rebindAction("noteR", { "k", "right" })
+
 	-- switch to the main menu screen for now.
 	ScreenManager.skipNextTransIn = true
 	ScreenManager.skipNextTransOut = true
-	ScreenManager:switchScreen("funkin.screens.MainMenu")
+	ScreenManager:switchScreen("funkin.screens.Gameplay")
 end
 
 local fpsCap = 60 --- @type number

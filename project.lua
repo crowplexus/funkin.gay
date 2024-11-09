@@ -6,8 +6,8 @@ local Project = {
 
 	title = "Friday Night Funkin' (Kiskadee)", -- Game Window Title
 	executable = "Funkin-Kiskadee", -- Executable File Name
-	wwidth = 1280, -- Window Width
-	wheight = 720, -- Window Height
+	wwidth = 1366, -- Window Width
+	wheight = 768, -- Window Height
 
 	-- GAME RULES --
 

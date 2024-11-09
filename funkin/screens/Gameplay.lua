@@ -1,10 +1,13 @@
 local Gameplay = Screen:extend("Gameplay")
 
 local PopupSprite = require("funkin.gameplay.hud.PopupSprite")
-local Character = require("funkin.gameplay.Character")
 local ScriptsHandler = require("funkin.backend.scripting.ScriptsHandler")
 
-local player = nil
+local NoteField = require("funkin.gameplay.note.NoteField")
+local Character = require("funkin.gameplay.Character")
+
+local Player = require("funkin.gameplay.Player")
+local players = {}
 
 function Gameplay:enter()
 	local vpw, vph = love.graphics.getDimensions()
@@ -14,7 +17,7 @@ function Gameplay:enter()
 	--print("notes caught in the fire: " .. #chart.notes)
 
 	-- make a conductor here for gameplay, bpm is placeholder.
-	self.conductor = Conductor(--[[chart.bpm or]] 100)
+	self.conductor = Conductor( --[[chart.bpm or]] 100)
 
 	self.scriptsHandler = ScriptsHandler()
 	self.scriptsHandler:loadDirectory("assets/data/scripts")
@@ -24,11 +27,19 @@ function Gameplay:enter()
 	bg:centerPosition(Axis.XY)
 	self:add(bg)
 
-	player = Character.load(Paths.getModule("data/characters/bf"))
-	player.position.x = 640
-	player.position.y = 480
-	self.player = player
-	self:add(player)
+	self.boyfriend = Character.load(Paths.getModule("data/characters/bf"))
+	self.boyfriend.position.y = 480
+	self.boyfriend.position.x = 640
+	self:add(self.boyfriend)
+
+	local vpw = love.graphics.getWidth()
+
+	for i = 1, 2 do
+		local noteX, noteY = (i == 1 and 50 or vpw * 0.5), 100
+		local notefield = NoteField(noteX, noteY)
+		players[i] = Player(i == 2, notefield)
+		self:add(notefield)
+	end
 
 	self.hud = require("funkin.gameplay.hud.DefaultHUD")()
 	self:add(self.hud)
@@ -45,19 +56,24 @@ end
 function Gameplay:update(dt)
 	self.scriptsHandler:call("update")
 	Gameplay.super.update(self, dt)
-	if player and player.texture then
-		local fatnuts = {
-			InputManager.getJustPressed("ui_left"),
-			InputManager.getJustPressed("ui_down"),
-			InputManager.getJustPressed("ui_up"),
-			InputManager.getJustPressed("ui_right"),
-		}
-		for i = 1, #fatnuts do
-			if fatnuts[i] == true then
-				player:sing(i, true)
+
+	for i = 1, #players do
+		if players[i].autoplay == true then
+			return
+		end
+		for _, action in ipairs(players[i].controls) do
+			local pressed = love.keyboard.isDown(action)
+			local released = love.keyboard.isUp(action)
+			if j ~= 0 and j < #ctrls then
+				if pressed == true then
+					Player.handleInput(players[i], action)
+				elseif released == true then
+					Player.handleRelease(players[i], action)
+				end
 			end
 		end
 	end
+
 	self.scriptsHandler:call("postUpdate")
 end
 
