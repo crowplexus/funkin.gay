@@ -35,7 +35,7 @@ function DefaultHUD:construct()
 
 	local Label = require("jigw.objects.Label")
 	local ProgressShape = require("jigw.objects.ProgressShape")
-	local vpw, vph = love.graphics.getDimensions()
+	local _, vph = love.graphics.getDimensions()
 
 	local downscroll = false
 	local healthBarY = downscroll and vph * 0.1 or vph * 0.9
@@ -47,20 +47,10 @@ function DefaultHUD:construct()
 	self.healthBar:centerPosition(Axis.X)
 
 	self.scoreText = Label(0, healthBarY + self.healthBar:getHeight() + 15, getScoreText(), 16)
-	self.scoreText.position.x = self.healthBar.position.x + self.healthBar:getWidth() - 190
-	--self.scoreText.position.y = (vph - self.scoreText.size.y) - 15
+	local posX = self.healthBar.position.x + self.healthBar:getWidth()
+	self.scoreText.position.x = posX - self.scoreText:getWidth() - 150
 	self.scoreText:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
-	--self.scoreText:centerPosition(Axis.X)
 	self.scoreText.strokeSize = 1.0
-
-	--self.judgementCounter = Label(5, 0, getJudges(), 18)
-	--self.judgementCounter:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
-	--self.judgementCounter.position.y = (vph - self.judgementCounter.size.y) * 0.5
-	--self.judgementCounter.strokeSize = 1.25
-
-	--self:add(self.healthBar)
-	--self:add(self.scoreText)
-	--self:add(self.judgementCounter)
 end
 
 function DefaultHUD:update(dt)

@@ -11,48 +11,87 @@
 --- ```
 local Translator = {
 	localeData = {},
-	languageName = "Unknown",
-	languageAuthor = "Unknown",
+	localeName = "Unknown",
+	localeAuthor = "Unknown",
+	availableLocales = {},
 }
 
 local DEFAULT_LOCALE = "en"
+local _localeFilePath = Paths.getPath("data/locale")
 
---- Returns a list of locale files in a given folder.
---- @param path string path where your locale files are, files must be in .ini format
---- @return table
-function Translator.getLocaleList(path)
-	local _list = {}
-	local _files = love.filesystem.getDirectoryItems(path)
-	for idx,asset in pairs(_files) do
-		table.insert(_list,idx,asset)
-	end
-	return _list
-end
 
 --- Parses a translation file and loads it if allowed;
 ---
 --- If the file does not exist, returns an empty table.
 --- @param file string				File path.
 --- @param change boolean			If the translator should immediately apply the translation (if successful)
---- @return table
-function Translator.parseFile(file, change)
-	if change == nil then change = true end
+--- @return string, string, table
+local function parseFile(file, change)
+	change = change or false
 	if love.filesystem.getInfo(file) == nil then
-		print("Failed to parse language file \""..file.."\" because the file couldn't be loaded.")
-		return {}
+		print("Failed to parse locale file \""..file.."\" because the file couldn't be loaded.")
+		return "Unknown", "unknown", {}
 	end
 	local inip = require("jigw.lib.inifile")
 	local data = inip.parse(file,"love")
+	local n = data.Data.name or data.data.name or "Unknown"
+	local a = data.Data.author or data.data.author or "Unknown"
+
 	if change == true then
 		Translator.localeData = data
-		local n = data.Data.name or data.data.name or "Unknown"
-		local a = data.Data.author or data.data.author or "Unknown"
 		if string.first(n,'"') and string.last(n,'"') then n = n:sub(2,#n-1) end
 		if string.first(a,'"') and string.last(a,'"') then a = a:sub(2,#a-1) end
-		Translator.languageName = n
-		Translator.languageAuthor = a
+		Translator.localeName = n
+		Translator.localeAuthor = a
 	end
-	return data
+	return n, a, data
+end
+
+--- Initialises the translator.
+---
+--- @param locale? string		Language to use by default.
+function Translator.init(locale)
+	Translator.availableLocales = Translator.getLocaleList(_localeFilePath)
+	if locale then Translator.changeLocale(locale) else
+		if #Translator.localeData == 0 then
+			Translator.resetLocale()
+		end
+	end
+end
+
+--- Sets the current locale to the default one immediately.
+function Translator.resetLocale()
+	Translator.changeLocale(DEFAULT_LOCALE)
+end
+
+--- Changes the current locale.
+---
+--- @param newloc string			Locale to change to.
+function Translator.changeLocale(newloc)
+	newloc = string.gsub(string.lower(newloc), " ", "-") -- format filename
+	if Translator.availableLocales[newloc] == nil then
+		print("Error when changing locale - locale unavailable: "..newloc)
+		-- avoiding a crash
+		if #Translator.localeData == 0 then
+			print("No locale loaded! Resetting to default...")
+			Translator.resetLocale()
+		end
+		return
+	end
+	local n,_,_ = parseFile(_localeFilePath.."/"..Translator.availableLocales[newloc], true)
+	if n then print("Changed locale to "..n) end
+end
+
+--- Returns a list of locale files in a given folder.
+--- @param path string path where your localfd files are, files must be in .ini format
+--- @return table
+function Translator.getLocaleList(path)
+	local _list = {}
+	local _files = love.filesystem.getDirectoryItems(path)
+	for _,asset in pairs(_files) do
+		_list[string.gsub(string.lower(asset),".ini","")] = asset
+	end
+	return _list
 end
 
 --- Grabs a string from the currently loaded translation file.

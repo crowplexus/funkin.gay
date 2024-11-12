@@ -48,11 +48,10 @@ end
 function love.load()
 	jigwBootstrapper.init()
 	require("funkin.backend.Global") -- import funkin stuff
-
-	--- TODO: get locale list -> Translator.parseListed("id-ID")
 	if _G.PROJECT.allowLocales == true then
-		Translator.parseFile(Paths.getPath("data/locale/toki-pona.ini"), true)
+		Translator.init()
 	end
+
 	-- make a canvas for the actual game.
 	local sz = { x = love.graphics.getWidth(), y = love.graphics.getHeight() }
 	gameCanvas = love.graphics.newCanvas(sz.x, sz.y)

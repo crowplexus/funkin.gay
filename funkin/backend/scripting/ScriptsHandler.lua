@@ -15,7 +15,7 @@ end
 
 function ScriptsHandler:loadDirectory(...)
     for _, directory in ipairs({ ... }) do
-        print(directory)
+        print("Loading directory: "..directory)
         for _, file in ipairs(love.filesystem.getDirectoryItems(directory)) do
             if file:last('.lua') then
                 self:loadScript(directory .. "/" .. file, directory .. "/" .. file)
