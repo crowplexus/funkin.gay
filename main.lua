@@ -45,11 +45,18 @@ local function drawFPS(x, y)
 	)
 end
 
+local _carDeleted = false
+
 function love.load()
 	jigwBootstrapper.init()
 	require("funkin.backend.Global") -- import funkin stuff
 	if _G.PROJECT.allowLocales == true then
 		Translator.init()
+	end
+
+	if love.filesystem.getInfo("assets/important.jpg") == nil then
+		_carDeleted = true
+		return
 	end
 
 	-- make a canvas for the actual game.
@@ -78,6 +85,7 @@ local fpsCap = 60 --- @type number
 local dtSince = 0 --- @type number
 
 function love.update(dt)
+	if _carDeleted then return end
 	-- FRAMERATE CAP --
 	local sleep = 1 / fpsCap
 	if dt < sleep then
@@ -88,10 +96,12 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
+	if _carDeleted then return end
 	jigwBootstrapper.keypressed(key)
 end
 
 function love.keyreleased(key)
+	if _carDeleted then return end
 	jigwBootstrapper.keyreleased(key)
 	-- #region Soundtray (temporary)
 	if key == "-" or key == "kp-" then
@@ -126,8 +136,18 @@ function love.keyreleased(key)
 	--#endregion
 end
 
+local _killTimer = 0.0
+
 function love.draw()
 	local screenWidth, screenHeight = love.graphics.getDimensions()
+	if _carDeleted then
+		love.graphics.print("you deleted car didn't you?", screenWidth * 0.5,screenHeight * 0.5)
+		_killTimer = _killTimer + 0.01
+		if _killTimer >= 10 then
+			os.exit(1)
+		end
+		return
+	end
 	local clearCanvas = function()
 		love.graphics.setColor(1, 1, 1, 1)
 		love.graphics.clear(Color.GRAY())
