@@ -56,35 +56,27 @@ end
 function Gameplay:update(dt)
 	self.scriptsHandler:call("update")
 	Gameplay.super.update(self, dt)
-
-	for i = 1, #players do
-		if players[i].autoplay == true then
-			return
-		end
-		for _, action in ipairs(players[i].controls) do
-			local pressed = love.keyboard.isDown(action)
-			local released = love.keyboard.isUp(action)
-			if j ~= 0 and j < #ctrls then
-				if pressed == true then
-					Player.handleInput(players[i], action)
-				elseif released == true then
-					Player.handleRelease(players[i], action)
-				end
-			end
-		end
-	end
-
 	self.scriptsHandler:call("postUpdate")
 end
 
 function Gameplay:keypressed(key)
+	local controls = string.split("dfjk", "")
+	local j = table.find(controls, key) or 0
+	if j ~= 0 then players[1].notefield:playAnimation(j, "press", true) end
+
 	if key == "escape" then
 		ScreenManager:switchScreen("funkin.screens.MainMenu")
 	end
-	if key == "j" then
+	if key == "p" then
 		self.hud:displayJudgement("epic")
 		self.hud:displayCombo(math.random(0, 1000000))
 	end
+end
+
+function Gameplay:keyreleased(key)
+	local controls = string.split("dfjk", "")
+	local j = table.find(controls, key) or 0
+	if j ~= 0 then players[1].notefield:playAnimation(j, "static", true) end
 end
 
 local counter = 1

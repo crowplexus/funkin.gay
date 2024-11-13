@@ -48,6 +48,17 @@ function NoteField:draw()
 	end
 end
 
+--- Plays an animation on a receptor.
+--- @param column number The column of the receptor to play the animation on.
+--- @param animation string The name of the animation to play.
+--- @param force boolean Whether to force the animation to play from the benning.
+function NoteField:playAnimation(column, animation, force)
+	column = math.abs(column)
+	force = force or false
+	_receptors[column]:playAnimation(animation, force)
+	--print("played "..animation.." on "..column)
+end
+
 function NoteField:addReceptor(x, y, column, atlas)
 	atlas = atlas or Paths.getPath("play/notes/normal/notes")
 	local receptor = AnimatedSprite(x, y)
@@ -59,7 +70,7 @@ function NoteField:addReceptor(x, y, column, atlas)
 		{ "confirm", string.lower(dir) .. " confirm", 24 }
 	})
 	receptor:playAnimation("static", true)
-	table.insert(_receptors, receptor)
+	_receptors[column] = receptor
 	return receptor
 end
 

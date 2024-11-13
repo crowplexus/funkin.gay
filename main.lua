@@ -48,15 +48,15 @@ end
 local _carDeleted = false
 
 function love.load()
+	if love.filesystem.getInfo("assets/important.jpg") == nil then
+		_carDeleted = true
+		return
+	end
+
 	jigwBootstrapper.init()
 	require("funkin.backend.Global") -- import funkin stuff
 	if _G.PROJECT.allowLocales == true then
 		Translator.init()
-	end
-
-	if love.filesystem.getInfo("assets/important.jpg") == nil then
-		_carDeleted = true
-		return
 	end
 
 	-- make a canvas for the actual game.
