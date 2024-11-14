@@ -20,8 +20,8 @@ end
 ---
 --- @param self			funkin.gameplay.Player Instance of a player.
 --- @param action		string Action to handle.
---- @param notes		table Table of notes.
-function Player.handleInput(self, action)
+--- @param notes?		table Table of notes.
+function Player.handleInput(self, action, notes)
 	if self.autoplay or self.controls[action] == nil then
 		return
 	end

@@ -5,19 +5,19 @@ local currentMod = "" --- @type string
 function Paths.getPath(key)
   local root = "assets/"
   local modName = Paths.getCurrentMod()
-  if love.filesystem.getInfo("mods/"..modName, "directory") ~= nil then
-    return "mods/"..modName..key
+  if love.filesystem.getInfo("mods/" .. modName, "directory") ~= nil then
+    return "mods/" .. modName .. key
   end
-  return root..key
+  return root .. key
 end
 
 function Paths.getModule(key)
   local assetFolder = Paths.getPath(key)
-	return string.gsub(assetFolder, "/", ".")
+  return string.gsub(assetFolder, "/", ".")
 end
 
 function Paths.getModuleRaw(key)
-	return string.gsub(key, "/", ".")
+  return string.gsub(key, "/", ".")
 end
 
 --- Grabs the specified path and generates a love.Texture from it, nil if failed
@@ -25,14 +25,34 @@ end
 --- @param key string       Path to image.
 function Paths.getImage(key)
   local path = Paths.getPath(key)
-  if love.filesystem.getInfo(path..".png","file").size ~= nil then
-    return love.graphics.newImage(path..".png")
+  local hasExtension = string.gsub(path, "%.%w+$", "") ~= path
+  if hasExtension == false then
+    if love.filesystem.getInfo(path .. ".png", "file").size ~= nil then
+      return love.graphics.newImage(path .. ".png")
+    end
+    if love.filesystem.getInfo(path .. ".jpg", "file").size ~= nil then
+      return love.graphics.newImage(path .. ".jpg")
+    end
+    print("failed to grab image at path " .. path)
+    return nil
   end
-  if love.filesystem.getInfo(path..".jpg","file").size ~= nil then
-    return love.graphics.newImage(path..".jpg")
+  return love.graphics.newImage(path)
+end
+
+function Paths.getSound(key)
+  local path = Paths.getPath(key)
+  local hasExtension = string.gsub(path, "%.%w+$", "") ~= path
+  if hasExtension == false then
+    if love.filesystem.getInfo(path .. ".wav", "file").size ~= nil then
+      return love.audio.newSource(path .. ".wav", "static")
+    end
+    if love.filesystem.getInfo(path .. ".ogg", "file").size ~= nil then
+      return love.audio.newSource(path .. ".ogg", "static")
+    end
+    print("failed to grab sound at path " .. path)
+    return nil
   end
-  print("failed to grab image at path "..path)
-  return nil
+  return love.audio.newSource(path, "static")
 end
 
 --- Checks whether a file existing using the LOVE filesystem API.
@@ -44,7 +64,7 @@ end
 function Paths.fileExists(path, fileType)
   local file = love.filesystem.getInfo(path)
   local typelowercase = string.lower(fileType)
-  if file ~= nil and (not fileType or file.type == typelowercase)then return true end 
+  if file ~= nil and (not fileType or file.type == typelowercase) then return true end
   return false
 end
 
@@ -55,7 +75,7 @@ end
 ---
 --- @return string
 function Paths.switchMod(newMod)
-  if love.filesystem.getInfo("mods/"..newMod, "directory") ~= nil then
+  if love.filesystem.getInfo("mods/" .. newMod, "directory") ~= nil then
     currentMod = newMod
     return newMod
   end
@@ -67,7 +87,7 @@ end
 function Paths.getCurrentMod()
   local modPath = currentMod
   if #modPath ~= 0 and string.last(modPath, "/") == false then
-    modPath = modPath.."/"
+    modPath = modPath .. "/"
   end
   return modPath
 end

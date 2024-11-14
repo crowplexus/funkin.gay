@@ -1,5 +1,4 @@
-local DefaultHUD = Classic:extend("DefaultHUD")
-local judgeHolder = require("funkin.gameplay.JudgementHolder")
+local GameplayHUD = Classic:extend("GameplayHUD")
 local PopupSprite = require("funkin.gameplay.hud.PopupSprite")
 
 local function getScoreText(tally)
@@ -17,16 +16,7 @@ local function getScoreText(tally)
 	end
 end
 
-local function getJudges()
-	local str = ""
-	local judges = judgeHolder.getList()
-	for i = 1, #judges do
-		str = str .. judgeHolder.judgeToPlural(judges[i][1]) .. ": 0\n"
-	end
-	return str
-end
-
-function DefaultHUD:construct()
+function GameplayHUD:construct()
 	self.super.construct(self)
 
 	self.scoreText = nil --- @class jigw.objects.Label
@@ -53,7 +43,7 @@ function DefaultHUD:construct()
 	self.scoreText.strokeSize = 1.0
 end
 
-function DefaultHUD:update(dt)
+function GameplayHUD:update(dt)
 	if self.comboSprites and #self.comboSprites ~= 0 then
 		for i = 1, #self.comboSprites do
 			local judge = self.comboSprites[i]
@@ -68,7 +58,7 @@ function DefaultHUD:update(dt)
 	end
 end
 
-function DefaultHUD:draw()
+function GameplayHUD:draw()
 	-- TODO: better way to draw here??? idk
 	if self.healthBar and self.healthBar.draw then
 		self.healthBar:draw()
@@ -90,7 +80,7 @@ function DefaultHUD:draw()
 	--print(shit and "pong" or "ping")
 end
 
-function DefaultHUD:displayJudgement(name, offestx, offsety)
+function GameplayHUD:displayJudgement(name, offestx, offsety)
 	local tex = Paths.getImage("play/scoring/" .. name)
 	if tex == nil then
 		return
@@ -112,7 +102,7 @@ function DefaultHUD:displayJudgement(name, offestx, offsety)
 	end
 end
 
-function DefaultHUD:displayCombo(comboCount)
+function GameplayHUD:displayCombo(comboCount)
 	assert(comboCount, "comboCount value in displayCombo function must be a number!")
 	comboCount = math.round(comboCount)
 	local comboTable = string.split(tostring(comboCount), "")
@@ -145,4 +135,4 @@ function DefaultHUD:displayCombo(comboCount)
 	end
 end
 
-return DefaultHUD
+return GameplayHUD
