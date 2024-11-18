@@ -4,16 +4,16 @@
 local Project = {
 	-- CONFIGURATION --
 
-	title = "Friday Night Funkin' (Kiskadee)", -- Game Window Title
-	executable = "Funkin-Kiskadee", -- Executable File Name
-	wwidth = 1366, -- Window Width
-	wheight = 768, -- Window Height
+	title = "Friday Night Funkin' (Kiskadee)", --- @type string Window title bar text
+	executable = "Funkin-Kiskadee",         --- @type string Executable file name
+	wwidth = 1280,                          --- @type number Window Width
+	wheight = 720,                          --- @type number Window Height
 
 	-- GAME RULES --
 
-	allowEpics = true, -- Enables the new 5th judgement, set to false if you don't need/want
-	allowLocales = true, -- Enables in-game translations, disable for English(AU)-only
-	allowDiscord = true, -- discord
-	allowMods = true, -- mods
+	allowEpics = true, --- @type boolean Enables the new 5th judgement, set to false if you don't need/want
+	allowLocales = true, --- @type boolean Enables in-game translations, disable for English(AU)-only
+	allowDiscord = true, --- @type boolean discord
+	allowMods = true, --- @type boolean mods
 }
 return Project

@@ -1,5 +1,15 @@
 local NoteObject = Classic:extend("NoteObject") -- extend AnimatedSprite??
 
+function NoteObject.getColor(column)
+	local colors = {"purple", "blue", "green", "red"}
+	return colors[column or 1]
+end
+
+function NoteObject.getDirection(column)
+	local directions = {"left", "down", "up", "right"}
+	return directions[column or 1]
+end
+
 function NoteObject:construct()
 	self.position  = Vector2(0, -5000) --- @type jigw.util.Vector2
 	self.scale     = Vector2(1, 1)  --- @class jigw.util.Vector2

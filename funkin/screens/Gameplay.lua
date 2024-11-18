@@ -5,6 +5,7 @@ local ScriptsHandler = require("funkin.backend.scripting.ScriptsHandler")
 
 local NoteField = require("funkin.gameplay.note.NoteField")
 local Character = require("funkin.gameplay.Character")
+local NoteSpawner = require("funkin.gameplay.note.NoteSpawner")
 
 local Player = require("funkin.gameplay.Player")
 local players = {}
@@ -12,7 +13,7 @@ local players = {}
 function Gameplay:enter()
 	-- #region initialise game backend
 	--local ChartLoader = require("funkin.backend.ChartLoader")
-	--local chart = ChartLoader:readLegacy("2hot", "hard")
+	--local chart = ChartLoader.readLegacy("2hot", "hard")
 	--print("notes caught in the fire: " .. #chart.notes)
 
 	-- make a conductor here for gameplay, bpm is placeholder.
@@ -35,7 +36,8 @@ function Gameplay:enter()
 	self.boyfriend = boyfriend
 	self:add(boyfriend)
 
-	local vpw = love.graphics.getWidth()
+	self.hud = require("funkin.gameplay.hud.GameplayHUD")()
+	self:add(self.hud)
 
 	for i = 1, 2 do
 		local noteX, noteY = (i == 1 and 50 or vpw * 0.5), 100
@@ -44,9 +46,8 @@ function Gameplay:enter()
 		self:add(notefield)
 	end
 
-	local hud = require("funkin.gameplay.hud.GameplayHUD")()
-	self.hud = hud
-	self:add(hud)
+	self.noteSpawner = NoteSpawner()
+	self:add(self.noteSpawner)
 
 	Timer.create(0.25, function()
 		-- TODO: hudstyle system that changes the countdown that gets initialised or something of that genre

@@ -1,10 +1,3 @@
---- @enum Axis
-Axis = {
-	X = 0x01,
-	Y = 0x02,
-	XY = 0x03,
-}
-
 if arg[2] == "debug" then
 	require("lldebugger").start()
 end
@@ -14,8 +7,6 @@ end
 --- of when a version of the game was compiled
 --- @type string
 _G.GAME_VER = tostring(os.date("%Y.%m.%d"))
-
-_G.PROJECT = require("project")
 
 Paths = require("funkin.backend.Paths")
 Translator = require("funkin.backend.Translator")

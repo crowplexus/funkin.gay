@@ -16,9 +16,6 @@ local function generateNote()
 		--- e.g: {50.0, "normal"}
 		--- @type table<[number,string]>
 		hold = { 0.0, nil },
-		--- Note judgement, given to a note when hitting or missing it.
-		--- @type table<any>
-		judgement = nil,
 		--- Player Notefield ID.
 		--- @type number
 		player = 0,
@@ -57,24 +54,26 @@ end
 --- Contains different IDs for chart types
 --- @enum ChartType
 ChartType = {
-	FNF_LEGACY = 0,
-	FNF_VSLICE = 1,
-	FNF_PSYCH = 2,
-
-	--- other formats ---
-
-	STEPMANIA = 3,
-	SM_SHARK = 4,
+	CUSTOM = 0,
+	FNF_LEGACY = 1,
+	FNF_VSLICE = 2,
+	FNF_PSYCH = 3,
+	STEPMANIA = 4,
+	SM_SHARK = 5,
 }
 
-function ChartLoader:readLegacy(name, difficulty)
+function ChartLoader.readLegacy(name, difficulty)
 	name = name or "test"
 	difficulty = difficulty or "normal"
 
 	-- todo: look for every possible name for the json files
 	local json = io.open(Paths.getPath("songs/" .. name .. "/" .. difficulty .. ".json"))
-	local legacyChart = require("lib.json").decode(json:read("*a")).song
+	if json == nil then
+		print("Failed to parse chart " .. name .. " in difficulty " .. difficulty)
+		return nil
+	end
 
+	local legacyChart = require("lib.json").decode(json:read("*a")).song
 	if legacyChart == nil then
 		print("Failed to parse chart " .. name .. " in difficulty " .. difficulty)
 		return nil
@@ -83,7 +82,19 @@ function ChartLoader:readLegacy(name, difficulty)
 	--Utils.tablePrint(legacyChart, "json")
 
 	local chart = ChartLoader.getTemplateChart()
+	chart.metadata = ChartLoader.readMeta(name)
 	chart.type = ChartType.FNF_LEGACY
+
+	local function setDefaultIfNull(key, value, nullv)
+		if chart.metadata[key][_] == nullv then
+			chart.metadata[key][_] = value
+		end
+	end
+
+	setDefaultIfNull("bpm", legacyChart.bpm, -1)
+	setDefaultIfNull("scrollSpeed", legacyChart.speed, -1)
+	setDefaultIfNull("artist", legacyChart.artist or "Unknown", "nil")
+	setDefaultIfNull("charter", legacyChart.charter or "Unknown", "nil")
 
 	local isPsych = false
 	local curBPM = legacyChart.bpm or 100
@@ -92,8 +103,8 @@ function ChartLoader:readLegacy(name, difficulty)
 	local keyCount = 4
 
 	local i = 1
+	local totalNotesPushed = 1
 	print("sections: " .. #legacyChart.notes)
-	local total = 1
 
 	while i <= #legacyChart.notes do
 		local curSection = legacyChart.notes[i]
@@ -114,7 +125,7 @@ function ChartLoader:readLegacy(name, difficulty)
 					note.time = tonumber(curNote[1] * 0.001) or 0.0
 					note.column = math.floor(curNote[2] % 4)
 					note.player = mustHitSection and 1 or 2
-					if math.floor(curNote[1]) % (keyCount * 2) >= keyCount then
+					if rawColumn % (keyCount * 2) >= keyCount then
 						note.player = not mustHitSection and 1 or 2
 					end
 					note.hold = { curNote[3], nil }
@@ -122,7 +133,7 @@ function ChartLoader:readLegacy(name, difficulty)
 					chart.notes[j] = note
 				end
 			end
-			total = total + #curSection.sectionNotes
+			totalNotesPushed = totalNotesPushed + #curSection.sectionNotes
 		end
 
 		-- EVENT GENERATION --
@@ -147,44 +158,73 @@ function ChartLoader:readLegacy(name, difficulty)
 		timePassed = timePassed + crotchet * 4
 		i = i + 1
 	end
-	print("total notes meant to be generated: " .. total)
+	print("total notes meant to be generated: " .. totalNotesPushed)
 
 	table.sort(chart.notes, function(a, b) return a.time < b.time end)
+	table.sort(chart.tempoChanges, function(a, b) return a.time < b.time end)
 	table.sort(chart.events, function(a, b) return a.time < b.time end)
 
 	return chart
+end
+
+function ChartLoader.readMeta(song)
+	song = song or "test"
+
+	local metaTable = ChartLoader.getTemplateMetadata()
+
+	local json = io.open(Paths.getPath("songs/" .. name .. "/_meta.json"))
+	if json == nil then
+		print("Failed to parse chart metadata " .. name)
+		return metaTable
+	end
+
+	local chartMeta = require("lib.json").decode(json:read("*a"))
+	if chartMeta == nil then
+		print("Failed to parse chart metadata " .. name)
+		return metaTable
+	end
+
+	local function setMetaOrDefault(key, value)
+		if chartMeta[key] then
+			if type(value) == "table" then
+				metaTable[key] = chartMeta[key]
+			else
+				metaTable[key][_] = chartMeta[key]
+			end
+		end
+	end
+
+	setMetaOrDefault("bpm", chartMeta.bpm)
+	setMetaOrDefault("scrollSpeed", chartMeta.scrollSpeed)
+	setMetaOrDefault("instrumental", chartMeta.instrumental)
+	setMetaOrDefault("charter", chartMeta.charter)
+	setMetaOrDefault("artist", chartMeta.artist)
+	setMetaOrDefault("vocals", chartMeta.vocals)
+
+	return metaTable
 end
 
 --- I still don't know how I'm gonna do this and all
 function ChartLoader.getTemplateChart()
 	return {
 		name = "Unknown",
-		artist = "Unknown",
-		charter = "Unknown",
 		notes = {},  --- @type table
 		events = {}, --- @type table
 		tempoChanges = {}, --- @type table
-		type = ChartType.FNF_LEGACY,
+		type = ChartType.CUSTOM,
 		generatedBy = "Hand",
 	}
 end
 
 function ChartLoader.getTemplateMetadata()
+	-- "_" means default for all difficulties
 	return {
-		bpm = {
-			easy = 100,
-			normal = 100,
-			hard = 100,
-			erect = 100,
-			nightmare = 100,
-		},
-		scrollSpeed = {
-			easy = 1,
-			normal = 1,
-			hard = 1,
-			erect = 1,
-			nightmare = 1,
-		},
+		bpm = { _ = -1, },
+		scrollSpeed = { _ = -1, },
+		instrumental = { _ = "Inst" },
+		vocals = { _ = { "Voices" } },
+		charter = { _ = "nil" },
+		artist = { _ = "nil" },
 	}
 end
 
