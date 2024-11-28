@@ -21,7 +21,7 @@ function Gameplay:enter()
 
 	self.scriptsHandler = ScriptsHandler()
 	self.scriptsHandler:loadDirectory("assets/data/scripts")
-	self.scriptsHandler:call("enter")
+	self.scriptsHandler:call("_enter")
 	-- #endregion
 
 	local vpw, vph = love.graphics.getDimensions()
@@ -58,19 +58,19 @@ function Gameplay:enter()
 		Countdown.start(false)
 	end, 0, true)
 
-	self.scriptsHandler:call("postEnter")
+	self.scriptsHandler:call("_postEnter")
 end
 
 function Gameplay:update(dt)
-	self.scriptsHandler:call("update")
+	self.scriptsHandler:call("_update")
 	Gameplay.super.update(self, dt)
-	self.scriptsHandler:call("postUpdate")
+	self.scriptsHandler:call("_postUpdate")
 end
 
 function Gameplay:keypressed(key)
 	local controls = string.split("dfjk", "")
-	local j = table.find(controls, key) or 0
-	if j ~= 0 then players[1].notefield:playAnimation(j, "press", true) end
+	local j = table.find(controls, key) or -1
+	if j > 0 then players[1].notefield:playAnimation(j, "press", true) end
 
 	if key == "escape" then
 		ScreenManager:switchScreen("funkin.screens.MainMenu")

@@ -79,7 +79,7 @@ function ChartLoader.readLegacy(name, difficulty)
 		return nil
 	end
 
-	--Utils.tablePrint(legacyChart, "json")
+	--print(legacyChart, "json")
 
 	local chart = ChartLoader.getTemplateChart()
 	chart.metadata = ChartLoader.readMeta(name)
@@ -95,6 +95,7 @@ function ChartLoader.readLegacy(name, difficulty)
 	setDefaultIfNull("scrollSpeed", legacyChart.speed, -1)
 	setDefaultIfNull("artist", legacyChart.artist or "Unknown", "nil")
 	setDefaultIfNull("charter", legacyChart.charter or "Unknown", "nil")
+	setDefaultIfNull("generatedBy", legacyChart.generatedBy or "Unknown", "nil")
 
 	local isPsych = false
 	local curBPM = legacyChart.bpm or 100
@@ -160,9 +161,13 @@ function ChartLoader.readLegacy(name, difficulty)
 	end
 	print("total notes meant to be generated: " .. totalNotesPushed)
 
-	table.sort(chart.notes, function(a, b) return a.time < b.time end)
-	table.sort(chart.tempoChanges, function(a, b) return a.time < b.time end)
-	table.sort(chart.events, function(a, b) return a.time < b.time end)
+	-- generic sorting method used by pretty much every single data structure here
+	-- if i make more of these I might just put this in a script
+	local function sortByTime(a,b) return a.time < b.time end
+
+	table.sort(chart.notes, sortByTime)
+	table.sort(chart.tempoChanges, sortByTime)
+	table.sort(chart.events, sortByTime)
 
 	return chart
 end
@@ -211,8 +216,8 @@ function ChartLoader.getTemplateChart()
 		notes = {},  --- @type table
 		events = {}, --- @type table
 		tempoChanges = {}, --- @type table
-		type = ChartType.CUSTOM,
-		generatedBy = "Hand",
+		type = ChartType.CUSTOM, --- @type number
+		generatedBy = "nil", --- @type string
 	}
 end
 

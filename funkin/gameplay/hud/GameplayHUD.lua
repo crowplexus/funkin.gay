@@ -1,5 +1,6 @@
 local GameplayHUD = Classic:extend("GameplayHUD")
 local PopupSprite = require("funkin.gameplay.hud.PopupSprite")
+local drawQueue = {}
 
 local function getScoreText(tally)
 	local scrRep = tally and Utils.thousandSep(tally.score) or "0"
@@ -8,8 +9,8 @@ local function getScoreText(tally)
 	local clearRep = tally and tally.clear or "(NOPLAY) "
 	local gradeRep = tally and tally:getCurrentGrade() or ""
 	if _G.PROJECT.allowLocales == true then
-		return Translator.getString("scoreText", "Gameplay", { scrRep, accRep, clearRep, gradeRep, missRep})
-	--return Translator.getString("scoreText","Gameplay",{scrRep,accRep,clearRep,gradeRep, missRep})
+		return Translator.tr("scoreText", "Gameplay", { scrRep, accRep, clearRep, gradeRep, missRep})
+	--return Translator.tr("scoreText","Gameplay",{scrRep,accRep,clearRep,gradeRep, missRep})
 	else
 		return "Score:" .. scrRep
 		--return "Score: "..scrRep .." | Accuracy: "..accRep.."%" .." | "..clearRep..gradeRep
@@ -20,7 +21,6 @@ function GameplayHUD:construct()
 	self.super.construct(self)
 
 	self.scoreText = nil --- @class jigw.objects.Label
-	self.judgementCounter = nil --- @class jigw.objects.Label
 	self.comboSprites = {} --- @class table<funkin.gameplay.hud.PopupSprite>
 
 	local Label = require("jigw.objects.Label")
@@ -41,6 +41,9 @@ function GameplayHUD:construct()
 	self.scoreText.position.x = posX - self.scoreText:getWidth() - 150
 	self.scoreText:changeFontFromPath(Paths.getPath("ui/fonts/vcr.ttf"))
 	self.scoreText.strokeSize = 1.0
+	
+	table.insert(drawQueue, self.healthBar)
+	table.insert(drawQueue, self.scoreText)
 end
 
 function GameplayHUD:update(dt)
@@ -59,15 +62,9 @@ function GameplayHUD:update(dt)
 end
 
 function GameplayHUD:draw()
-	-- TODO: better way to draw here??? idk
-	if self.healthBar and self.healthBar.draw then
-		self.healthBar:draw()
-	end
-	if self.scoreText and self.scoreText.draw then
-		self.scoreText:draw()
-	end
-	if self.judgementCounter and self.judgementCounter.draw then
-		self.judgementCounter:draw()
+	for i = 1, #drawQueue do
+		local o = drawQueue[i]
+		if o.draw then o:draw() end
 	end
 	if self.comboSprites and #self.comboSprites ~= 0 then
 		for i = 1, #self.comboSprites do

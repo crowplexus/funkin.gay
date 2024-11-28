@@ -50,6 +50,8 @@ function FreeplayMenu:enter()
 		local songLabel = Alphabet(10, 0, song.name)
 		songLabel.alpha = i == selected and 1.0 or 0.6
 		songLabel:centerPosition(Axis.Y)
+		songLabel.isMenuItem = true
+		songLabel.indexY = i - selected
 		--10 + (10 * i), 5 + (80 * i)
 		--songLabel.position.x = 10 + (10 * i)
 		songLabel.position.y = (songLabel.position.y - 250) + (80 * i)
@@ -83,8 +85,10 @@ function FreeplayMenu:keypressed(x)
 		selected = Utils.wrap(selected + sMult, 1, #songTable)
 	end
 	if selected ~= oldS then
-		songTable[oldS].alpha = 0.6
-		songTable[selected].alpha = 1.0
+		for i = 1, #songTable do
+			songTable[i].alpha = i == selected and 1.0 or 0.6
+			songTable[i].indexY = i - selected
+		end
 		Sound.playSound(menuSounds.scroll, "static", 0.7)
 	end
 

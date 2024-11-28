@@ -4,10 +4,12 @@
 --- i.e:
 ---
 --- ```ini
---- # [Data] or [data] is a default category name
---- [Data]
+--- [lang]
 --- name="English"
 --- author="Me, Myself, and I"
+---
+--- regularPluralPrefix=""
+--- regularPluralSuffix="s"
 --- ```
 local Translator = {
 	localeData = {},
@@ -29,18 +31,18 @@ local _localeFilePath = Paths.getPath("data/locale")
 local function parseFile(file, change)
 	change = change or false
 	if love.filesystem.getInfo(file) == nil then
-		print("Failed to parse locale file \""..file.."\" because the file couldn't be loaded.")
+		print("Failed to parse locale file \"" .. file .. "\" because the file couldn't be loaded.")
 		return "Unknown", "unknown", {}
 	end
 	local inip = require("jigw.lib.inifile")
-	local data = inip.parse(file,"love")
-	local n = data.Data.name or data.data.name or "Unknown"
-	local a = data.Data.author or data.data.author or "Unknown"
+	local data = inip.parse(file, "love")
+	local n = data.lang.name or "Unknown"
+	local a = data.lang.author or "Unknown"
 
 	if change == true then
 		Translator.localeData = data
-		if string.first(n,'"') and string.last(n,'"') then n = n:sub(2,#n-1) end
-		if string.first(a,'"') and string.last(a,'"') then a = a:sub(2,#a-1) end
+		if string.first(n, '"') and string.last(n, '"') then n = n:sub(2, #n - 1) end
+		if string.first(a, '"') and string.last(a, '"') then a = a:sub(2, #a - 1) end
 		Translator.localeName = n
 		Translator.localeAuthor = a
 	end
@@ -52,7 +54,9 @@ end
 --- @param locale? string		Language to use by default.
 function Translator.init(locale)
 	Translator.availableLocales = Translator.getLocaleList(_localeFilePath)
-	if locale then Translator.changeLocale(locale) else
+	if locale then
+		Translator.changeLocale(locale)
+	else
 		if #Translator.localeData == 0 then
 			Translator.resetLocale()
 		end
@@ -70,7 +74,7 @@ end
 function Translator.changeLocale(newloc)
 	newloc = string.gsub(string.lower(newloc), " ", "-") -- format filename
 	if Translator.availableLocales[newloc] == nil then
-		print("Error when changing locale - locale unavailable: "..newloc)
+		print("Error when changing locale - locale unavailable: " .. newloc)
 		-- avoiding a crash
 		if #Translator.localeData == 0 then
 			print("No locale loaded! Resetting to default...")
@@ -78,8 +82,8 @@ function Translator.changeLocale(newloc)
 		end
 		return
 	end
-	local n,_,_ = parseFile(_localeFilePath.."/"..Translator.availableLocales[newloc], true)
-	if n then print("Changed locale to "..n) end
+	local n, _, _ = parseFile(_localeFilePath .. "/" .. Translator.availableLocales[newloc], true)
+	if n then print("Changed locale to " .. n) end
 end
 
 --- Returns a list of locale files in a given folder.
@@ -88,34 +92,58 @@ end
 function Translator.getLocaleList(path)
 	local _list = {}
 	local _files = love.filesystem.getDirectoryItems(path)
-	for _,asset in pairs(_files) do
-		_list[string.gsub(string.lower(asset),".ini","")] = asset
+	for _, asset in pairs(_files) do
+		_list[string.gsub(string.lower(asset), ".ini", "")] = asset
 	end
 	return _list
+end
+
+local function applyReps(str, replacements)
+	if #replacements == 0 then
+		return str
+	end
+	for i = 1, #replacements do
+		--print("replacing {"..i.."} with "..tostring(replacements[i]))
+		str = string.gsub(str, "{" .. i .. "}", tostring(replacements[i]))
+	end
+	return str
+end
+
+--- `tr` but with no error handling whatsoever.
+---
+--- @see Translator.tr
+---
+--- @param name string							String name to capture.
+--- @param category? string						Category to capture the string from, if unspecified, tries to search on the global scope, may result in nil
+--- @param replacements? table<string>			If your string has placeholders (i.e: {1}, {2}) those will get replaced by these elements
+--- @return string
+local function trUns(name, category, replacements)
+	local v = Translator.localeData[category][name] or "nil"
+	v = applyReps(v, replacements)
+	return tostring(v)
 end
 
 --- Grabs a string from the currently loaded translation file.
 ---
 --- if the string is nil, this will return another string, containing details of what tried to be captured by this function.
---- @param name string										String name to capture.
---- @param category string								Category to capture the string from, if unspecified, tries to search on the global scope, may result in nil
---- @param replacements table<string>			If your string has placeholders (i.e: {1}, {2}) those will get replaced by these elements
+--- @param name string							String name to capture.
+--- @param category? string						Category to capture the string from, if unspecified, tries to search on the global scope, may result in nil
+--- @param replacements? table<string>			If your string has placeholders (i.e: {1}, {2}) those will get replaced by these elements
 --- @return string
-function Translator.getString(name,category,replacements)
-	local t = Translator.localeData[category][name] or Translator.localeData[name]
-	if t ~= nil then
-		if string.first(t,'"') and string.last(t,'"') then
-			t = t:sub(2,#t-1)
-		end
-		if #replacements ~= 0 then
-		  for i=1, #replacements do
-				--print("replacing {"..i.."} with "..tostring(replacements[i]))
-				t = string.gsub(t,"{"..i.."}",tostring(replacements[i]))
-		  end
+function Translator.tr(name, category, replacements)
+	category = category or "lang"
+	replacements = replacements or {}
+
+	local t = trUns(name, category, replacements)
+	if t and t ~= "nil" then
+		if string.first(t, '"') and string.last(t, '"') then
+			t = t:sub(2, #t - 1)
 		end
 		return t
+	else
+		return "TRANSLATION MISSING \"" ..
+			name .. "\"" .. (#category ~= 0 and " IN \"" .. category .. "\" CATEGORY" or "")
 	end
-	return "TRANSLATION MISSING \""..name.."\" IN \""..category.."\" CATEGORY"
 end
 
 return Translator

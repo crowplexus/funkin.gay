@@ -1,9 +1,9 @@
 --- @diagnostic disable: lowercase-global
 
-function enter()
+function _enter()
     print("hello this is from script :DDDD")
 end
 
-function postEnter()
+function _postEnter()
     print("stuff")
 end

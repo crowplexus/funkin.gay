@@ -11,29 +11,31 @@ _G.GAME_VER = tostring(os.date("%Y.%m.%d"))
 Paths = require("funkin.backend.Paths")
 Translator = require("funkin.backend.Translator")
 
-local drawFPSCounter = true --- @type boolean
-local gameCanvas --- @type love.Canvas
+local drawFPSCounter = true                   --- @type boolean
+local gameCanvas                              --- @type love.Canvas
 
 local jigwBootstrapper = require("jigw.Boot") --- @class jigw.Boot
 
 local function getVRAM()
-	local imgBytes = love.graphics.getStats().images --- @type number
-	local fontBytes = love.graphics.getStats().fonts --- @type number
+	local imgBytes = love.graphics.getStats().images   --- @type number
+	local fontBytes = love.graphics.getStats().fonts   --- @type number
 	local canvasBytes = love.graphics.getStats().canvases --- @type number
 	return imgBytes + fontBytes + canvasBytes
 end
 
 local function drawFPS(x, y)
 	local so = ScreenManager:isScreenOperating()
-	love.graphics.print(
-		"VRAM: "
-			.. Utils.formatBytes(getVRAM())
-			.. (so and "\nScreen: " .. ScreenManager.activeScreen:__tostring() or "")
-			.. "\nDraw Calls: "
-			.. love.graphics.getStats().drawcalls,
-		x,
-		y
-	)
+	local fnt = love.graphics.getFont()
+	local txt = "VRAM: "
+		.. Utils.formatBytes(getVRAM())
+		.. (so and "\nScreen: " .. ScreenManager.activeScreen:__tostring() or "")
+		.. "\nDraw Calls: ".. love.graphics.getStats().drawcalls
+		.. "\nF1 to toggle this"
+	local txtw, txth = fnt:getWidth(txt), fnt:getHeight(txt)
+	love.graphics.setColor(0, 0, 0, 0.3)
+	love.graphics.rectangle("fill", x, y, txtw + 10, txth + 45)
+	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.print(txt, x, y)
 end
 
 local _carDeleted = false
@@ -69,7 +71,7 @@ function love.load()
 	-- switch to the main menu screen for now.
 	ScreenManager.skipNextTransIn = true
 	ScreenManager.skipNextTransOut = true
-	ScreenManager:switchScreen("funkin.screens.Gameplay")
+	ScreenManager:switchScreen("funkin.screens.MainMenu")
 end
 
 local fpsCap = 60 --- @type number
@@ -124,6 +126,9 @@ function love.keyreleased(key)
 			print("Volume unmuted!")
 		end
 	end
+	if key == "f1" then
+		drawFPSCounter = not drawFPSCounter
+	end
 	--#endregion
 end
 
@@ -132,7 +137,7 @@ local _killTimer = 0.0
 function love.draw()
 	local screenWidth, screenHeight = love.graphics.getDimensions()
 	if _carDeleted then
-		love.graphics.print("you deleted car didn't you?", screenWidth * 0.5,screenHeight * 0.5)
+		love.graphics.print("you deleted car didn't you?", screenWidth * 0.5, screenHeight * 0.5)
 		_killTimer = _killTimer + 0.01
 		if _killTimer >= 10 then
 			os.exit(1)

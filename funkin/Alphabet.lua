@@ -31,12 +31,23 @@ function Alphabet:construct(x, y, newtext)
 	self.scale = Vector2(1, 1)                                                             --- @class jigw.util.Vector2
 	self.rotation = 0                                                                      --- @type number
 	self.visible = true                                                                    --- @type boolean
+	self.isMenuItem = false                                                                --- @type boolean
+	self.indexY = 0                                                                        --- @type number
 	self.color = Color.WHITE()                                                             --- @type table<number>
 	self.alpha = 1.0                                                                       --- @type number
 	self.texture = love.graphics.newImage(Paths.getPath(spritePath .. ".png"))             --- @class love.Image
 	_cachedAnimations = AtlasFrameHelper.getSparrowAtlas(Paths.getPath(spritePath .. ".xml")) --- @type table
 	initBatch(self, #newtext or 50)
 	self.text = newtext or ""                                                              --- @type string
+end
+
+function Alphabet:update(dt)
+	if self.isMenuItem == true then
+		local scaledY = math.remapRange(self.indexY,0,1,0,1.3)
+		local sWidth = (love.graphics:getWidth() * 0.25)
+		self.position.y = math.lerp(self.position.y, (scaledY * 120) + sWidth, 0.16)
+		self.position.x = math.lerp(self.position.x, (self.indexY * 20) + 90, 0.16)
+	end
 end
 
 function Alphabet:set_text(vl)
@@ -82,7 +93,7 @@ function Alphabet:draw()
 	end
 	love.graphics.push("all")
 	love.graphics.setColor(self.color)
-	local frW, frH = self.texture:getDimensions()
+	--local frW, frH = self.texture:getDimensions()
 	love.graphics.translate(self.position:unpack())
 	love.graphics.rotate(self.rotation)
 	love.graphics.scale(self.scale.x, self.scale.y)

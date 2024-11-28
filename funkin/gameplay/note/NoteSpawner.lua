@@ -35,7 +35,7 @@ end
 
 function NoteSpawner:draw()
     if _drawable and _drawable.draw then
-        _drawable:draw()
+        --_drawable:draw()
     end
 end
 
