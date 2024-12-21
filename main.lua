@@ -36,8 +36,6 @@ end
 
 function love.draw()
     if activeScreen then activeScreen:draw() end
-    -- render fps counter or whatever...!
-    love.graphics.setColor(0, 0, 0, 1)
     if #overlays ~= 0 then
         for _, v in pairs(overlays) do
             if v.draw then v:draw() end
