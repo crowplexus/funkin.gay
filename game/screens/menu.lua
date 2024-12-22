@@ -31,7 +31,7 @@ function Menu:enter()
         button:addAnimationFromPrefix("idle", id .. " idle", 5, true)
         button:addAnimationFromPrefix("hover", id .. " selected", 5, true)
         button:playAnimation("idle", true)
-        button:worldCenter(0x01)
+        button:worldCenter(Enums.Axis.X)
         groupButtons[i] = button
         self:add(button)
     end
@@ -78,7 +78,7 @@ function Menu:changeSelection(next)
     groupButtons[selected]:playAnimation("idle", true)
     selected = math.wrapvalue(selected + next, 1, #buttons)
     groupButtons[selected]:playAnimation("hover", true)
-    groupButtons[selected]:worldCenter(0x01)
+    groupButtons[selected]:worldCenter(Enums.Axis.X)
     if next ~= 0 then
         Sound.playSfx("res/sounds/scrollMenu.ogg", "static")
     end
