@@ -15,10 +15,8 @@ local buttons = {
 local groupButtons = {}
 
 function Menu:enter()
-    if not Sound.isPlaying() then
-        Sound.play("res/music/menu/freakyMenu.ogg", "stream", 0.3, true)
-        Sound.setLooping(true)
-    end
+    Sound.playMusicPassive("res/music/menu/freakyMenu.ogg", "stream", 0.3, true)
+    Sound.setLooping(true)
 
     local background = Sprite:new(0, 0)
     background.texture = love.graphics.newImage("res/ui/menu/menuBG.png")
@@ -35,8 +33,6 @@ function Menu:enter()
         groupButtons[i] = button
         self:add(button)
     end
-    print(tostring(groupButtons[1]))
-
     self:changeSelection()
 end
 

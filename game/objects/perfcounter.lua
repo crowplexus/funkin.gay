@@ -1,7 +1,8 @@
+--- PerfCounter is a simple object that displays the current FPS on the screen.
 --- @class PerfCounter
 local PerfCounter, super = Class("PerfCounter", Canvas)
 
-local font = love.graphics.newFont("res/ui/fonts/vcr.ttf", 16, "none")
+local font = love.graphics.newFont("res/ui/fonts/vcr.ttf", 16)
 
 function PerfCounter:init(x, y)
     super.init(self)
@@ -19,7 +20,7 @@ function PerfCounter:draw()
     love.graphics.setFont(font)
     local lbCount = string.len(fpsText) - string.len(fpsText:gsub("\n", ""))
     local fpsWidth = love.graphics.getFont():getWidth(fpsText)
-    love.graphics.rectangle("fill", 3, 5, fpsWidth + 5, (lbCount + 1) * 20)
+    love.graphics.rectangle("fill", 3, 3, fpsWidth + 5, (lbCount + 1) * 20)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(fpsText, self.position.unpack())
     love.graphics.pop()
