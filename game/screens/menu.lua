@@ -15,11 +15,11 @@ local buttons = {
 local groupButtons = {}
 
 function Menu:enter()
-    Sound.playMusicPassive("res/music/menu/freakyMenu.ogg", "stream", 0.3, true)
+    Sound.playMusicPassive(AssetManager.getPath("music/menu/freakyMenu.ogg"), "stream", 0.3, true)
     Sound.setLooping(true)
 
     local background = Sprite:new(0, 0)
-    background.texture = love.graphics.newImage("res/ui/menu/menuBG.png")
+    background.texture = AssetManager.getImage("ui/menu/menuBG")
     self:add(background)
 
     for i = 1, #buttons do

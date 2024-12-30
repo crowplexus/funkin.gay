@@ -1,6 +1,8 @@
 require("engine.util.override")
 require("engine.util.import")
 
+AssetManager = require("game.backend.assetmanager")
+
 local activeScreen = nil
 local overlays = {
     -- Framerate Counter
