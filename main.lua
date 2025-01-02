@@ -37,5 +37,9 @@ function love.keyreleased(key)
 end
 
 function love.draw()
+    if ScreenManager.activeScreen.camera then
+        local camera = ScreenManager.activeScreen.camera
+        love.graphics.applyTransform(camera:getTransform())
+    end
     ScreenManager:draw()
 end
