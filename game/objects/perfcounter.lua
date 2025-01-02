@@ -2,7 +2,7 @@
 --- @class PerfCounter
 local PerfCounter, super = Class("PerfCounter", Canvas)
 
-local font = love.graphics.newFont("res/ui/fonts/vcr.ttf", 16)
+local font = love.graphics.newFont("res/ui/fonts/vcr.ttf", 16, "none")
 
 function PerfCounter:init(x, y)
     super.init(self)

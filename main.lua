@@ -3,21 +3,21 @@ require("engine.util.import")
 
 AssetManager = require("game.backend.assetmanager")
 
-local activeScreen = nil
-local overlays = {
-    -- Framerate Counter
-    require("game.objects.perfcounter"):new(5, 5)
-}
-
 function love.load()
     love.audio.setVolume(0.1)
-    activeScreen = require("game.screens.menu"):new()
-    activeScreen:enter()
+    ScreenManager:initialize()
+
+    -- TODO: make a better system for all this
+    ScreenManager:addScreen(require("game.screens.menu"):new(), "menu")
+    ScreenManager:addScreen(require("game.screens.gameplay"):new(), "gameplay")
+
+    ScreenManager:addOverlay(require("game.objects.perfcounter"):new(5, 5))
+    ScreenManager:switchScreen("gameplay")
 end
 
 function love.update(dt)
-    GlobalUpdate()
-    if activeScreen then activeScreen:update(dt) end
+    GlobalUpdate(dt)
+    ScreenManager:update(dt)
 end
 
 function love.errorhandler(msg)
@@ -29,18 +29,13 @@ function love.errorhandler(msg)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-    if activeScreen then activeScreen:keypressed(key, scancode, isrepeat) end
+    ScreenManager:keypressed(key, scancode, isrepeat)
 end
 
 function love.keyreleased(key)
-    if activeScreen then activeScreen:keyreleased(key) end
+    ScreenManager:keyreleased(key)
 end
 
 function love.draw()
-    if activeScreen then activeScreen:draw() end
-    if #overlays ~= 0 then
-        for _, v in pairs(overlays) do
-            if v.draw then v:draw() end
-        end
-    end
+    ScreenManager:draw()
 end

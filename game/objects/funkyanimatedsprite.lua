@@ -19,14 +19,16 @@ local function _addAtlasAnimations(self, ...)
 end
 
 function FunkyAnimatedSprite:loadSparrowAtlas(path, animations)
-    self.texture = love.graphics.newImage(path .. ".png")
+    path = string.gsub(path, "%.%w+$", "")
+    self.texture = AssetManager.getImage(path .. ".png")
     if _cached.path ~= path then
-        _cached.atlasanims = AtlasFrameHelper.getSparrowAtlas(path .. ".xml")
+        _cached.atlasanims = AtlasFrameHelper.getSparrowAtlas(AssetManager.getPath(path .. ".xml"))
         _cached.path = path
     end
     animations = animations or {}
     for i = 1, #animations do
-        _addAtlasAnimations(self, path, animations[i])
+        local name, prefix, fps, looped = unpack(animations[i])
+        _addAtlasAnimations(self, name, prefix, fps or 24, looped or false)
     end
 end
 
