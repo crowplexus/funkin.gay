@@ -4,8 +4,7 @@
 local Project = {
 	-- CONFIGURATION --
 
-	title = "Friday Night Funkin'", --- @type string Window title bar text
-	saveFolder = "crowplexus/funkin", --- @type string Executable file name
+	title = "Friday Night Funkin' (.gay)", --- @type string Window title bar text
 	wwidth = 1280,                 --- @type number Window Width
 	wheight = 720,                 --- @type number Window Height
 }
