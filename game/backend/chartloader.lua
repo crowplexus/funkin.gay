@@ -86,6 +86,33 @@ function ChartLoader.readLegacy(name, difficulty)
     if type(jsonData.song) == "table" then
         jsonData = jsonData.song
     end
+	
+	chart.metadata = ChartLoader.readMeta(name)
+	local psychV1String = nil
+    if not isPsych then
+        if not jsonData.format then
+            chart.type = ChartType.FNF.."(Legacy)"
+        else
+            if #jsonData.format ~= 0 then
+                chart.type = ChartType.FNF.."("..jsonData.format..")"
+            else
+                chart.type = ChartType.FNF.."(Psych 1.0+)"
+            end
+			psychV1String = chart.type
+        end
+    end
+
+	local function setDefaultIfNull(key, value, nullv)
+		if chart.metadata[key][_] == nullv then
+			chart.metadata[key][_] = value
+		end
+	end
+
+	setDefaultIfNull("bpm", jsonData.bpm, 100.0)
+	setDefaultIfNull("scrollSpeed", jsonData.speed, 1.0)
+	setDefaultIfNull("artist", jsonData.artist, "Unknown")
+	setDefaultIfNull("charter", jsonData.charter, "Unknown")
+	setDefaultIfNull("generatedBy", jsonData.generatedBy, "Unknown")
     
     local isPsych = false
 	local curBPM = jsonData.bpm or 100
@@ -116,7 +143,7 @@ function ChartLoader.readLegacy(name, difficulty)
 					note.time = tonumber(curNote[1] * 0.001) or 0.0
 					note.column = math.floor(curNote[2] % 4)
 					note.player = mustHitSection and 1 or 2
-					if rawColumn % (keyCount * 2) >= keyCount then
+					if rawColumn % (keyCount * 2) >= keyCount and chart.type ~= psychV1String then
 						note.player = not mustHitSection and 1 or 2
 					end
 					note.hold = { curNote[3], nil }
@@ -150,33 +177,6 @@ function ChartLoader.readLegacy(name, difficulty)
 		i = i + 1
 	end
 	-- print("total notes meant to be generated: " .. daBeats)
-
-    ---- PARSE METADATA ----
-
-	chart.metadata = ChartLoader.readMeta(name)
-    if not isPsych then
-        if not jsonData.format then
-            chart.type = ChartType.FNF.."(Legacy)"
-        else
-            if #jsonData.format ~= 0 then
-                chart.type = ChartType.FNF.."("..jsonData.format..")"
-            else
-                chart.type = ChartType.FNF.."(Psych 1.0+)"
-            end
-        end
-    end
-
-	local function setDefaultIfNull(key, value, nullv)
-		if chart.metadata[key][_] == nullv then
-			chart.metadata[key][_] = value
-		end
-	end
-
-	setDefaultIfNull("bpm", jsonData.bpm, 100.0)
-	setDefaultIfNull("scrollSpeed", jsonData.speed, 1.0)
-	setDefaultIfNull("artist", jsonData.artist, "Unknown")
-	setDefaultIfNull("charter", jsonData.charter, "Unknown")
-	setDefaultIfNull("generatedBy", jsonData.generatedBy, "Unknown")
 
 	return chart
 end

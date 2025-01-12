@@ -25,7 +25,7 @@ function Menu:enter()
     for i = 1, #buttons do
         local id = buttons[i][1]
         local button = FunkyAnimatedSprite:new(0, (160 * i) - 85)
-        button:loadSparrowAtlas("res/ui/menu/main/" .. id)
+        button:loadSparrowAtlas("ui/menu/main/" .. id)
         button:addAnimationFromPrefix("idle", id .. " idle", 5, true)
         button:addAnimationFromPrefix("hover", id .. " selected", 5, true)
         button:playAnimation("idle", true)

@@ -3,18 +3,11 @@ require("engine.util.import")
 
 AssetManager = require("game.backend.assetmanager")
 
-local overlays = {
-    require("game.objects.perfcounter"):new(5, 5)
-}
-
 function love.load()
     love.audio.setVolume(0.1)
     ScreenManager:initialize()
-
-    -- TODO: make a better system for all this
-    ScreenManager:addScreen(require("game.screens.menu"):new(), "menu")
-    ScreenManager:addScreen(require("game.screens.gameplay"):new(), "gameplay")
-    ScreenManager:switchScreen("gameplay")
+    ScreenManager:addOverlay(require("game.objects.perfcounter"):new(5, 5))
+    ScreenManager:switchScreen("game.screens.menu")
 end
 
 function love.update(dt)
@@ -40,15 +33,13 @@ end
 
 function love.draw()
     love.graphics.push("all")
-    if ScreenManager.activeScreen.camera then
+    --[[local camera = ScreenManager:getCamera()
+    if camera then
         -- TODO: fix this cus it doesn't work
-        love.graphics.setColor(ScreenManager.activeScreen.camera.color)
-        love.graphics.applyTransform(ScreenManager.activeScreen.camera:getTransform())
-    end
+        love.graphics.setColor(camera.color)
+        love.graphics.applyTransform(camera:getTransform())
+    end]]
     ScreenManager:draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.pop()
-    for _, overlay in pairs(overlays) do
-        if overlay.draw then overlay:draw() end
-    end
 end
