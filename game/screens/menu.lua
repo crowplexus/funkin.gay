@@ -1,6 +1,6 @@
 --- @class Menu
 local Menu, super = Class("Menu", Screen)
-local FunkyAnimatedSprite = require("game.objects.funkyanimatedsprite")
+local AtlasSprite = require("game.objects.atlassprite")
 local FreeplayPage = require("game.screens.pages.freeplaypage")
 
 local activePage = nil
@@ -21,10 +21,10 @@ function Menu:enter()
     local background = Sprite:new(0, 0)
     background.texture = AssetManager.getImage("ui/menu/menuBG")
     self:add(background)
-
+    
     for i = 1, #buttons do
         local id = buttons[i][1]
-        local button = FunkyAnimatedSprite:new(0, (160 * i) - 85)
+        local button = AtlasSprite:new(0, (160 * i) - 85)
         button:loadSparrowAtlas("ui/menu/main/" .. id)
         button:addAnimationFromPrefix("idle", id .. " idle", 5, true)
         button:addAnimationFromPrefix("hover", id .. " selected", 5, true)
@@ -33,6 +33,7 @@ function Menu:enter()
         groupButtons[i] = button
         self:add(button)
     end
+    
     self:changeSelection()
 end
 

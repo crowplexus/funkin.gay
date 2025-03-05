@@ -1,15 +1,15 @@
 --- @class Gameplay
 local Gameplay, super = Class("Gameplay", Screen)
 
-local FunkyAnimatedSprite = require("game.objects.funkyanimatedsprite")
+local AtlasSprite = require("game.objects.Atlassprite")
 
 function Gameplay:enter()
     local camera = Camera:new(0, 0)
-    camera.tint = { love.math.tintFromBytes(255, 0, 0, 10) }
+    camera.tint = { love.math.colorFromBytes(255, 0, 0, 10) }
     camera.limit = Rect2(-500, -500, 500, 500)
     self:add(camera)
     for i = 1, 5 do
-        local sprite = FunkyAnimatedSprite:new(480 - (50 * i), 250)
+        local sprite = AtlasSprite:new(480 - (50 * i), 250)
         sprite:loadSparrowAtlas("game/characters/BOYFRIEND", {
             { "idle", "BF idle dance", 24, true }
         })

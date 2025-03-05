@@ -1,17 +1,18 @@
 --- PerfCounter is a simple object that displays the current FPS on the screen.
 --- @class PerfCounter
-local PerfCounter, super = Class("PerfCounter", Canvas)
-
-local font = love.graphics.newFont("res/ui/fonts/vcr.ttf", 16, "none")
+local PerfCounter, super = Class("PerfCounter")
 
 function PerfCounter:init(x, y)
-    super.init(self)
+    --if super.init then super.init(self) end
     -- mini vec2
     self.position = {x = x, y = y}
     self.position.unpack = function(addx, addy)
         return self.position.x + (addx or 0), self.position.y + (addy or 0)
     end
+    return self
 end
+
+local font = love.graphics.newFont("res/ui/fonts/vcr.ttf", 16, "none")
 
 function PerfCounter:draw()
     love.graphics.push("all")
