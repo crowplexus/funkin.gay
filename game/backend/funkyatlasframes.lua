@@ -58,13 +58,13 @@ function AtlasFrameHelper.buildSparrowQuad(attributes, texture)
     local i = 1
     while i <= #attributes do
         local cfg = attributes[i]
-        local trimmed = math.abs(cfg.frameX or 0) > 0
+        local trimmed = math.abs(cfg.framex or 0) > 0
         local rotated = cfg.rotated == "true" or false
         local flipX = cfg.flipX == "true" or false
         local flipY = cfg.flipY == "true" or false
         local frame = {
             source = { x = cfg.x or 0, y = cfg.y or 0, width = cfg.width or 1, height = cfg.height or 1 },
-            offset = { x = cfg.frameX or 0, y = cfg.frameY or 0, width = cfg.frameWidth or 1, height = cfg.frameHeight or 1 },
+            offset = { x = cfg.framex or 0, y = cfg.framey or 0, width = cfg.frameWidth or 1, height = cfg.frameHeight or 1 },
             scale = { x = flipX and -1 or 1, y = flipY and -1 or 1 },
             angle = rotated and math.rad(-90) or 0,
         }

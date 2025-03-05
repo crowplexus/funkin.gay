@@ -9,7 +9,7 @@ function AtlasText:init(x, y, text)
     self.text = text or ""      --- @type string
     self.visible = true         --- @type boolean
     self.position = Vec2(x, y)  --- @type Vec2
-    self.color = { 1, 1, 1, 1 } --- @type table<number>
+    self.tint = { 1, 1, 1, 1 } --- @type table<number>
     self.alignment = "left"     --- @type "left"|"center"|"right"
     return self
 end
@@ -20,9 +20,9 @@ end
 function AtlasText:draw()
     if #self.text ~= 0 or self.visible then
         love.graphics.push("all")
-        if self.color then love.graphics.setColor(self.color) end
+        if self.tint then love.graphics.setColor(self.tint) end
         love.graphics.draw()
-        if self.color then love.graphics.setColor(1, 1, 1, 1) end
+        if self.tint then love.graphics.setColor(1, 1, 1, 1) end
         love.graphics.pop()
     end
 end

@@ -6,7 +6,7 @@ local selected = 1
 function FreeplayPage:enter()
     local background = Sprite:new(0, 0)
     background.texture = love.graphics.newImage("res/ui/menu/menuDesat.png")
-    background.color = { love.math.colorFromBytes(66, 135, 245) }
+    background.tint = { love.math.tintFromBytes(66, 135, 245) }
     self:add(background)
     self:changeSelection()
 end

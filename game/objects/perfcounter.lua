@@ -7,7 +7,7 @@ local font = love.graphics.newFont("res/ui/fonts/vcr.ttf", 16, "none")
 function PerfCounter:init(x, y)
     super.init(self)
     -- mini vec2
-    self.position = {x = x or 0, y = y or 0}
+    self.position = {x = x, y = y}
     self.position.unpack = function(addx, addy)
         return self.position.x + (addx or 0), self.position.y + (addy or 0)
     end

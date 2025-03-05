@@ -18,7 +18,7 @@ end
 function love.errorhandler(msg)
     return function()
         print(msg)
-        throw.error() -- error, throw is nil
+        --throw.error() -- error, throw is nil
         return 1
     end
 end
@@ -36,7 +36,7 @@ function love.draw()
     --[[local camera = ScreenManager:getCamera()
     if camera then
         -- TODO: fix this cus it doesn't work
-        love.graphics.setColor(camera.color)
+        love.graphics.setColor(camera.tint)
         love.graphics.applyTransform(camera:getTransform())
     end]]
     ScreenManager:draw()

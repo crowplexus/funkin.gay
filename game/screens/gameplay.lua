@@ -5,7 +5,7 @@ local FunkyAnimatedSprite = require("game.objects.funkyanimatedsprite")
 
 function Gameplay:enter()
     local camera = Camera:new(0, 0)
-    camera.color = { love.math.colorFromBytes(255, 0, 0, 10) }
+    camera.tint = { love.math.tintFromBytes(255, 0, 0, 10) }
     camera.limit = Rect2(-500, -500, 500, 500)
     self:add(camera)
     for i = 1, 5 do
